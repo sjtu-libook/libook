@@ -19,12 +19,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='region',
             name='group',
-            field=models.ForeignKey(help_text='区域所属区域组', on_delete=django.db.models.deletion.CASCADE, to='libookapi.regiongroup'),
+            field=models.ForeignKey(
+                help_text='区域所属区域组', on_delete=django.db.models.deletion.CASCADE, to='libookapi.regiongroup'),
         ),
         migrations.AlterField(
             model_name='region',
             name='id',
-            field=models.AutoField(help_text='区域唯一 ID', primary_key=True, serialize=False),
+            field=models.AutoField(help_text='区域唯一 ID',
+                                   primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='region',
@@ -34,7 +36,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='regiongroup',
             name='id',
-            field=models.AutoField(help_text='区域组唯一 ID', primary_key=True, serialize=False),
+            field=models.AutoField(help_text='区域组唯一 ID',
+                                   primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='regiongroup',
@@ -49,17 +52,20 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='reservation',
             name='id',
-            field=models.AutoField(help_text='预定唯一 ID', primary_key=True, serialize=False),
+            field=models.AutoField(help_text='预定唯一 ID',
+                                   primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='reservation',
             name='region',
-            field=models.ForeignKey(help_text='预定区域', on_delete=django.db.models.deletion.CASCADE, to='libookapi.region'),
+            field=models.ForeignKey(
+                help_text='预定区域', on_delete=django.db.models.deletion.CASCADE, to='libookapi.region'),
         ),
         migrations.AlterField(
             model_name='reservation',
             name='time',
-            field=models.ForeignKey(help_text='预定时间', on_delete=django.db.models.deletion.CASCADE, to='libookapi.timeslice'),
+            field=models.ForeignKey(
+                help_text='预定时间', on_delete=django.db.models.deletion.CASCADE, to='libookapi.timeslice'),
         ),
         migrations.AlterField(
             model_name='reservation',
@@ -69,7 +75,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='reservation',
             name='user',
-            field=models.ForeignKey(help_text='预定用户', on_delete=django.db.models.deletion.CASCADE, to='libookapi.user'),
+            field=models.ForeignKey(
+                help_text='预定用户', on_delete=django.db.models.deletion.CASCADE, to='libookapi.user'),
         ),
         migrations.AlterField(
             model_name='timeslice',
@@ -79,7 +86,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='timeslice',
             name='id',
-            field=models.AutoField(help_text='时间片唯一 ID', primary_key=True, serialize=False),
+            field=models.AutoField(help_text='时间片唯一 ID',
+                                   primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='timeslice',

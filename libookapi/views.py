@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import viewsets, permissions, views
+from rest_framework import viewsets, permissions, views, generics
 from rest_framework.decorators import action
 from .serializers import RegionGroupSerializer, RegionSerializer, ReservationSerializer
 from .models import RegionGroup, Region, Reservation
@@ -12,6 +13,7 @@ class RegionGroupView(viewsets.ReadOnlyModelViewSet):
     """
     queryset = RegionGroup.objects.all()
     serializer_class = RegionGroupSerializer
+    filter_backends = [DjangoFilterBackend]
 
 
 class RegionView(viewsets.ReadOnlyModelViewSet):
@@ -20,19 +22,26 @@ class RegionView(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
+    filter_backends = [DjangoFilterBackend]
 
 
 class ReservationView(viewsets.ReadOnlyModelViewSet):
     """
     获取预约信息。
     """
+    queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
-
-    def get_queryset(self):
-        return Reservation.objects.filter(user=self.request.user)
+    filter_backends = [DjangoFilterBackend]
 
 
-class BatchReservationView(views.APIView):
+class BatchReservationView(generics.ListAPIView):
+    def get(self, request, format=None):
+        """
+        获取当前用户的所有预定信息。
+        """
+        user = self.request.user
+        return Reservation.objects.filter(user=user)
+
     def post(self, request, format=None):
         """
         批量订位

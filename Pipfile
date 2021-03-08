@@ -8,6 +8,7 @@ django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 drf-spectacular = "*"
+django-filter = "*"
 
 [dev-packages]
 autopep8 = "*"

@@ -17,4 +17,4 @@ class RegionSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ('id', 'user', 'region', 'time', 'created_at', 'updated_at')
+        fields = ('id', 'region', 'time')

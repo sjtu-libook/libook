@@ -29,6 +29,8 @@ class Region(models.Model):
 class Timeslice(models.Model):
     """
     时间片是用户可以预定的最小时间单位。时间片含有起始时间与终止时间。
+    时间片的 id 必须根据起始时间排序。如果 id_1 < id_2，那么 from_time_1 < from_time_2。
+    时间片不能重叠。
     """
     id = models.AutoField(primary_key=True, help_text="时间片唯一 ID")
     from_time = models.DateTimeField(help_text="时间片起始时间")
