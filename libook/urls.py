@@ -17,11 +17,22 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from libookapi import views
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 router = routers.DefaultRouter()
-router.register(r'libook', views.ReservationView, 'reservations')
+router.register(r'region_groups', views.RegionGroupView, 'region_groups')
+router.register(r'regions', views.RegionView, 'regions')
+router.register(r'reservations', views.ReservationView, 'reservations')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/users/self', views.UserView.as_view(), name='users'),
+    path('api/reservations/batch', views.BatchReservationView.as_view(),
+         name='batch_reservation'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/',
+         SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/',
+         SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

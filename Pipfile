@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 autopep8 = "*"
