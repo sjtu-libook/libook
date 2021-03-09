@@ -19,6 +19,6 @@ jobs:
     - uses: dschep/install-pipenv-action@v1
     - run: pipenv install --dev
     - name: lint code style
-      run: pipenv run pycodestyle --ignore=E501 --exclude booklib/* **/*.py
+      run: pipenv run pycodestyle --ignore=E501 **/*.py
     - name: check database migration files
       run: make makemigrations && git diff --exit-code
