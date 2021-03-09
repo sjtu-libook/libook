@@ -1,0 +1,24 @@
+name: Lint and Test libook
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.9"
+    - uses: dschep/install-pipenv-action@v1
+    - run: pipenv sync
+    - name: lint code style
+      run: pipenv run pycodestyle --ignore=E501 --exclude booklib/* **/*.py
+    - name: check database migration files
+      run: make makemigrations && git diff --exit-code
