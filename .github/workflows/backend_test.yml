@@ -22,3 +22,5 @@ jobs:
       run: pipenv run pycodestyle --ignore=E501 **/*.py
     - name: check database migration files
       run: make makemigrations && git diff --exit-code
+    - name: test
+      run: make test.backend

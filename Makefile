@@ -20,3 +20,6 @@ run.backend:
 
 format.backend:
 	pipenv run autopep8 --in-place --recursive . --exclude booklib
+
+test.backend:
+	pipenv run pytest
