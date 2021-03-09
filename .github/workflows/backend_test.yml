@@ -17,7 +17,7 @@ jobs:
       with:
         python-version: "3.9"
     - uses: dschep/install-pipenv-action@v1
-    - run: pipenv sync
+    - run: pipenv install --dev
     - name: lint code style
       run: pipenv run pycodestyle --ignore=E501 --exclude booklib/* **/*.py
     - name: check database migration files
