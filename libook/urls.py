@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 router.register(r'region_groups', views.RegionGroupView, 'region_groups')
 router.register(r'regions', views.RegionView, 'regions')
 router.register(r'reservations', views.ReservationView, 'reservations')
+router.register(r'timeslices', views.TimesliceView, 'timeslices')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

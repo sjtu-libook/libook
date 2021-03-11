@@ -22,5 +22,7 @@ jobs:
       run: pipenv run pycodestyle --ignore=E501 **/*.py
     - name: check database migration files
       run: make makemigrations && git diff --exit-code
+    - name: generate schema
+      run: pipenv run python manage.py spectacular
     - name: test
       run: make test.backend
