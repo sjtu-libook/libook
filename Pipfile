@@ -9,6 +9,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 drf-spectacular = "*"
 django-filter = "*"
+pytz = "*"
+tzlocal = "*"
 
 [dev-packages]
 autopep8 = "*"

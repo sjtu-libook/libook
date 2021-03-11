@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import RegionGroup, Region, Reservation, Timeslice
+from .models import *
 
 
 class RegionGroupSerializer(serializers.ModelSerializer):
@@ -42,12 +42,12 @@ class ResultSerializer(serializers.Serializer):
 
 class RegionReservationSerializer(serializers.Serializer):
     reserved = serializers.IntegerField()
-    time = TimesliceSerializer(many=False, read_only=True)
-    region = RegionSerializer(many=False, read_only=True)
+    time_id = serializers.IntegerField()
+    region_id = serializers.IntegerField()
 
 
 class RegionGroupReservationSerializer(serializers.Serializer):
     reserved = serializers.IntegerField()
     capacity = serializers.IntegerField()
-    time = TimesliceSerializer(many=False, read_only=True)
-    region_group = RegionGroupSerializer(many=False, read_only=True)
+    time_id = serializers.IntegerField()
+    region_group_id = serializers.IntegerField()

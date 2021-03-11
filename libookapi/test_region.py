@@ -5,7 +5,7 @@ from .models import Region, RegionGroup
 
 
 @pytest.mark.django_db
-def test_user_create():
+def test_get_region():
     """创建的 Region 可以通过接口获取到"""
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)

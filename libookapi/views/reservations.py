@@ -3,44 +3,19 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics
+from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.db.models import Count, F
 
-from .serializers import *
-from .models import *
-
-
-class RegionGroupView(viewsets.ReadOnlyModelViewSet):
-    """
-    获取区域组的信息。
-    """
-    queryset = RegionGroup.objects.all()
-    serializer_class = RegionGroupSerializer
-    filter_backends = [DjangoFilterBackend]
-
-
-class RegionView(viewsets.ReadOnlyModelViewSet):
-    """
-    获取区域的信息。
-    """
-    queryset = Region.objects.all()
-    serializer_class = RegionSerializer
-    filter_backends = [DjangoFilterBackend]
-
-
-class ReservationView(viewsets.ReadOnlyModelViewSet):
-    """
-    获取预约信息。
-    """
-    queryset = Reservation.objects.all()
-    serializer_class = ReservationDetailSerializer
-    filter_backends = [DjangoFilterBackend]
+from ..serializers import *
+from ..models import *
 
 
 class QueryRegionReservationView(views.APIView):
     @extend_schema(
         parameters=[
-            OpenApiParameter("min_time", TimesliceSerializer),
-            OpenApiParameter("max_time", TimesliceSerializer),
+            OpenApiParameter("min_time_id", OpenApiTypes.INT),
+            OpenApiParameter("max_time_id", OpenApiTypes.INT),
             OpenApiParameter("region_id", OpenApiTypes.INT,
                              OpenApiParameter.PATH),
         ],
@@ -50,14 +25,25 @@ class QueryRegionReservationView(views.APIView):
         """
         查询区域的预约情况
         """
-        pass
+        region = request.GET.get('region_id')
+        min_time_id = request.GET.get('min_time_id')
+        max_time_id = request.GET.get('max_time_id')
+        reserved_time = Reservation.objects \
+            .filter(time__gte=min_time_id, time__lte=max_time_id, region=region) \
+            .values('region', 'time') \
+            .annotate(reserved=Count('*')) \
+            .annotate(region_id=F('region')) \
+            .annotate(time_id=F('time')) \
+            .values('region_id', 'time_id', 'reserved')
+        serializer = RegionReservationSerializer(reserved_time, many=True)
+        return Response(serializer.data)
 
 
 class QueryRegionGroupReservationView(views.APIView):
     @extend_schema(
         parameters=[
-            OpenApiParameter("min_time", TimesliceSerializer),
-            OpenApiParameter("max_time", TimesliceSerializer),
+            OpenApiParameter("min_time_id", OpenApiTypes.INT),
+            OpenApiParameter("max_time_id", OpenApiTypes.INT),
             OpenApiParameter("region_group_id",
                              OpenApiTypes.INT, OpenApiParameter.PATH),
         ],
@@ -101,13 +87,5 @@ class BatchReservationView(views.APIView):
         2. 一个场地的预约数不能超过场地限制
         3. 用户在同一个时间段只能预约一个场地
         4. ...
-        """
-        pass
-
-
-class UserView(views.APIView):
-    def get(self, request, format=None):
-        """
-        获取当前用户信息
         """
         pass
