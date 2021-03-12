@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classnames from 'classnames'
 
 export function LinkButtonEnum({ selections, selected, setSelected }) {
     const onClick = (e) => {

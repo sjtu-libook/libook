@@ -14,7 +14,7 @@ function ConfirmReserve({ prevStep, nextStep }) {
                 <LinkButton className="ml-auto" onClick={nextStep}><i className="bi bi-check-square"></i></LinkButton>
             </div>
         </>
-    );
+    )
 }
 
-export default ConfirmReserve;
+export default ConfirmReserve

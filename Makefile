@@ -26,3 +26,12 @@ test.backend:
 
 run.frontend:
 	cd booklib && yarn start
+
+lint.frontend:
+	cd booklib && yarn lint
+
+format.frontend:
+	cd booklib && yarn lint --fix
+
+build.frontend:
+	cd booklib && yarn build

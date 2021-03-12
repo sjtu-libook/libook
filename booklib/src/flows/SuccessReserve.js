@@ -19,7 +19,7 @@ function SuccessReserve() {
                 <LinkButton className="text-muted">人流密度 <i className="bi bi-arrow-right"></i></LinkButton>
             </div>
         </>
-    );
+    )
 }
 
-export default SuccessReserve;
+export default SuccessReserve
