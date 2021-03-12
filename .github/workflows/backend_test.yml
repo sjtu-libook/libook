@@ -22,7 +22,11 @@ jobs:
         key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-pipenv-
-    - uses: dschep/install-pipenv-action@v1
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        architecture: 'x64'
+    - run: pip install pipenv
     - run: pipenv install --dev
     - name: lint code style
       run: pipenv run pycodestyle --ignore=E501 **/*.py
