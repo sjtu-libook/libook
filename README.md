@@ -17,3 +17,6 @@ View schema at http://127.0.0.1:8000/api/schema/swagger-ui/
 pipenv run python manage.py fill_timeslice
 ```
 
+## License
+
+Apache 2.0
