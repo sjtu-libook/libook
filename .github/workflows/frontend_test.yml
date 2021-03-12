@@ -1,4 +1,4 @@
-name: Lint and Test libook
+name: Lint and Test frontend
 
 on:
   push:
@@ -16,6 +16,8 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
+    - name: install
+      run: cd booklib && yarn
     - name: lint
       run: make lint.frontend
     - name: build

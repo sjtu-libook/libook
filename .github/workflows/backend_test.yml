@@ -1,4 +1,4 @@
-name: Lint and Test libook
+name: Lint and Test backend
 
 on:
   push:
