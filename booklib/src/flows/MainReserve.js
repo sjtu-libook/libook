@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { useState } from 'react';
+import { useState } from 'react'
 import { LinkButton, LinkButtonEnum } from './common.js'
 
 const calendarDateOnly = {
@@ -7,17 +7,17 @@ const calendarDateOnly = {
     nextDay: '[明天]',
     nextWeek: function (now) {
         if (now.week() !== this.week()) {
-            return '[下]ddd';
+            return '[下]ddd'
         } else {
-            return '[本]ddd';
+            return '[本]ddd'
         }
     },
     lastDay: '[昨天]',
     lastWeek: function (now) {
         if (this.week() !== now.week()) {
-            return '[上]ddd';
+            return '[上]ddd'
         } else {
-            return '[本]ddd';
+            return '[本]ddd'
         }
     },
     sameElse: 'L',
@@ -65,7 +65,7 @@ function MainReserve({ nextStep }) {
             <div className="display-3">
                 <LinkButtonEnum selections={dates} selected={date} setSelected={setDate}></LinkButtonEnum>
                         &nbsp;
-                        <LinkButtonEnum selections={times} selected={time} setSelected={setTime}></LinkButtonEnum>
+                <LinkButtonEnum selections={times} selected={time} setSelected={setTime}></LinkButtonEnum>
             </div>
             <div className="display-3">
                 <LinkButton>安静的地方</LinkButton>
@@ -78,7 +78,7 @@ function MainReserve({ nextStep }) {
                 <LinkButton className="text-muted">切换到自选模式 <i className="bi bi-arrow-right"></i></LinkButton>
             </div>
         </>
-    );
+    )
 }
 
-export default MainReserve;
+export default MainReserve
