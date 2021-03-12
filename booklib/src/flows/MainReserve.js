@@ -75,7 +75,7 @@ function MainReserve({ nextStep }) {
                 <LinkButton className="ml-auto" onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
             <div className="h3 text-right">
-                <LinkButton className="text-muted"><i class="bi bi-toggles"></i> 切换到自选模式</LinkButton>
+                <LinkButton className="text-muted">切换到自选模式 <i className="bi bi-arrow-right"></i></LinkButton>
             </div>
         </>
     );
