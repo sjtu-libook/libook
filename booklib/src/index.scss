@@ -1,0 +1,9 @@
+$link-color: cornflowerblue;
+
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+.libook-big-selection {
+    @include button-size($btn-padding-y-lg, $btn-padding-x-lg, inherit, $btn-line-height-lg, $btn-border-radius-lg);
+    text-decoration: none !important;
+}

@@ -23,3 +23,6 @@ format.backend:
 
 test.backend:
 	pipenv run pytest -v
+
+run.frontend:
+	cd booklib && yarn start
