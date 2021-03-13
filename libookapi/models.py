@@ -2,9 +2,14 @@ from django.db import models
 
 
 class User(models.Model):
+    """
+    用户是进行操作的最小单位。
+    """
     id = models.AutoField(primary_key=True)
     sid = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=20)
+    fingerprint_id = models.IntegerField(help_text="指纹 ID", null=True)
+    face_id = models.IntegerField(help_text="面部图像 ID", null=True)
 
 
 class RegionGroup(models.Model):
@@ -49,3 +54,23 @@ class Reservation(models.Model):
         Timeslice, on_delete=models.CASCADE, help_text="预定时间")
     created_at = models.DateTimeField(auto_now_add=True, help_text="预定创建时间")
     updated_at = models.DateTimeField(auto_now=True, help_text="预定更新时间")
+
+
+class Device(models.Model):
+    """
+    设备对应现实世界中放置在图书馆座位上的硬件。
+    """
+    id = models.AutoField(primary_key=True, help_text="设备 ID")
+    api_key = models.CharField(max_length=64, help_text="设备 API Key")
+    region = models.ForeignKey(
+        Region, on_delete=models.CASCADE, help_text="设备所在区域")
+
+
+class UserToken(models.Model):
+    """
+    一次性验证 Token 是用户第一次落座时输入的一串数字。可以用于绑定指纹和身份。
+    """
+    id = models.AutoField(primary_key=True, help_text="Token ID")
+    token = models.CharField(max_length=64, help_text="Token")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text="对应用户")
+    expires_at = models.DateTimeField(help_text="Token 过期时间")
