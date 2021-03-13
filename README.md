@@ -10,6 +10,7 @@
 ```bash
 pip3 install pipenv
 pipenv install
+make migrate # 创建数据库
 make run.backend
 ```
 
