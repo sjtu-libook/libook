@@ -6,7 +6,7 @@ from ...models import Timeslice
 
 
 class Command(BaseCommand):
-    help = 'Populate timeslice for a year.'
+    help = '生成一整年的时间片。'
 
     def add_arguments(self, parser):
         parser.add_argument('--open_time',

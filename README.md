@@ -14,7 +14,9 @@ make migrate # 创建数据库
 make run.backend
 ```
 
-启动后，在 http://127.0.0.1:8000/api/schema/swagger-ui/ 可以看到后端暴露的所有 API。
+* 启动后，在 http://127.0.0.1:8000/api/schema/swagger-ui/ 可以看到后端暴露的所有 API。
+* 访问 http://127.0.0.1:8000/api/ 可以向后端发送请求。
+* 运行 `make createsuperuser` 后，即可使用 Django 管理后台。 http://127.0.0.1:8000/admin/
 
 前端使用 React 框架编写，使用 yarn 管理依赖。您需要先安装 Node.js 和 yarn，而后才能启动。
 
@@ -31,6 +33,7 @@ yarn start
 
 ```
 pipenv run python manage.py fill_timeslice
+pipenv run python manage.py fill_region
 ```
 
 ## License
