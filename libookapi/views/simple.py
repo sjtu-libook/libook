@@ -38,16 +38,6 @@ class ReservationView(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
 
 
-class TimesliceView(viewsets.ReadOnlyModelViewSet):
-    """
-    获取时间片信息。
-    """
-    queryset = Timeslice.objects.all()
-    serializer_class = TimesliceSerializer
-    # TODO: 支持范围查询 (time_from, time_to)
-    filter_backends = [DjangoFilterBackend]
-
-
 class UserView(views.APIView):
     def get(self, request, format=None):
         """

@@ -1,4 +1,5 @@
 import classnames from 'classnames'
+import { CSSTransition } from 'react-transition-group'
 
 export function LinkButtonEnum({ selections, selected, setSelected }) {
     const onClick = (e) => {
@@ -11,4 +12,28 @@ export function LinkButtonEnum({ selections, selected, setSelected }) {
 
 export function LinkButton({ children, onClick, className }) {
     return <button className={classnames("libook-big-selection btn btn-link", className)} onClick={onClick}>{children}</button>
+}
+
+export function Row({ className, children }) {
+    return <div className="row"><div className={classnames("col", className)}>{children}</div></div>
+}
+
+export function LinkButtonSelect({ selections, selected, setSelected }) {
+    return <select className="libook-big-selection form-select btn btn-link" value={(selections[selected] || {}).key}>
+        {
+            selections.map(({ key, value }) => <option value={key} key={key}>{value}</option>)
+        }
+    </select>
+}
+
+export function ShowWhen({ when, children }) {
+    return <CSSTransition in={when} timeout={300} classNames="libook-flow-loading">
+        {children}
+    </CSSTransition>
+}
+
+export function LoadingWhen({ when, size, className }) {
+    return when && <div className={classnames("spinner-border", className)} style={{ 'width': size, 'height': size }} role="status">
+        <span className="visually-hidden">加载中...</span>
+    </div>
 }

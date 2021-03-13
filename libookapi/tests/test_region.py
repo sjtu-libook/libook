@@ -1,7 +1,7 @@
 import pytest
 from django.test import Client
 
-from .models import Region, RegionGroup
+from ..models import Region, RegionGroup
 
 
 @pytest.mark.django_db

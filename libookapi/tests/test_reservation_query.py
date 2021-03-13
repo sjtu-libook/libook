@@ -2,7 +2,7 @@ import pytest
 from django.test import Client
 from datetime import datetime
 from tzlocal import get_localzone
-from .models import *
+from ..models import *
 
 
 @pytest.mark.django_db

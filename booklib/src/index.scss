@@ -4,6 +4,32 @@ $link-color: cornflowerblue;
 @import '~bootstrap-icons/font/bootstrap-icons.css';
 
 .libook-big-selection {
-    @include button-size($btn-padding-y-lg, $btn-padding-x-lg, inherit, $btn-line-height-lg, $btn-border-radius-lg);
+    @include button-size($btn-padding-y-lg, $btn-padding-x-lg, inherit, $btn-border-radius-lg);
     text-decoration: none !important;
+}
+
+.libook-wizard-container {
+    min-height: 30rem;
+}
+
+.libook-flow-loading-enter {
+    opacity: 0;
+}
+
+.libook-flow-loading-enter-active {
+    opacity: 1;
+    transition: opacity 100ms;
+}
+
+.libook-flow-loading-exit {
+    opacity: 1;
+}
+
+.libook-flow-loading-exit-active {
+    opacity: 0;
+    transition: opacity 100ms;
+}
+
+.libook-flow-loading-exit-done {
+    opacity: 0;
 }
