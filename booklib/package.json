@@ -31,11 +31,11 @@
     ],
     "rules": {
       "indent": [
-        "error",
+        "warn",
         4
       ],
       "semi": [
-        "error",
+        "warn",
         "never"
       ]
     }

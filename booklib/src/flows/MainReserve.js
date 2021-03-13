@@ -47,6 +47,20 @@ function hourSelections() {
     return result
 }
 
+function placeSelections() {
+    const places = [
+        "安静",
+        "非安静",
+        "阳光好",
+        "有电脑",
+        "人少",
+        "小组讨论室",
+        "哪里都可以"
+    ]
+
+    return places.map((value, key) =>( { key, value }))
+}
+
 function MainReserve({ nextStep }) {
     const dates = dateSelections()
     const [date, setDate] = useState(0)
@@ -57,20 +71,23 @@ function MainReserve({ nextStep }) {
     const hours = hourSelections()
     const [hour, setHour] = useState(0)
 
+    const places = placeSelections()
+    const [place, setPlace] = useState(0)
+
     return (
         <>
             <div className="px-3">
                 <h1>快速预定座位</h1>
             </div>
-            <div className="display-3">
+            <div className="display-4">
                 <LinkButtonEnum selections={dates} selected={date} setSelected={setDate}></LinkButtonEnum>
                         &nbsp;
                 <LinkButtonEnum selections={times} selected={time} setSelected={setTime}></LinkButtonEnum>
             </div>
-            <div className="display-3">
-                <LinkButton>安静的地方</LinkButton>
+            <div className="display-4">
+                <LinkButtonEnum selections={places} selected={place} setSelected={setPlace}></LinkButtonEnum>
             </div>
-            <div className="display-3 d-flex justify-content-space-between">
+            <div className="display-4 d-flex justify-content-space-between">
                 <LinkButtonEnum selections={hours} selected={hour} setSelected={setHour}></LinkButtonEnum>
                 <LinkButton className="ml-auto" onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>

@@ -28,7 +28,7 @@ run.frontend:
 	cd booklib && yarn start
 
 lint.frontend:
-	cd booklib && yarn lint
+	cd booklib && yarn lint --max-warnings 0
 
 format.frontend:
 	cd booklib && yarn lint --fix
