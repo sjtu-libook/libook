@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { useState } from 'react'
-import { LinkButton, LinkButtonEnum } from './common.js'
+import { LinkButton, LinkButtonEnum, div } from './common.js'
 
 const calendarDateOnly = {
     sameDay: '[今天]',
@@ -23,21 +23,20 @@ const calendarDateOnly = {
     sameElse: 'L',
 }
 
-function dateSelections() {
-    let day = moment(new Date())
+export function dateSelections() {
+    let day = moment()
     const result = []
 
     for (let i = 0; i < 7; i++) {
         let item = day.calendar(calendarDateOnly)
-        result.push({ key: day, value: item })
-
+        result.push({ key: moment(day), value: item })
         day.add(1, 'days')
     }
 
     return result
 }
 
-function hourSelections() {
+export function hourSelections() {
     const result = []
 
     for (let i = 1; i <= 6; i++) {
@@ -61,7 +60,7 @@ function placeSelections() {
     return places.map((value, key) =>( { key, value }))
 }
 
-function MainReserve({ nextStep }) {
+function MainReserve({ nextStep, generalStep }) {
     const dates = dateSelections()
     const [date, setDate] = useState(0)
 
@@ -87,12 +86,12 @@ function MainReserve({ nextStep }) {
             <div className="display-4">
                 <LinkButtonEnum selections={places} selected={place} setSelected={setPlace}></LinkButtonEnum>
             </div>
-            <div className="display-4 d-flex justify-content-space-between">
+            <div className="display-4 d-flex justify-content-between">
                 <LinkButtonEnum selections={hours} selected={hour} setSelected={setHour}></LinkButtonEnum>
-                <LinkButton className="ml-auto" onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
+                <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
-            <div className="h3 text-right">
-                <LinkButton className="text-muted">切换到自选模式 <i className="bi bi-arrow-right"></i></LinkButton>
+            <div className="h3 d-flex justify-content-end">
+                <LinkButton className="text-muted" onClick={generalStep}>切换到自选模式 <i className="bi bi-arrow-right"></i></LinkButton>
             </div>
         </>
     )

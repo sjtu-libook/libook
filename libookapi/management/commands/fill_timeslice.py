@@ -8,28 +8,24 @@ from ...models import Timeslice
 class Command(BaseCommand):
     help = '生成一整年的时间片。'
 
-    def add_arguments(self, parser):
-        parser.add_argument('--open_time',
-                            default=7,
-                            type=int,
-                            help='Open time every day in hour')
-        parser.add_argument('--close_time',
-                            default=23,
-                            type=int,
-                            help='Close time every day in hour')
-
-    def handle(self, open_time, close_time, *args, **options):
+    def handle(self, *args, **options):
         today = date.today()
-        tz = get_localzone()
+        tz = timezone('Asia/Shanghai')
         Timeslice.objects.all().delete()
         for i in range(365):
-            for hour in range(open_time, close_time):
-                from_time = datetime(
-                    today.year, today.month, today.day, hour, 0, 0)
-                to_time = datetime(
-                    today.year, today.month, today.day, hour + 1, 0, 0)
-                timeslice = Timeslice(from_time=tz.localize(
-                    from_time), to_time=tz.localize(to_time))
+            if today.weekday() >= 5:
+                # open from 8pm to 10pm on weekends
+                open_range = range(8, 22)
+            else:
+                # open from 7pm to 11pm on weekdays
+                open_range = range(7, 23)
+
+            for hour in open_range:
+                from_time = tz.localize(datetime(
+                    today.year, today.month, today.day, hour, 0, 0))
+                to_time = tz.localize(datetime(
+                    today.year, today.month, today.day, hour + 1, 0, 0))
+                timeslice = Timeslice(from_time=from_time, to_time=to_time)
                 timeslice.save()
             today = today + timedelta(days=1)
             print(today)

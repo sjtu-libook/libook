@@ -41,6 +41,12 @@ class Timeslice(models.Model):
     from_time = models.DateTimeField(help_text="时间片起始时间")
     to_time = models.DateTimeField(help_text="时间片终止时间")
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['from_time']),
+            models.Index(fields=['to_time'])
+        ]
+
 
 class Reservation(models.Model):
     """
