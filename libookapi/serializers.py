@@ -2,16 +2,24 @@ from rest_framework import serializers
 from .models import *
 
 
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = ('id', 'name', 'group', 'capacity')
+
+
 class RegionGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegionGroup
         fields = ('id', 'name')
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class RegionGroupDetailSerializer(serializers.ModelSerializer):
+    regions = RegionSerializer(many=True, read_only=True)
+
     class Meta:
-        model = Region
-        fields = ('id', 'name', 'group', 'capacity')
+        model = RegionGroup
+        fields = ('id', 'name', 'regions')
 
 
 class TimesliceSerializer(serializers.ModelSerializer):

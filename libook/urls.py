@@ -35,6 +35,8 @@ urlpatterns = [
          views.QueryRegionGroupReservationView.as_view(), name='batch_query_region_group'),
     path('api/reservations/by_region',
          views.QueryRegionReservationView.as_view(), name='batch_query_region'),
+    path('api/region_groups/<int:id>/detail',
+         views.RegionGroupDetailView.as_view(), name='region_group_detail'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/',
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
