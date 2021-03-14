@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
-from rest_framework import viewsets, permissions, views, generics
+from rest_framework import viewsets, permissions, views, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F
@@ -39,8 +39,14 @@ class ReservationView(viewsets.ReadOnlyModelViewSet):
 
 
 class UserView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        responses=UserSerializer(),
+    )
     def get(self, request, format=None):
         """
         获取当前用户信息
         """
-        pass
+        serializer = UserSerializer(User.objects.get(username=request.user))
+        return Response(serializer.data, status=status.HTTP_200_OK)

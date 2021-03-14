@@ -6,6 +6,7 @@ import LocationReserve from './flows/LocationReserve.js'
 import { CSSTransition } from 'react-transition-group'
 
 import { useState } from 'react'
+import StatusBar from './StatusBar.js'
 
 function FlowTransition({ match, children }) {
     return <CSSTransition
@@ -28,12 +29,15 @@ function App() {
             <div className="container-fluid vh-100">
                 <div className="row align-items-center justify-content-center h-100">
                     <div className="col-xl-4 col-lg-6 col-md-8 col-12 libook-wizard-container">
-                        <FlowTransition match={step === "quick"}><MainReserve nextStep={() => setStep("quick-confirm")} generalStep={() => setStep("general-time")}></MainReserve></FlowTransition>
-                        <FlowTransition match={step === "quick-confirm"}><ConfirmReserve prevStep={() => setStep("quick")} nextStep={() => setStep("success")}></ConfirmReserve></FlowTransition>
-                        <FlowTransition match={step === "general-time"}><TimeReserve prevStep={() => setStep("quick")} nextStep={() => setStep("general-location")}></TimeReserve></FlowTransition>
-                        <FlowTransition match={step === "general-location"}><LocationReserve prevStep={() => setStep("general-time")} nextStep={() => setStep("general-confirm")}></LocationReserve></FlowTransition>
-                        <FlowTransition match={step === "general-confirm"}><ConfirmReserve prevStep={() => setStep("general-location")} nextStep={() => setStep("success")}></ConfirmReserve></FlowTransition>
-                        <FlowTransition match={step === "success"}><SuccessReserve></SuccessReserve></FlowTransition>
+                        <div className="col-12 px-3 text-end"><StatusBar></StatusBar></div>
+                        <div className="col-12">
+                            <FlowTransition match={step === "quick"}><MainReserve nextStep={() => setStep("quick-confirm")} generalStep={() => setStep("general-time")}></MainReserve></FlowTransition>
+                            <FlowTransition match={step === "quick-confirm"}><ConfirmReserve prevStep={() => setStep("quick")} nextStep={() => setStep("success")}></ConfirmReserve></FlowTransition>
+                            <FlowTransition match={step === "general-time"}><TimeReserve prevStep={() => setStep("quick")} nextStep={() => setStep("general-location")}></TimeReserve></FlowTransition>
+                            <FlowTransition match={step === "general-location"}><LocationReserve prevStep={() => setStep("general-time")} nextStep={() => setStep("general-confirm")}></LocationReserve></FlowTransition>
+                            <FlowTransition match={step === "general-confirm"}><ConfirmReserve prevStep={() => setStep("general-location")} nextStep={() => setStep("success")}></ConfirmReserve></FlowTransition>
+                            <FlowTransition match={step === "success"}><SuccessReserve></SuccessReserve></FlowTransition>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -64,3 +64,17 @@ class RegionGroupReservationSerializer(serializers.Serializer):
     capacity = serializers.IntegerField()
     time_id = serializers.IntegerField()
     region_group_id = serializers.IntegerField()
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserInfo
+        fields = []
+
+
+class UserSerializer(serializers.ModelSerializer):
+    user_info = UserInfoSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'user_info')

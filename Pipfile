@@ -11,6 +11,8 @@ drf-spectacular = "*"
 django-filter = "*"
 pytz = "*"
 tzlocal = "*"
+authlib = "*"
+loginpass = "*"
 
 [dev-packages]
 autopep8 = "*"

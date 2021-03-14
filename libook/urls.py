@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 from libookapi import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from . import logins
 
 router = routers.DefaultRouter()
 router.register(r'region_groups', views.RegionGroupView, 'region_groups')
@@ -37,6 +38,10 @@ urlpatterns = [
          views.QueryRegionReservationView.as_view(), name='batch_query_region'),
     path('api/region_groups/<int:id>/detail',
          views.RegionGroupDetailView.as_view(), name='region_group_detail'),
+    # Authentication
+    path('api/auth/', include('rest_framework.urls')),
+    *logins.urlpatterns,
+    # REST API Schemas
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/',
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
