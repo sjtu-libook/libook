@@ -4,7 +4,7 @@ from .models import *
 
 
 class UserInfoAdmin(admin.ModelAdmin):
-    list_display = ('sid', 'name', 'fingerprint_id', 'face_id', 'user')
+    list_display = ('fingerprint_id', 'face_id', 'user')
 
 
 class RegionAdmin(admin.ModelAdmin):

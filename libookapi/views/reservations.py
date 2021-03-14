@@ -68,10 +68,9 @@ class QueryRegionGroupReservationView(views.APIView):
 
 
 class BatchReservationView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     @extend_schema(
-        parameters=[
-            OpenApiParameter("delete", OpenApiTypes.BOOL)
-        ],
         request=ReservationSerializer(many=True),
         responses=ReservationSerializer(many=True),
     )
