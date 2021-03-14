@@ -6,7 +6,7 @@ function SuccessReserve() {
             <div className="px-3">
                 <h1>预约成功</h1>
             </div>
-            <div class="px-3 mt-3 h2 fw-normal">
+            <div className="px-3 mt-3 h2 fw-normal">
                 <p>您可以在 1pm 前取消预约。</p>
             </div>
             <div className="h3 d-flex justify-content-end">
