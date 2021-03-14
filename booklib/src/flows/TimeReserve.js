@@ -11,7 +11,7 @@ function TimeReserve({ prevStep, nextStep }) {
     const [toTime, setToTime] = useState(0)
     const [date, setDate] = useState(0)
     const [data, setData] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const now = dates[date].key
@@ -22,8 +22,6 @@ function TimeReserve({ prevStep, nextStep }) {
                 url: "/api/timeslices",
                 params: { from_time__gt: now.startOf('day').toISOString(), from_time__lt: now.endOf('day').toISOString() }
             })
-            await new Promise(r => setTimeout(r, 500))
-            console.log("loaded!")
             setLoading(false)
             setData(result.data)
         }
@@ -33,14 +31,13 @@ function TimeReserve({ prevStep, nextStep }) {
 
     return (
         <>
-            <div className="px-3">
-                <h1>选择时间</h1>
-            </div>
-            <div className="d-flex flex-row align-items-center">
-                <div className="display-4 d-inline-block">
-                    <LinkButtonEnum selections={dates} selected={date} setSelected={setDate}></LinkButtonEnum>
-                </div>
+            <div className="d-flex flex-row align-items-center justify-content-between px-3">
+                <h1 className="d-inline-block">选择时间</h1>
                 <LoadingWhen when={loading} size="3rem" className="text-muted"></LoadingWhen>
+            </div>
+
+            <div className="display-4">
+                <LinkButtonEnum selections={dates} selected={date} setSelected={setDate}></LinkButtonEnum>
             </div>
 
             <ShowWhen when={!loading}>

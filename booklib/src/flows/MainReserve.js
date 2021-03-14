@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { useState } from 'react'
-import { LinkButton, LinkButtonEnum, div } from './common.js'
+import { LinkButton, LinkButtonEnum } from './common.js'
 
 const calendarDateOnly = {
     sameDay: '[今天]',

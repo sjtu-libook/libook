@@ -1,10 +1,20 @@
 $link-color: cornflowerblue;
 
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~bootstrap-icons/font/bootstrap-icons.css';
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
 
 .libook-big-selection {
     @include button-size($btn-padding-y-lg, $btn-padding-x-lg, inherit, $btn-border-radius-lg);
+
+    &.btn:focus {
+        box-shadow: none;
+    }
+
+    &.form-select {
+        border: none;
+    }
+
     text-decoration: none !important;
 }
 
@@ -32,4 +42,35 @@ $link-color: cornflowerblue;
 
 .libook-flow-loading-exit-done {
     opacity: 0;
+}
+
+.libook-flow {
+    position: relative;
+}
+
+.libook-flow-inner {
+    position: absolute;
+    width: 100%;
+}
+
+.libook-flow-enter {
+    opacity: 0;
+    transform: translate(200px);
+}
+
+.libook-flow-enter-active {
+    opacity: 1;
+    transform: translate(0);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.libook-flow-exit {
+    opacity: 1;
+    transform: translate(0);
+}
+
+.libook-flow-exit-active {
+    opacity: 0;
+    transform: translate(-200px);
+    transition: opacity 300ms, transform 300ms;
 }

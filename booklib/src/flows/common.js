@@ -19,9 +19,11 @@ export function Row({ className, children }) {
 }
 
 export function LinkButtonSelect({ selections, selected, setSelected }) {
-    return <select className="libook-big-selection form-select btn btn-link" value={(selections[selected] || {}).key}>
+    return <select className="libook-big-selection form-select btn btn-link"
+        value={selected}
+        onChange={event => setSelected(parseInt(event.target.value))}>
         {
-            selections.map(({ key, value }) => <option value={key} key={key}>{value}</option>)
+            selections.map(({ key, value }, idx) => <option value={idx} key={key}>{value}</option>)
         }
     </select>
 }

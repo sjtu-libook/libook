@@ -27,7 +27,7 @@ class Region(models.Model):
     id = models.AutoField(primary_key=True, help_text="区域唯一 ID")
     name = models.CharField(max_length=20, help_text="区域名称")
     group = models.ForeignKey(
-        RegionGroup, on_delete=models.CASCADE, help_text="区域所属区域组")
+        RegionGroup, related_name='regions', on_delete=models.CASCADE, help_text="区域所属区域组")
     capacity = models.IntegerField(help_text="区域最大可容纳人数")
 
 
