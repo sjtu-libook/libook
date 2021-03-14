@@ -11,7 +11,9 @@ export function LinkButtonEnum({ selections, selected, setSelected }) {
 }
 
 export function LinkButton({ children, onClick, className }) {
-    return <button className={classnames("libook-big-selection btn btn-link", className)} onClick={onClick}>{children}</button>
+    return <button
+        className={classnames("libook-big-selection btn btn-link", className)}
+        onClick={onClick}>{children}</button>
 }
 
 export function Row({ className, children }) {
@@ -35,15 +37,17 @@ export function ShowWhen({ when, children }) {
 }
 
 export function LoadingWhen({ when, size, className }) {
-    return when && <div className={classnames("spinner-border", className)} style={{ 'width': size, 'height': size }} role="status">
+    return when ? <div
+        className={classnames("spinner-border", className)}
+        style={{ 'width': size, 'height': size }} role="status">
         <span className="visually-hidden">加载中...</span>
-    </div>
+    </div> : <></>
 }
 
 export function ErrorWhen({ error }) {
-    return error && <div className="px-3 text-muted" role="alert">
+    return error ? <div className="px-3 text-muted" role="alert">
         <i className="bi bi-exclamation-triangle-fill text-warning"></i>
         &nbsp;
         {error}
-    </div>
+    </div> : <></>
 }

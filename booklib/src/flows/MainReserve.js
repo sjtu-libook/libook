@@ -57,14 +57,17 @@ function placeSelections() {
         "哪里都可以"
     ]
 
-    return places.map((value, key) =>( { key, value }))
+    return places.map((value, key) => ({ key, value }))
 }
 
 function MainReserve({ nextStep, generalStep }) {
     const dates = dateSelections()
     const [date, setDate] = useState(0)
 
-    const times = [{ key: 'morning', 'value': '上午' }, { key: 'afternoon', 'value': '下午' }, { key: 'evening', 'value': '晚上' }]
+    const times = [
+        { key: 'morning', 'value': '上午' },
+        { key: 'afternoon', 'value': '下午' },
+        { key: 'evening', 'value': '晚上' }]
     const [time, setTime] = useState(0)
 
     const hours = hourSelections()
@@ -76,7 +79,7 @@ function MainReserve({ nextStep, generalStep }) {
     return (
         <>
             <div className="px-3">
-                <h1>快速预定座位</h1>
+                <h1>快速预约座位</h1>
             </div>
             <div className="display-4">
                 <LinkButtonEnum selections={dates} selected={date} setSelected={setDate}></LinkButtonEnum>
@@ -91,7 +94,9 @@ function MainReserve({ nextStep, generalStep }) {
                 <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
             <div className="h3 d-flex justify-content-end">
-                <LinkButton className="text-muted" onClick={generalStep}>切换到自选模式 <i className="bi bi-arrow-right"></i></LinkButton>
+                <LinkButton className="text-muted" onClick={generalStep}>
+                    切换到自选模式 <i className="bi bi-arrow-right"></i>
+                </LinkButton>
             </div>
         </>
     )

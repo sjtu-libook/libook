@@ -41,6 +41,9 @@ function LocationReserve({ prevStep, nextStep }) {
         }
     }, [regionGroupData, regionGroup])
 
+
+    const validate = () => !loading && !loading2
+
     return (
         <>
             <div className="d-flex flex-row align-items-center justify-content-between px-3">
@@ -50,12 +53,18 @@ function LocationReserve({ prevStep, nextStep }) {
 
             <ShowWhen when={!loading}>
                 <div className="display-4">
-                    <LinkButtonSelect selections={regionGroupData.map(({ id, name }) => ({ key: id, value: name }))} selected={regionGroup} setSelected={setRegionGroup}></LinkButtonSelect>
+                    <LinkButtonSelect
+                        selections={regionGroupData.map(({ id, name }) => ({ key: id, value: name }))}
+                        selected={regionGroup}
+                        setSelected={setRegionGroup}></LinkButtonSelect>
                 </div>
             </ShowWhen>
             <ShowWhen when={!loading2}>
                 <div className="display-4">
-                    <LinkButtonSelect selections={regionData.map(({ id, name }) => ({ key: id, value: name }))} selected={region} setSelected={setRegion}></LinkButtonSelect>
+                    <LinkButtonSelect
+                        selections={regionData.map(({ id, name }) => ({ key: id, value: name }))}
+                        selected={region}
+                        setSelected={setRegion}></LinkButtonSelect>
                 </div>
             </ShowWhen>
 
@@ -63,7 +72,10 @@ function LocationReserve({ prevStep, nextStep }) {
 
             <div className="display-4 d-flex justify-content-between">
                 <LinkButton onClick={prevStep}><i className="bi bi-arrow-left-square"></i></LinkButton>
-                <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
+                <LinkButton
+                    onClick={() => nextStep({ regionGroup: regionGroupData[regionGroup], region: regionData[region] })}
+                    className={{ "disabled": !validate() }}>
+                    <i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
         </>
     )

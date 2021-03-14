@@ -46,6 +46,7 @@ $link-color: cornflowerblue;
 
 .libook-flow {
     position: relative;
+    visibility: hidden;
 }
 
 .libook-flow-inner {
@@ -56,21 +57,29 @@ $link-color: cornflowerblue;
 .libook-flow-enter {
     opacity: 0;
     transform: translate(200px);
+    visibility: visible;
 }
 
 .libook-flow-enter-active {
     opacity: 1;
     transform: translate(0);
     transition: opacity 300ms, transform 300ms;
+    visibility: visible;
+}
+
+.libook-flow-enter-done {
+    visibility: visible;
 }
 
 .libook-flow-exit {
     opacity: 1;
     transform: translate(0);
+    visibility: visible;
 }
 
 .libook-flow-exit-active {
     opacity: 0;
     transform: translate(-200px);
     transition: opacity 300ms, transform 300ms;
+    visibility: visible;
 }

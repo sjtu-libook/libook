@@ -7,8 +7,8 @@ import axios from 'axios'
 const dates = dateSelections()
 
 function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
-    const [fromTime, setFromTime] = useState(0)
-    const [toTime, setToTime] = useState(0)
+    const [fromTimeId, setFromTimeId] = useState(0)
+    const [toTimeId, setToTimeId] = useState(0)
     const [date, setDate] = useState(0)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
@@ -21,10 +21,15 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
             setLoading(true)
             const result = await axios({
                 url: "/api/timeslices",
-                params: { from_time__gt: now.startOf('day').toISOString(), from_time__lt: now.endOf('day').toISOString() }
+                params: {
+                    from_time__gt: now.startOf('day').toISOString(),
+                    from_time__lt: now.endOf('day').toISOString()
+                }
             })
             setLoading(false)
             setData(result.data)
+            setFromTimeId(0)
+            setToTimeId(0)
             setError(null)
         }
 
@@ -32,6 +37,18 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
             setError(`无法获取开馆时间: ${err}`)
         })
     }, [date])
+
+    const validate = () => {
+        if (dates[date].key == null) {
+            return false
+        }
+        if (fromTimeId > toTimeId) {
+            return false
+        }
+        return true
+    }
+
+    const genTimeslices = () => data.slice(fromTimeId, toTimeId + 1)
 
     return (
         <>
@@ -48,11 +65,19 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
                 <div>
                     <div className="display-4 d-flex flex-row align-items-center px-3">
                         从
-                        <LinkButtonSelect selections={data.map(({ id, from_time }) => ({ key: id, value: moment(from_time).local().format('HH:mm') }))} selected={fromTime} setSelected={setFromTime}></LinkButtonSelect>
+                        <LinkButtonSelect
+                            selections={
+                                data.map(({ id, from_time }) =>
+                                    ({ key: id, value: moment(from_time).local().format('HH:mm') }))}
+                            selected={fromTimeId} setSelected={setFromTimeId}></LinkButtonSelect>
                     </div>
                     <div className="display-4 d-flex flex-row align-items-center px-3">
                         到
-                        <LinkButtonSelect selections={data.map(({ id, to_time }) => ({ key: id, value: moment(to_time).local().format('HH:mm') }))} selected={toTime} setSelected={setToTime}></LinkButtonSelect>
+                        <LinkButtonSelect
+                            selections={
+                                data.map(({ id, to_time }) =>
+                                    ({ key: id, value: moment(to_time).local().format('HH:mm') }))}
+                            selected={toTimeId} setSelected={setToTimeId}></LinkButtonSelect>
                     </div>
                 </div>
             </ShowWhen>
@@ -61,7 +86,10 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
 
             <div className="display-4 d-flex justify-content-between">
                 <LinkButton onClick={prevStep}><i className="bi bi-arrow-left-square"></i></LinkButton>
-                <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
+                <LinkButton
+                    onClick={() => nextStep(genTimeslices())}
+                    className={{ "disabled": !validate() }}>
+                    <i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
         </>
     )
