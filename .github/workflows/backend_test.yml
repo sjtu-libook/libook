@@ -30,6 +30,7 @@ jobs:
     - run: pipenv install --dev
     - name: lint code style
       run: pipenv run pycodestyle --ignore=E501 **/*.py
+    - run: cp libook/secrets.example.py libook/secrets.py
     - name: check database migration files
       run: make makemigrations && git diff --exit-code
     - name: generate schema
