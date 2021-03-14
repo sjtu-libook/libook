@@ -69,7 +69,6 @@ class RegionGroupReservationSerializer(serializers.Serializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
-        fields = ('sid', 'name')
 
 
 class UserSerializer(serializers.ModelSerializer):
