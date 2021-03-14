@@ -1,11 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class User(models.Model):
+class UserInfo(models.Model):
     """
     用户是进行操作的最小单位。
     """
-    id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     sid = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=20)
     fingerprint_id = models.IntegerField(help_text="指纹 ID", null=True)
