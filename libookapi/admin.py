@@ -3,8 +3,8 @@ from django.contrib import admin
 from .models import *
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'sid', 'name', 'fingerprint_id', 'face_id')
+class UserInfoAdmin(admin.ModelAdmin):
+    list_display = ('sid', 'name', 'fingerprint_id', 'face_id', 'user')
 
 
 class RegionAdmin(admin.ModelAdmin):
@@ -31,7 +31,7 @@ class UserTokenAdmin(admin.ModelAdmin):
     list_display = ('id', 'token', 'user', 'expires_at')
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(RegionGroup, RegionGroupAdmin)
 admin.site.register(Timeslice, TimesliceAdmin)

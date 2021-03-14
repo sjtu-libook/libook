@@ -29,6 +29,7 @@ class TimesliceSerializer(serializers.ModelSerializer):
 
 
 class ReservationDetailSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
     region = RegionSerializer(many=False, read_only=True)
     time = TimesliceSerializer(many=False, read_only=True)
 
@@ -38,9 +39,14 @@ class ReservationDetailSerializer(serializers.ModelSerializer):
 
 
 class ReservationSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Reservation
-        fields = ('region', 'time')
+        fields = ('id', 'region', 'time', 'user')
 
 
 class ResultSerializer(serializers.Serializer):
