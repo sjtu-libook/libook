@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const dates = dateSelections()
 
-function TimeReserve({ prevStep, nextStep }) {
+function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
     const [fromTime, setFromTime] = useState(0)
     const [toTime, setToTime] = useState(0)
     const [date, setDate] = useState(0)
