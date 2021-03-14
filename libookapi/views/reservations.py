@@ -73,7 +73,7 @@ class BatchReservationView(views.APIView):
             OpenApiParameter("delete", OpenApiTypes.BOOL)
         ],
         request=ReservationSerializer(many=True),
-        responses=ResultSerializer,
+        responses=ReservationSerializer(many=True),
     )
     def post(self, request, format=None):
         """
