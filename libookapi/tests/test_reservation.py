@@ -34,3 +34,21 @@ def test_batch_reservation():
     assert response.json() == [{"id": 1, "region": region.id, "time": timeslice1.id},
                                {"id": 2, "region": region.id, "time": timeslice2.id}]
     assert response.status_code == 201
+
+
+@pytest.mark.django_db
+def test_batch_reservation_failed():
+    """提供非法信息时预约会失败"""
+
+    user = User.objects.create(username="Alex Chi")
+
+    client = APIClient()
+    client.force_authenticate(user=user)
+
+    reservations = [{"region": 1, "time": 3, "test": 233},
+                    {"region": 2, "time": 4}]
+    response = client.post(f'/api/reservations/batch',
+                           json.dumps(reservations),
+                           content_type='application/json'
+                           )
+    assert response.status_code == 400

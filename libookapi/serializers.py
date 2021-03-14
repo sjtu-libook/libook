@@ -49,8 +49,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = ('id', 'region', 'time', 'user')
 
 
-class ResultSerializer(serializers.Serializer):
-    success = serializers.BooleanField()
+class ErrorSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
 
 
