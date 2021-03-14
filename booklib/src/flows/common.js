@@ -39,3 +39,11 @@ export function LoadingWhen({ when, size, className }) {
         <span className="visually-hidden">加载中...</span>
     </div>
 }
+
+export function ErrorWhen({ error }) {
+    return error && <div className="px-3 text-muted" role="alert">
+        <i className="bi bi-exclamation-triangle-fill text-warning"></i>
+        &nbsp;
+        {error}
+    </div>
+}

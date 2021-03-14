@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonSelect, LinkButtonEnum, ShowWhen, LoadingWhen } from './common.js'
+import { LinkButton, LinkButtonSelect, LinkButtonEnum, ShowWhen, LoadingWhen, ErrorWhen } from './common.js'
 import { dateSelections } from './MainReserve.js'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
@@ -12,6 +12,7 @@ function TimeReserve({ prevStep, nextStep }) {
     const [date, setDate] = useState(0)
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         const now = dates[date].key
@@ -24,9 +25,12 @@ function TimeReserve({ prevStep, nextStep }) {
             })
             setLoading(false)
             setData(result.data)
+            setError(null)
         }
 
-        fetchTimeslice()
+        fetchTimeslice().catch(err => {
+            setError(`无法获取开馆时间: ${err}`)
+        })
     }, [date])
 
     return (
@@ -52,6 +56,9 @@ function TimeReserve({ prevStep, nextStep }) {
                     </div>
                 </div>
             </ShowWhen>
+
+            <ErrorWhen error={error}></ErrorWhen>
+
             <div className="display-4 d-flex justify-content-between">
                 <LinkButton onClick={prevStep}><i className="bi bi-arrow-left-square"></i></LinkButton>
                 <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>

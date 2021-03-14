@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonSelect, ShowWhen, LoadingWhen } from './common.js'
+import { LinkButton, LinkButtonSelect, ShowWhen, LoadingWhen, ErrorWhen } from './common.js'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
@@ -9,6 +9,7 @@ function LocationReserve({ prevStep, nextStep }) {
     const [loading2, setLoading2] = useState(true)
     const [regionGroup, setRegionGroup] = useState(0)
     const [region, setRegion] = useState(0)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         async function fetchRegionGroups() {
@@ -16,8 +17,12 @@ function LocationReserve({ prevStep, nextStep }) {
             const result = await axios("/api/region_groups")
             setLoading(false)
             setRegionGroupData(result.data)
+            setError(null)
         }
-        fetchRegionGroups()
+
+        fetchRegionGroups().catch(err => {
+            setError(`无法获取区域组: ${err}`)
+        })
     }, [])
 
     useEffect(() => {
@@ -27,9 +32,12 @@ function LocationReserve({ prevStep, nextStep }) {
             const result = await axios(`/api/region_groups/${regionGroupId}/detail`)
             setLoading2(false)
             setRegionData(result.data.regions)
+            setError(null)
         }
         if (regionGroupId) {
-            fetchRegions()
+            fetchRegions().catch(err => {
+                setError(`无法获取区域详情: ${err}`)
+            })
         }
     }, [regionGroupData, regionGroup])
 
@@ -50,6 +58,8 @@ function LocationReserve({ prevStep, nextStep }) {
                     <LinkButtonSelect selections={regionData.map(({ id, name }) => ({ key: id, value: name }))} selected={region} setSelected={setRegion}></LinkButtonSelect>
                 </div>
             </ShowWhen>
+
+            <ErrorWhen error={error}></ErrorWhen>
 
             <div className="display-4 d-flex justify-content-between">
                 <LinkButton onClick={prevStep}><i className="bi bi-arrow-left-square"></i></LinkButton>
