@@ -27,7 +27,9 @@ function StatusBar() {
     return (
         <>
             {error && <><i className="bi bi-exclamation-triangle-fill text-warning"></i> 无法登陆</>}
-            {loading && <div className="spinner-border spinner-border-sm text-muted" role="status"><span className="visually-hidden">加载中...</span></div>}
+            {loading && <div className="spinner-border spinner-border-sm text-muted" role="status">
+                <span className="visually-hidden">加载中...</span>
+            </div>}
             {user && `欢迎您，${user.username}`}
         </>
     )

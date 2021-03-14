@@ -40,6 +40,12 @@
       "semi": [
         "warn",
         "never"
+      ],
+      "max-len": [
+        "warn",
+        {
+          "code": 120
+        }
       ]
     }
   },
@@ -64,6 +70,5 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "http-proxy-middleware": "^1.0.6"
-  },
-  "proxy": "http://localhost:8000"
+  }
 }
