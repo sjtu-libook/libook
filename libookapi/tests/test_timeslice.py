@@ -22,8 +22,9 @@ def test_get_timeslice():
         to_time=tz.localize(datetime(2021, 3, 12, 10, 0, 0)))
 
     client = Client()
-    response = client.get(f'/api/timeslices/', {'from_time__gt': tz.localize(datetime(
-        2021, 3, 13, 0, 0, 0)), 'from_time__lt': tz.localize(datetime(2021, 3, 14, 0, 0, 0))})
+    response = client.get(f'/api/timeslices/', {
+        'from_time__gte': tz.localize(datetime(2021, 3, 13, 0, 0, 0)),
+        'from_time__lte': tz.localize(datetime(2021, 3, 14, 0, 0, 0))})
     assert response.status_code == 200
     assert response.json() == [
         TimesliceSerializer(timeslice1).data,

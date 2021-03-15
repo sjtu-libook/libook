@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
+import django_filters
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics, status
@@ -9,6 +10,30 @@ from django.db.models import Count, F
 
 from ..serializers import *
 from ..models import *
+
+class ReservationFilter(django_filters.FilterSet):
+    from_time__gte = django_filters.DateTimeFilter(
+        field_name='time__from_time', lookup_expr='gte')
+    from_time__lte = django_filters.DateTimeFilter(
+        field_name='time__from_time', lookup_expr='lte')
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'region', 'time']
+
+
+class ReservationView(viewsets.ReadOnlyModelViewSet):
+    """
+    获取预约信息。
+    """
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.reservation_set.all()
+
+    serializer_class = ReservationDetailSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ReservationFilter
 
 
 class QueryRegionReservationView(views.APIView):
