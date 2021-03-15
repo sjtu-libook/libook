@@ -28,6 +28,7 @@ class RegionView(viewsets.ReadOnlyModelViewSet):
     serializer_class = RegionSerializer
     filter_backends = [DjangoFilterBackend]
 
+
 class UserView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 

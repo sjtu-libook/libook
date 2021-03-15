@@ -1,6 +1,7 @@
 import { LinkButton } from './common.js'
 import minBy from 'lodash/minBy'
 import moment from 'moment'
+import { Link } from "react-router-dom"
 
 function parseTimeslice(timeslice) {
     const fromTime = minBy(timeslice, ts => ts.id)
@@ -17,7 +18,9 @@ function SuccessReserve({ timeslice }) {
                 <p>您可以在 {timeslice && parseTimeslice(timeslice)} 前取消预约。</p>
             </div>
             <div className="h3 d-flex justify-content-end">
-                <LinkButton className="text-muted">查看当前预约 <i className="bi bi-arrow-right"></i></LinkButton>
+                <Link to="/">
+                    <LinkButton className="text-muted">查看当前预约 <i className="bi bi-arrow-right"></i></LinkButton>
+                </Link>
             </div>
             <div className="h3 d-flex justify-content-end">
                 <LinkButton className="text-muted">继续预约 <i className="bi bi-arrow-right"></i></LinkButton>
