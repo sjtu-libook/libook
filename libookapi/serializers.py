@@ -14,6 +14,14 @@ class RegionGroupSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class RegionDetailSerializer(serializers.ModelSerializer):
+    group = RegionGroupSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Region
+        fields = ('id', 'name', 'group', 'capacity')
+
+
 class RegionGroupDetailSerializer(serializers.ModelSerializer):
     regions = RegionSerializer(many=True, read_only=True)
 
@@ -30,7 +38,7 @@ class TimesliceSerializer(serializers.ModelSerializer):
 
 class ReservationDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-    region = RegionSerializer(many=False, read_only=True)
+    region = RegionDetailSerializer(many=False, read_only=True)
     time = TimesliceSerializer(many=False, read_only=True)
 
     class Meta:
