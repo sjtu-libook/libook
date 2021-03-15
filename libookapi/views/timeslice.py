@@ -14,10 +14,10 @@ from ..models import *
 
 class TimesliceFilter(django_filters.FilterSet):
     from_time = django_filters.DateTimeFilter(field_name='from_time')
-    from_time__gt = django_filters.DateTimeFilter(
-        field_name='from_time', lookup_expr='gt')
-    from_time__lt = django_filters.DateTimeFilter(
-        field_name='from_time', lookup_expr='lt')
+    from_time__gte = django_filters.DateTimeFilter(
+        field_name='from_time', lookup_expr='gte')
+    from_time__lte = django_filters.DateTimeFilter(
+        field_name='from_time', lookup_expr='lte')
 
     class Meta:
         model = Timeslice

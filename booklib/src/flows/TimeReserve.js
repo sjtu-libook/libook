@@ -22,8 +22,8 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
             const result = await axios({
                 url: "/api/timeslices",
                 params: {
-                    from_time__gt: now.startOf('day').toISOString(),
-                    from_time__lt: now.endOf('day').toISOString()
+                    from_time__gte: now.startOf('day').toISOString(),
+                    from_time__lte: now.endOf('day').toISOString()
                 }
             })
             setLoading(false)

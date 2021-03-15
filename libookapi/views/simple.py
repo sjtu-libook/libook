@@ -28,16 +28,6 @@ class RegionView(viewsets.ReadOnlyModelViewSet):
     serializer_class = RegionSerializer
     filter_backends = [DjangoFilterBackend]
 
-
-class ReservationView(viewsets.ReadOnlyModelViewSet):
-    """
-    获取预约信息。
-    """
-    queryset = Reservation.objects.all()
-    serializer_class = ReservationDetailSerializer
-    filter_backends = [DjangoFilterBackend]
-
-
 class UserView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
