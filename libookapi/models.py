@@ -76,6 +76,7 @@ class UserToken(models.Model):
     一次性验证 Token 是用户第一次落座时输入的一串数字。可以用于绑定指纹和身份。
     """
     id = models.AutoField(primary_key=True, help_text="Token ID")
-    token = models.CharField(max_length=64, help_text="Token")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text="对应用户")
+    token = models.CharField(max_length=64, help_text="Token", unique=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, help_text="对应用户")
     expires_at = models.DateTimeField(help_text="Token 过期时间")

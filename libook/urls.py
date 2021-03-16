@@ -38,6 +38,8 @@ urlpatterns = [
          views.QueryRegionReservationView.as_view(), name='batch_query_region'),
     path('api/region_groups/<int:id>/detail',
          views.RegionGroupDetailView.as_view(), name='region_group_detail'),
+    path('api/devices/<int:id>', views.DeviceView.as_view(), name='device'),
+    path('api/tokens/', views.TokenView.as_view(), name='token'),
     # Authentication
     path('api/auth/', include('rest_framework.urls')),
     *logins.urlpatterns,
