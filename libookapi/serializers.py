@@ -86,3 +86,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'user_info')
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserToken
+        fields = ('token', 'expires_at')
