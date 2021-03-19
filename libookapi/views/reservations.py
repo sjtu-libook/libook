@@ -102,6 +102,7 @@ class BatchReservationView(views.APIView):
     )
     def post(self, request, format=None):
         """
+        TODO: 实现预定逻辑
         批量订位/取消订位
         1. 用户只能在预约时间之前更改预约信息
         2. 一个场地的预约数不能超过场地限制

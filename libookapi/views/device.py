@@ -21,6 +21,7 @@ class DeviceView(views.APIView):
     )
     def get(self, request, format=None):
         """
+        TODO: 决定需要返回给嵌入式设备的数据，创建新的 Serializer，并实现该接口
         获取某个设备绑定的位置信息
         1. 验证 API Key
         2. 返回所有需要的信息
@@ -32,5 +33,6 @@ class DeviceView(views.APIView):
     )
     def post(self, request, format=None):
         """
+        TODO: 嵌入式设备提交的，创建新的 Serializer，并实现该接口
         用户入座后确认用户的预约
         """
