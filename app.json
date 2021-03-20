@@ -1,0 +1,21 @@
+{
+    "name": "libook",
+    "description": "A library booking system",
+    "image": "heroku/python",
+    "repository": "https://github.com/skyzh/libook",
+    "keywords": [
+        "python",
+        "django"
+    ],
+    "addons": [
+        "heroku-postgresql"
+    ],
+    "environments": {
+        "test": {
+            "scripts": {
+                "test-setup": "python manage.py collectstatic --noinput",
+                "test": "python manage.py test"
+            }
+        }
+    }
+}

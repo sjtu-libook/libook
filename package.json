@@ -1,0 +1,19 @@
+{
+    "name": "libook-build",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "",
+    "author": "Alex Chi",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "heroku-prebuild": "NODE_ENV=production cd booklib/ && yarn install && yarn build && cd .. && rm Pipfile*"
+    },
+    "cacheDirectories": [
+        "booklib/node_modules"
+    ],
+    "engines": {
+        "yarn": "1.x",
+        "node": "14.x"
+    }
+}
