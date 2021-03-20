@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 from .secrets import GITHUB_CLIENT_SECRET
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -142,3 +143,5 @@ AUTHLIB_OAUTH_CLIENTS = {
         'client_secret': GITHUB_CLIENT_SECRET,
     }
 }
+
+REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
