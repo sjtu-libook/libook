@@ -16,7 +16,7 @@ function StatusBar() {
         }
 
         fetchUser().catch(error => {
-            if (error?.response?.status === 401) {
+            if (error?.response?.status === 401 || error?.response?.status == 403) {
                 window.location = "/api/auth/github/login"
             }
             setError(true)
