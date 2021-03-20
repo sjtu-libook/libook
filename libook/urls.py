@@ -53,4 +53,4 @@ urlpatterns = [
 ]
 
 if not settings.DEBUG:
-     urlpatterns.append(re_path(r'^', views.FrontendAppView.as_view()))
+    urlpatterns.append(re_path(r'^', views.FrontendAppView.as_view()))
