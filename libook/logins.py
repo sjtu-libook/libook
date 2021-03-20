@@ -14,12 +14,12 @@ backends = [GitHub]
 
 
 def handle_authorize(request, remote, token, user_info):
+    username = "github-" + user_info['preferred_username']
     try:
-        user = User.objects.get(email=user_info['email'])
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         user = User.objects.create_user(
-            username="github-" + user_info['preferred_username'],
-            email=user_info['email'], password=''.join(
+            username=username, password=''.join(
                 random.choices(string.ascii_uppercase + string.digits, k=32)))
     login(request, user)
     return redirect('/')
