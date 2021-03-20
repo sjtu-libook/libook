@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn libook.wsgi
+web: gunicorn libook.wsgi --log-file=-
