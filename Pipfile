@@ -13,6 +13,7 @@ pytz = "*"
 tzlocal = "*"
 authlib = "*"
 loginpass = "*"
+gunicorn = "*"
 
 [dev-packages]
 autopep8 = "*"

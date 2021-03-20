@@ -4,3 +4,4 @@ from .timeslice import *
 from .region_group import *
 from .device import *
 from .token import *
+from .frontend import *
