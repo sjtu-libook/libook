@@ -22,7 +22,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start": "cross-env PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.3.1",
     "eslint-plugin-import": "^2.22.1",
