@@ -6,7 +6,7 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count, F
+from django.db.models import Count, F, Value, IntegerField
 
 from ..serializers import *
 from ..models import *
@@ -81,17 +81,31 @@ class QueryRegionGroupReservationView(views.APIView):
         """
         查询区域组的预约情况
         """
-        group = request.GET.get('region_group_id')
+        group_id = request.GET.get('region_group_id')
         min_time_id = request.GET.get('min_time_id')
         max_time_id = request.GET.get('max_time_id')
-        reserved_time = Reservation.objects \
-            .filter(time__gte=min_time_id, time__lte=max_time_id, group=group) \
-            .values('region', 'time') \
-            .annotate(reserved=Count('*')) \
-            .annotate(region_id=F('region')) \
-            .annotate(time_id=F('time')) \
-            .values('region_id', 'time_id', 'reserved')
-        serializer = RegionReservationSerializer(reserved_time, many=True)
+        group = RegionGroup.objects.get(id=group_id)
+        regions = group.regions.order_by('id')
+
+        reserved_time = Reservation.objects.none()
+        reserved_num = 0
+        capacity = 0
+
+        for region in regions:
+            capacity += region.capacity
+            region_query_set = Reservation.objects \
+                .filter(time__gte=min_time_id, time__lte=max_time_id, region=region) \
+                .values('time') \
+                .annotate(time_id=F('time')) \
+                .values('time_id')
+            reserved_num += len(region_query_set)
+            reserved_time |= region_query_set
+
+        reserved_time = reserved_time.distinct() \
+                                     .annotate(reserved=Value(reserved_num, output_field=IntegerField())) \
+                                     .annotate(region_group_id=Value(group_id, output_field=IntegerField())) \
+                                     .annotate(capacity=Value(capacity, output_field=IntegerField()))
+        serializer = RegionGroupReservationSerializer(reserved_time, many=True)
         return Response(serializer.data)
 
 
