@@ -6,7 +6,8 @@ import {
 } from "react-router-dom"
 import MakeReservation from "./MakeReservation"
 import Reservations from './Reservations'
-import StatusBar from "./StatusBar"
+import StatusBar from './StatusBar'
+import Login from './Login'
 
 function App() {
     return <Router>
@@ -35,6 +36,9 @@ function App() {
                         <Switch>
                             <Route path="/reservation/new">
                                 <MakeReservation></MakeReservation>
+                            </Route>
+                            <Route path="/login">
+                                <Login></Login>
                             </Route>
                             <Route path="/">
                                 <Reservations></Reservations>

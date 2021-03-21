@@ -148,6 +148,10 @@ AUTHLIB_OAUTH_CLIENTS = {
     'github': {
         'client_id': '52abfc75054b4213999b',
         'client_secret': os.environ['GITHUB_CLIENT_SECRET'],
+    },
+    'jaccount': {
+        'client_id': os.environ.get('JACCOUNT_CLIENT_ID', ''),
+        'client_secret': os.environ.get('JACCOUNT_CLIENT_SECRET', ''),
     }
 }
 
