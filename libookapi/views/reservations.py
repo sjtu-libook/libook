@@ -24,6 +24,8 @@ class ReservationFilter(django_filters.FilterSet):
 
 
 class ReservationView(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
     """
     获取预约信息。
     """
