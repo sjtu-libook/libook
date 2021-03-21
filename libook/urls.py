@@ -19,7 +19,7 @@ from django.conf import settings
 from rest_framework import routers
 from libookapi import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from . import logins
+from . import oauth
 
 router = routers.DefaultRouter()
 router.register(r'region_groups', views.RegionGroupView, 'region_groups')
@@ -43,7 +43,7 @@ urlpatterns = [
     path('api/tokens/', views.TokenView.as_view(), name='token'),
     # Authentication
     path('api/auth/', include('rest_framework.urls')),
-    *logins.urlpatterns,
+    *oauth.urlpatterns,
     # REST API Schemas
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/',

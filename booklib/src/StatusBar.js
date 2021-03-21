@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useHistory } from "react-router-dom"
 import axios from 'axios'
 
 function StatusBar() {
+    const history = useHistory()
+
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -17,12 +20,12 @@ function StatusBar() {
 
         fetchUser().catch(error => {
             if (error?.response?.status === 401 || error?.response?.status === 403) {
-                window.location = "/api/auth/github/login"
+                history.push("/login")
             }
             setError(true)
             setLoading(false)
         })
-    }, [])
+    }, [history])
 
     return (
         <>
