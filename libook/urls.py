@@ -37,6 +37,8 @@ urlpatterns = [
          views.QueryRegionGroupReservationView.as_view(), name='batch_query_region_group'),
     path('api/reservations/by_region',
          views.QueryRegionReservationView.as_view(), name='batch_query_region'),
+    path('api/reservations/by_all',
+         views.QueryAllRegionGroupReservationView.as_view(), name='batch_query_region_all'),
     path('api/region_groups/<int:id>/detail',
          views.RegionGroupDetailView.as_view(), name='region_group_detail'),
     path('api/devices/<int:id>', views.DeviceView.as_view(), name='device'),
