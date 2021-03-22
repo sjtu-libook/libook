@@ -63,8 +63,8 @@ def auth_jaccount(request):
     token = client.authorize_access_token(request)
     claims = jwt.decode(token.get('id_token'),
                         client.client_secret, claims_cls=CodeIDToken)
-    login_with(request, claims['sub'] +
-               "@sjtu.edu.cn", "sjtu-" + claims['sub'])
+    login_with(request,
+               claims['sub'] + "@sjtu.edu.cn", "sjtu-" + claims['sub'])
     return redirect('/')
 
 
