@@ -9,7 +9,7 @@
 
 ```bash
 pip3 install pipenv
-pipenv install
+pipenv install --dev
 make migrate # 创建数据库
 make run.backend
 ```
