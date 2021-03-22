@@ -19,6 +19,7 @@ gunicorn = "*"
 autopep8 = "*"
 pycodestyle = "*"
 pytest-django = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.9"
