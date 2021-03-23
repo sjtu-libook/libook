@@ -2,14 +2,19 @@ import { ErrorWhen, LoadingWhen } from "./flows/common"
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import moment from "moment"
+import { mergeReservation } from "./utils"
 
 function ReservationItem({ reservation }) {
-    const fromTime = moment(reservation.time.from_time).format('HH:mm')
-    const toTime = moment(reservation.time.to_time).format('HH:mm')
+    const fromTime = moment(reservation.merged_time.from_time).format('HH:mm')
+    const toTime = moment(reservation.merged_time.to_time).format('HH:mm')
 
-    return <div className="d-flex justify-content-between list-group-item">
-        <div>{reservation.region.group.name} {reservation.region.name}</div>
-        <div>{fromTime} - {toTime}</div>
+    return <div className="card mb-3">
+        <div className="card-body">
+            <h5 className="card-title">{fromTime} - {toTime}</h5>
+            <p className="card-text">{reservation.region.group.name} {reservation.region.name}</p>
+            <a href="/" className="card-link">查看详情</a>
+            <a href="/" className="card-link">取消预约</a>
+        </div>
     </div>
 }
 
@@ -47,7 +52,7 @@ function Reservations() {
         </div>
         <div>
             <ul className="list-group">
-                {reservations.map(reservation => 
+                {mergeReservation(reservations).map(reservation => 
                     <ReservationItem reservation={reservation} key={reservation.id}></ReservationItem>)}
             </ul>
         </div>
