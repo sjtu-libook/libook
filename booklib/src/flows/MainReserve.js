@@ -91,7 +91,8 @@ function MainReserve({ nextStep, generalStep }) {
             </div>
             <div className="display-4 d-flex justify-content-between">
                 <LinkButtonEnum selections={hours} selected={hour} setSelected={setHour}></LinkButtonEnum>
-                <LinkButton onClick={nextStep}><i className="bi bi-arrow-right-square"></i></LinkButton>
+                <LinkButton className="disabled" onClick={nextStep}>
+                    <i className="bi bi-arrow-right-square"></i></LinkButton>
             </div>
             <div className="h3 d-flex justify-content-end">
                 <LinkButton className="text-muted" onClick={generalStep}>
