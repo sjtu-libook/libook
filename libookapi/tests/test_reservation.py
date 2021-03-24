@@ -119,3 +119,33 @@ def test_reservation_delete():
     response = client.get(f'/api/reservations/')
     assert response.status_code == 200
     assert response.json() == []
+
+
+@pytest.mark.django_db
+def test_reservation_post_only_self():
+    """只能提交自己的预约"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice1 = Timeslice.objects.create(
+        from_time=tz.localize(datetime(2021, 3, 13, 8, 0, 0)),
+        to_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)))
+    user1 = User.objects.create(username="Alex Chi")
+    user2 = User.objects.create(username="Bob Chi")
+
+    client = APIClient()
+    client.force_authenticate(user=user1)
+
+    reservations = [{"region": region.id,
+                     "time": timeslice1.id, "user": user2.id}]
+    response = client.post(f'/api/reservations/batch',
+                           json.dumps(reservations),
+                           content_type='application/json'
+                           )
+    assert response.status_code == 201
+
+    # 即使指定了 user 参数，这个预约最终也会添加到自己的用户下。
+    response = client.get(f'/api/reservations/')
+    assert response.status_code == 200
+    assert response.json() != []
