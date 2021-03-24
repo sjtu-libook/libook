@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F, Value, IntegerField
 from itertools import chain
+from datetime import datetime, timedelta
+from pytz import timezone
+import pytz
 
 from ..serializers import *
 from ..models import *
@@ -143,17 +146,59 @@ class BatchReservationView(views.APIView):
     )
     def post(self, request, format=None):
         """
-        TODO: 实现预定逻辑
-        批量订位/取消订位
-        1. 用户只能在预约时间之前更改预约信息
+        实现批量订位
+        1. 用户只能在预约时间片起始时间之前订位
         2. 一个场地的预约数不能超过场地限制
         3. 用户在同一个时间段只能预约一个场地
-        4. ...
+        4. 用户只能预约接下来一周的场地
+        5. ... to be continued
         """
         serializer = ReservationSerializer(
             data=request.data, many=True, context={'request': request})
         if serializer.is_valid():
-            # TODO: 增加更多的检测
+            '''检测请求是否有效'''
+            for i in range(len(serializer.data)):
+
+                # 1. 用户只能在预约时间片起始时间之前订位
+                reserve_timeslice = Timeslice.objects.get(
+                    id=serializer.data[i]['time'])
+                tz = timezone('Asia/Shanghai')
+                reserve_fromtime = reserve_timeslice.from_time.replace(
+                    tzinfo=pytz.utc).astimezone(tz)
+                reserve_totime = reserve_timeslice.to_time.replace(
+                    tzinfo=pytz.utc).astimezone(tz)
+                curr_time = tz.localize(datetime.today())
+                if curr_time > reserve_fromtime:
+                    message = {'message': '预约失败！您不能预约过去的位置'}
+                    serializer = ErrorSerializer(message)
+                    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+                # 2. 一个场地的预约数不能超过场地限制
+                reserve_region = Region.objects.get(
+                    id=serializer.data[i]['region'])
+                reserve_num = len(Reservation.objects.filter(
+                    region=reserve_region, time=reserve_timeslice))
+                if reserve_num >= reserve_region.capacity:
+                    message = {'message': f"预约失败！区域「{reserve_region.name}」在时间段"
+                               f"「{reserve_fromtime.strftime('%Y-%m-%d %H:00')} ~ "
+                               f"{reserve_totime.strftime('%H:00')}」已预约满"}
+                    serializer = ErrorSerializer(message)
+                    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+                # 3. 用户在同一个时间段只能预约一个场地
+                if len(Reservation.objects.filter(user=request.user, time=reserve_timeslice)) > 0:
+                    message = {'message': "预约失败！您在时间段「"
+                               f"{reserve_fromtime.strftime('%Y-%m-%d %H:00')} ~ "
+                               f"{reserve_totime.strftime('%H:00')}」已预约了一个位置"}
+                    serializer = ErrorSerializer(message)
+                    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+                # 4. 用户只能预约接下来一周的场地
+                if reserve_fromtime > tz.localize(datetime.today()) + timedelta(days=7):
+                    message = {'message': '预约失败！您只能预约未来一周的位置'}
+                    serializer = ErrorSerializer(message)
+                    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

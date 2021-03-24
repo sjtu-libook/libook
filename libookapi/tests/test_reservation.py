@@ -1,7 +1,7 @@
 import pytest
 import json
 from rest_framework.test import APIClient
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 from ..models import *
 from ..serializers import ReservationDetailSerializer
@@ -10,17 +10,16 @@ from ..serializers import ReservationDetailSerializer
 @pytest.mark.django_db
 def test_batch_reservation():
     """可以批量预约"""
-    # TODO: 加入重复预约、超过限制等错误情况的测试
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     tz = timezone('Asia/Shanghai')
     timeslice1 = Timeslice.objects.create(
-        from_time=tz.localize(datetime(2021, 3, 13, 8, 0, 0)),
-        to_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)))
+        from_time=tz.localize(datetime.today() + timedelta(days=1)),
+        to_time=tz.localize(datetime.today() + timedelta(days=1, hours=1)))
     timeslice2 = Timeslice.objects.create(
-        from_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)),
-        to_time=tz.localize(datetime(2021, 3, 13, 10, 0, 0)))
+        from_time=tz.localize(datetime.today() + timedelta(days=2)),
+        to_time=tz.localize(datetime.today() + timedelta(days=2, hours=1)))
     user = User.objects.create(username="Alex Chi")
 
     client = APIClient()
@@ -32,8 +31,8 @@ def test_batch_reservation():
                            json.dumps(reservations),
                            content_type='application/json'
                            )
-    assert response.json() == [{"id": 1, "region": region.id, "time": timeslice1.id},
-                               {"id": 2, "region": region.id, "time": timeslice2.id}]
+    assert response.json() == [{"region": region.id, "time": timeslice1.id},
+                               {"region": region.id, "time": timeslice2.id}]
     assert response.status_code == 201
 
 
@@ -129,8 +128,8 @@ def test_reservation_post_only_self():
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     tz = timezone('Asia/Shanghai')
     timeslice1 = Timeslice.objects.create(
-        from_time=tz.localize(datetime(2021, 3, 13, 8, 0, 0)),
-        to_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)))
+        from_time=tz.localize(datetime.today() + timedelta(days=1)),
+        to_time=tz.localize(datetime.today() + timedelta(days=1, hours=1)))
     user1 = User.objects.create(username="Alex Chi")
     user2 = User.objects.create(username="Bob Chi")
 
@@ -149,3 +148,118 @@ def test_reservation_post_only_self():
     response = client.get(f'/api/reservations/')
     assert response.status_code == 200
     assert response.json() != []
+
+
+@pytest.mark.django_db
+def test_batch_reservation_failed_01():
+    """1. 用户只能在预约时间片起始时间之前订位"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice = Timeslice.objects.create(
+        from_time=tz.localize(datetime(1999, 1, 1, 8, 0, 0)),
+        to_time=tz.localize(datetime(1999, 1, 1, 9, 0, 0)))
+    user = User.objects.create(username="Zihan")
+
+    client = APIClient()
+    client.force_authenticate(user=user)
+
+    reservations = [{"region": region.id, "time": timeslice.id}]
+    response = client.post(f'/api/reservations/batch',
+                           json.dumps(reservations),
+                           content_type='application/json'
+                           )
+    assert response.status_code == 400
+    assert response.json() == {'message': '预约失败！您不能预约过去的位置'}
+
+
+@pytest.mark.django_db
+def test_batch_reservation_failed_02():
+    """2. 一个场地的预约数不能超过场地限制"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=2, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice = Timeslice.objects.create(
+        from_time=tz.localize(datetime.today() + timedelta(days=1)),
+        to_time=tz.localize(datetime.today() + timedelta(days=2)))
+    user1 = User.objects.create(username="Zihan")
+    user2 = User.objects.create(username="Alex Chi")
+    user3 = User.objects.create(username="Bob Chi")
+
+    for user in [user1, user2, user3]:
+        client = APIClient()
+        client.force_authenticate(user=user)
+        reservations = [{"region": region.id, "time": timeslice.id}]
+        response = client.post(f'/api/reservations/batch',
+                               json.dumps(reservations),
+                               content_type='application/json'
+                               )
+        if user == user3:
+            assert response.status_code == 400
+            assert response.json() == {'message': f"预约失败！区域「{region.name}」在时间段"
+                                       f"「{timeslice.from_time.strftime('%Y-%m-%d %H:00')} ~ "
+                                       f"{timeslice.to_time.strftime('%H:00')}」已预约满"}
+        else:
+            assert response.status_code == 201
+            if user == user1:
+                assert response.json() == [
+                    {"region": region.id, "time": timeslice.id}]
+            else:
+                assert response.json() == [
+                    {"region": region.id, "time": timeslice.id}]
+
+
+@pytest.mark.django_db
+def test_batch_reservation_failed_03():
+    """3. 用户在同一个时间段只能预约一个场地"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region1 = Region.objects.create(name="新图 E100", capacity=10, group=group)
+    region2 = Region.objects.create(name="新图 A100", capacity=10, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice = Timeslice.objects.create(
+        from_time=tz.localize(datetime.today() + timedelta(days=1)),
+        to_time=tz.localize(datetime.today() + timedelta(days=1, hours=1)))
+    user = User.objects.create(username="Zihan")
+
+    client = APIClient()
+    client.force_authenticate(user=user)
+    reservations = [{"region": region1.id, "time": timeslice.id}]
+    client.post(f'/api/reservations/batch',
+                json.dumps(reservations),
+                content_type='application/json'
+                )
+    reservations = [{"region": region2.id, "time": timeslice.id}]
+    response = client.post(f'/api/reservations/batch',
+                           json.dumps(reservations),
+                           content_type='application/json'
+                           )
+    assert response.status_code == 400
+    assert response.json() == {'message': f"预约失败！您在时间段「"
+                               f"{timeslice.from_time.strftime('%Y-%m-%d %H:00')} ~ "
+                               f"{timeslice.to_time.strftime('%H:00')}」已预约了一个位置"}
+
+
+@pytest.mark.django_db
+def test_batch_reservation_failed_04():
+    """4. 用户只能预约接下来一周的场地"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=10, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice = Timeslice.objects.create(
+        from_time=tz.localize(datetime.today() + timedelta(days=10)),
+        to_time=tz.localize(datetime.today() + timedelta(days=11)))
+    user = User.objects.create(username="Zihan")
+
+    client = APIClient()
+    client.force_authenticate(user=user)
+    reservations = [{"region": region.id, "time": timeslice.id}]
+    response = client.post(f'/api/reservations/batch',
+                           json.dumps(reservations),
+                           content_type='application/json'
+                           )
+    assert response.status_code == 400
+    assert response.json() == {'message': '预约失败！您只能预约未来一周的位置'}
