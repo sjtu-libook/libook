@@ -6,7 +6,8 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count, F
+from django.db.models import Count, F, Value, IntegerField
+from itertools import chain
 
 from ..serializers import *
 from ..models import *
@@ -108,7 +109,26 @@ class QueryAllRegionGroupReservationView(views.APIView):
         查询所有区域组的预约情况，返回一个数组，代表各个区域组在
         [min_time_id, max_time_id] 每个时间段内的预约情况。
         """
-        return Response()
+        min_time_id = request.GET.get('min_time_id')
+        max_time_id = request.GET.get('max_time_id')
+        groups = RegionGroup.objects.all()
+        reserved_time = Reservation.objects.none()
+        for group in groups:                                                
+            regions = group.regions.all()
+            capacity = 0
+            for region in regions:
+                capacity += region.capacity
+            curr_reserved_time = Reservation.objects \
+                .filter(time__gte=min_time_id, time__lte=max_time_id, region__group=group) \
+                .values('time') \
+                .annotate(reserved=Count('*')) \
+                .annotate(capacity=Value(capacity, output_field=IntegerField())) \
+                .annotate(time_id=F('time')) \
+                .annotate(region_group_id=Value(group.id, output_field=IntegerField())) \
+                .values('reserved', 'capacity', 'time_id', 'region_group_id')
+            reserved_time = chain(reserved_time, curr_reserved_time)
+        serializer = RegionGroupReservationSerializer(reserved_time, many=True)   
+        return Response(serializer.data)
 
 
 class BatchReservationView(views.APIView):
