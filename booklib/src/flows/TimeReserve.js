@@ -6,6 +6,10 @@ import axios from 'axios'
 
 const dates = dateSelections()
 
+export function filterToNow(timeslices, now) {
+    return timeslices.filter(timeslice => moment(timeslice.from_time).isAfter(now))
+}
+
 function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
     const [fromTimeId, setFromTimeId] = useState(0)
     const [toTimeId, setToTimeId] = useState(0)
@@ -20,14 +24,14 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
         async function fetchTimeslice() {
             setLoading(true)
             const result = await axios({
-                url: "/api/timeslices",
+                url: "/api/timeslices/",
                 params: {
                     from_time__gte: now.startOf('day').toISOString(),
                     from_time__lte: now.endOf('day').toISOString()
                 }
             })
             setLoading(false)
-            setData(result.data)
+            setData(filterToNow(result.data, moment()))
             setFromTimeId(0)
             setToTimeId(0)
             setError(null)

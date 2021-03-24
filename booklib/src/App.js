@@ -14,8 +14,8 @@ function App() {
         <div className="container-fluid vh-100">
             <div className="row justify-content-center h-100">
                 <div className="col-12 mb-3 p-0">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <div class="container-fluid">
+                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <div className="container-fluid">
                             <ul className="navbar-nav me-auto">
                                 <li className="nav-item">
                                     <NavLink className="nav-link" activeClassName="active" exact to="/">所有预约</NavLink>

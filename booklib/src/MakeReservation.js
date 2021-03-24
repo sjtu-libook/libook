@@ -73,6 +73,7 @@ function MakeReservation() {
             </FlowTransition>
             <FlowTransition match={step === "general-location"}>
                 <LocationReserve
+                    timeslice={timeslice}
                     prevStep={() => setStep("general-time")}
                     nextStep={location => { setLocation(location); setStep("general-confirm") }}>
                 </LocationReserve>

@@ -33,5 +33,8 @@ lint.frontend:
 format.frontend:
 	cd booklib && yarn lint --fix
 
+test.frontend:
+	cd booklib && yarn test
+
 build.frontend:
 	cd booklib && yarn build
