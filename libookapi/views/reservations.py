@@ -3,7 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
-from rest_framework import viewsets, permissions, views, generics, status
+from rest_framework import viewsets, permissions, views, generics, status, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F, Value, IntegerField
@@ -24,11 +24,14 @@ class ReservationFilter(django_filters.FilterSet):
         fields = ['id', 'region', 'time']
 
 
-class ReservationView(viewsets.ReadOnlyModelViewSet):
+class ReservationView(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     """
-    获取预约信息。
+    获取、删除单个预约信息。
     """
 
     def get_queryset(self):
@@ -113,7 +116,7 @@ class QueryAllRegionGroupReservationView(views.APIView):
         max_time_id = request.GET.get('max_time_id')
         groups = RegionGroup.objects.all()
         reserved_time = Reservation.objects.none()
-        for group in groups:                                                
+        for group in groups:
             regions = group.regions.all()
             capacity = 0
             for region in regions:
@@ -127,7 +130,7 @@ class QueryAllRegionGroupReservationView(views.APIView):
                 .annotate(region_group_id=Value(group.id, output_field=IntegerField())) \
                 .values('reserved', 'capacity', 'time_id', 'region_group_id')
             reserved_time = chain(reserved_time, curr_reserved_time)
-        serializer = RegionGroupReservationSerializer(reserved_time, many=True)   
+        serializer = RegionGroupReservationSerializer(reserved_time, many=True)
         return Response(serializer.data)
 
 

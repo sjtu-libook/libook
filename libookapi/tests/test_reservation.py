@@ -91,3 +91,31 @@ def test_reservation_get_only_self():
                           {'from_time__gte': timeslice2.from_time})
     assert response.status_code == 200
     assert response.json() == [ReservationDetailSerializer(r2).data]
+
+
+@pytest.mark.django_db
+def test_reservation_delete():
+    """可以删除预约"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice1 = Timeslice.objects.create(
+        from_time=tz.localize(datetime(2021, 3, 13, 8, 0, 0)),
+        to_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)))
+    user1 = User.objects.create(username="Alex Chi")
+    r1 = Reservation.objects.create(user=user1, time=timeslice1, region=region)
+
+    client = APIClient()
+    client.force_authenticate(user=user1)
+
+    response = client.get(f'/api/reservations/')
+    assert response.status_code == 200
+    assert response.json() != []
+
+    response = client.delete(f'/api/reservations/{r1.id}/')
+    assert response.status_code == 204
+
+    response = client.get(f'/api/reservations/')
+    assert response.status_code == 200
+    assert response.json() == []
