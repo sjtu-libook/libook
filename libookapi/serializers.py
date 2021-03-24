@@ -57,6 +57,11 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = ('id', 'region', 'time', 'user')
 
 
+class ReservationResultSerializer(serializers.ModelSerializer):
+    reservation = ReservationSerializer()
+    reason = serializers.CharField()
+
+
 class ErrorSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
 
