@@ -3,6 +3,7 @@ import json
 from rest_framework.test import APIClient
 from datetime import datetime, timedelta
 from pytz import timezone
+from django.utils.timezone import now
 from ..models import *
 from ..serializers import ReservationDetailSerializer
 
@@ -10,16 +11,14 @@ from ..serializers import ReservationDetailSerializer
 @pytest.mark.django_db
 def test_batch_reservation():
     """可以批量预约"""
-
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
-    tz = timezone('Asia/Shanghai')
     timeslice1 = Timeslice.objects.create(
-        from_time=tz.localize(datetime.today() + timedelta(days=1)),
-        to_time=tz.localize(datetime.today() + timedelta(days=1, hours=1)))
+        from_time=now() + timedelta(days=1),
+        to_time=now() + timedelta(days=1, hours=1))
     timeslice2 = Timeslice.objects.create(
-        from_time=tz.localize(datetime.today() + timedelta(days=2)),
-        to_time=tz.localize(datetime.today() + timedelta(days=2, hours=1)))
+        from_time=now() + timedelta(days=2),
+        to_time=now() + timedelta(days=2, hours=1))
     user = User.objects.create(username="Alex Chi")
 
     client = APIClient()
@@ -218,10 +217,9 @@ def test_batch_reservation_failed_03():
     group = RegionGroup.objects.create(name="新图 1 楼")
     region1 = Region.objects.create(name="新图 E100", capacity=10, group=group)
     region2 = Region.objects.create(name="新图 A100", capacity=10, group=group)
-    tz = timezone('Asia/Shanghai')
     timeslice = Timeslice.objects.create(
-        from_time=tz.localize(datetime.today() + timedelta(days=1)),
-        to_time=tz.localize(datetime.today() + timedelta(days=1, hours=1)))
+        from_time=now() + timedelta(days=1),
+        to_time=now() + timedelta(days=1, hours=1))
     user = User.objects.create(username="Zihan")
 
     client = APIClient()
@@ -229,13 +227,11 @@ def test_batch_reservation_failed_03():
     reservations = [{"region": region1.id, "time": timeslice.id}]
     client.post(f'/api/reservations/batch',
                 json.dumps(reservations),
-                content_type='application/json'
-                )
+                content_type='application/json')
     reservations = [{"region": region2.id, "time": timeslice.id}]
     response = client.post(f'/api/reservations/batch',
                            json.dumps(reservations),
-                           content_type='application/json'
-                           )
+                           content_type='application/json')
     assert response.status_code == 400
     assert response.json() == {'message': f"预约失败！您在时间段「"
                                f"{timeslice.from_time.strftime('%Y-%m-%d %H:00')} ~ "
@@ -250,8 +246,8 @@ def test_batch_reservation_failed_04():
     region = Region.objects.create(name="新图 E100", capacity=10, group=group)
     tz = timezone('Asia/Shanghai')
     timeslice = Timeslice.objects.create(
-        from_time=tz.localize(datetime.today() + timedelta(days=10)),
-        to_time=tz.localize(datetime.today() + timedelta(days=11)))
+        from_time=now() + timedelta(days=10),
+        to_time=now() + timedelta(days=11))
     user = User.objects.create(username="Zihan")
 
     client = APIClient()
