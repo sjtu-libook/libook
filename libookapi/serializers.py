@@ -65,7 +65,6 @@ class ReservationSerializer(serializers.ModelSerializer):
         model = Reservation
         fields = ('id', 'region', 'time', 'user')
 
-
 class ErrorSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
 
@@ -100,3 +99,11 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserToken
         fields = ('token', 'expires_at')
+
+class DeviceReservationSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    region = RegionSerializer()
+    time = TimesliceSerializer()
+    class Meta:
+        model = Reservation
+        fields = ('id', 'region', 'time', 'user')

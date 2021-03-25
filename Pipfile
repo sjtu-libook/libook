@@ -21,6 +21,7 @@ autopep8 = "*"
 pycodestyle = "*"
 pytest-django = "*"
 pytest = "*"
+assertpy = "*"
 
 [requires]
 python_version = "3.9"
