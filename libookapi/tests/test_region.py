@@ -23,6 +23,12 @@ def test_get_region_detail():
     region1 = Region.objects.create(name="新图 E100", capacity=100, group=group)
     region2 = Region.objects.create(name="新图 E200", capacity=50, group=group)
     client = Client()
+
+    response = client.get(f'/api/region_groups/')
+    assert response.status_code == 200
+    assert response.json() == [
+        {"id": group.id, "name": group.name, "capacity": 150}]
+
     response = client.get(f'/api/region_groups/{group.id}/detail')
     assert response.status_code == 200
     assert response.json() == {"id": group.id, "name": group.name, "capacity": 150, "regions": [
