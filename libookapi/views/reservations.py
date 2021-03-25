@@ -115,18 +115,13 @@ class QueryAllRegionGroupReservationView(views.APIView):
         min_time_id = request.GET.get('min_time_id')
         max_time_id = request.GET.get('max_time_id')
         groups = RegionGroup.objects.all()
-        reservations_query = RegionGroup.objects \
-            .filter(id=OuterRef('region__group')) \
-            .annotate(capacity=Sum('regions__capacity')) \
-            .values('capacity')
         reserved_time = Reservation.objects \
             .filter(time__gte=min_time_id, time__lte=max_time_id) \
             .values('region__group', 'time') \
             .annotate(reserved=Count('*')) \
-            .annotate(capacity=Subquery(reservations_query, IntegerField())) \
             .annotate(region_group_id=F('region__group')) \
             .annotate(time_id=F('time')) \
-            .values('region_group_id', 'time_id', 'reserved', 'capacity')
+            .values('region_group_id', 'time_id', 'reserved')
         serializer = RegionReservationSerializer(reserved_time, many=True)
         serializer = RegionGroupReservationSerializer(reserved_time, many=True)
         return Response(serializer.data)
