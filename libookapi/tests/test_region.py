@@ -25,7 +25,7 @@ def test_get_region_detail():
     client = Client()
     response = client.get(f'/api/region_groups/{group.id}/detail')
     assert response.status_code == 200
-    assert response.json() == {"id": group.id, "name": group.name, "regions": [
+    assert response.json() == {"id": group.id, "name": group.name, "capacity": 150, "regions": [
         {"id": region1.id, "name": region1.name,
             "group": group.id, "capacity": region1.capacity},
         {"id": region2.id, "name": region2.name, "group": group.id, "capacity": region2.capacity}]}
