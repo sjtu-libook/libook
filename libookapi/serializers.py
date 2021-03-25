@@ -24,10 +24,11 @@ class RegionDetailSerializer(serializers.ModelSerializer):
 
 class RegionGroupDetailSerializer(serializers.ModelSerializer):
     regions = RegionSerializer(many=True, read_only=True)
+    capacity = serializers.IntegerField()
 
     class Meta:
         model = RegionGroup
-        fields = ('id', 'name', 'regions')
+        fields = ('id', 'name', 'regions', 'capacity')
 
 
 class TimesliceSerializer(serializers.ModelSerializer):
@@ -69,7 +70,6 @@ class RegionReservationSerializer(serializers.Serializer):
 
 class RegionGroupReservationSerializer(serializers.Serializer):
     reserved = serializers.IntegerField()
-    capacity = serializers.IntegerField()
     time_id = serializers.IntegerField()
     region_group_id = serializers.IntegerField()
 

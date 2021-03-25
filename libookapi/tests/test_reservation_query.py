@@ -98,12 +98,12 @@ def test_all_reservation_region_group_query():
                           {'min_time_id': time1.id, 'max_time_id': time2.id})
     assert response.status_code == 200
     assert response.json() == [
-        {'reserved': 2, 'capacity': 150, 'time_id': time1.id,
+        {'reserved': 2, 'time_id': time1.id,
             'region_group_id': group1.id},
-        {'reserved': 1, 'capacity': 150, 'time_id': time2.id,
+        {'reserved': 1, 'time_id': time2.id,
             'region_group_id': group1.id},
-        {'reserved': 1, 'capacity': 180, 'time_id': time1.id,
+        {'reserved': 1, 'time_id': time1.id,
             'region_group_id': group2.id},
-        {'reserved': 1, 'capacity': 180, 'time_id': time2.id,
+        {'reserved': 1, 'time_id': time2.id,
             'region_group_id': group2.id}
     ]

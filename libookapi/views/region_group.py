@@ -5,7 +5,7 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count, F
+from django.db.models import Count, F, Sum
 
 from ..serializers import *
 from ..models import *
@@ -22,6 +22,7 @@ class RegionGroupDetailView(views.APIView):
         """
         查询区域组下面的所有区域
         """
-        region_group = RegionGroup.objects.get(id=id)
+        region_group = RegionGroup.objects.annotate(
+            capacity=Sum('regions__capacity')).get(id=id)
         serializer = RegionGroupDetailSerializer(region_group)
         return Response(serializer.data)
