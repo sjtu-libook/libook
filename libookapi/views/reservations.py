@@ -6,7 +6,7 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics, status, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count, F, Value, IntegerField
+from django.db.models import Count, F, Value, IntegerField, Sum, OuterRef, Subquery
 from itertools import chain
 
 from ..serializers import *
@@ -115,21 +115,19 @@ class QueryAllRegionGroupReservationView(views.APIView):
         min_time_id = request.GET.get('min_time_id')
         max_time_id = request.GET.get('max_time_id')
         groups = RegionGroup.objects.all()
-        reserved_time = Reservation.objects.none()
-        for group in groups:
-            regions = group.regions.all()
-            capacity = 0
-            for region in regions:
-                capacity += region.capacity
-            curr_reserved_time = Reservation.objects \
-                .filter(time__gte=min_time_id, time__lte=max_time_id, region__group=group) \
-                .values('time') \
-                .annotate(reserved=Count('*')) \
-                .annotate(capacity=Value(capacity, output_field=IntegerField())) \
-                .annotate(time_id=F('time')) \
-                .annotate(region_group_id=Value(group.id, output_field=IntegerField())) \
-                .values('reserved', 'capacity', 'time_id', 'region_group_id')
-            reserved_time = chain(reserved_time, curr_reserved_time)
+        reservations_query = RegionGroup.objects \
+            .filter(id=OuterRef('region__group')) \
+            .annotate(capacity=Sum('regions__capacity')) \
+            .values('capacity')
+        reserved_time = Reservation.objects \
+            .filter(time__gte=min_time_id, time__lte=max_time_id) \
+            .values('region__group', 'time') \
+            .annotate(reserved=Count('*')) \
+            .annotate(capacity=Subquery(reservations_query, IntegerField())) \
+            .annotate(region_group_id=F('region__group')) \
+            .annotate(time_id=F('time')) \
+            .values('region_group_id', 'time_id', 'reserved', 'capacity')
+        serializer = RegionReservationSerializer(reserved_time, many=True)
         serializer = RegionGroupReservationSerializer(reserved_time, many=True)
         return Response(serializer.data)
 

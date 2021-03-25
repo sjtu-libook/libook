@@ -60,6 +60,12 @@ class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, help_text="预定创建时间")
     updated_at = models.DateTimeField(auto_now=True, help_text="预定更新时间")
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['region', 'time']),
+            models.Index(fields=['user'])
+        ]
+
 
 class Device(models.Model):
     """

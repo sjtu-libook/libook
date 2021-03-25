@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'drf_spectacular',
+    'debug_toolbar',
     'libookapi'
 ]
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'libook.urls'
@@ -149,3 +151,7 @@ AUTHLIB_OAUTH_CLIENTS = {
 }
 
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
