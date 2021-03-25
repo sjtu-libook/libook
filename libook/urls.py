@@ -19,6 +19,7 @@ from django.conf import settings
 from rest_framework import routers
 from libookapi import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+import debug_toolbar
 from . import oauth
 
 router = routers.DefaultRouter()
@@ -54,3 +55,6 @@ urlpatterns = [
          SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     re_path(r'^(?!api\/).*$', views.FrontendAppView.as_view())
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path('api/__debug__/', include(debug_toolbar.urls)))
