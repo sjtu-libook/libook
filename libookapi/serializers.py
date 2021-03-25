@@ -14,6 +14,14 @@ class RegionGroupSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class RegionGroupListSerializer(serializers.ModelSerializer):
+    capacity = serializers.IntegerField()
+
+    class Meta:
+        model = RegionGroup
+        fields = ('id', 'name', 'capacity')
+
+
 class RegionDetailSerializer(serializers.ModelSerializer):
     group = RegionGroupSerializer(many=False, read_only=True)
 

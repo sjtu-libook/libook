@@ -5,7 +5,7 @@ from drf_spectacular.types import OpenApiTypes
 from rest_framework import viewsets, permissions, views, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.db.models import Count, F
+from django.db.models import Count, F, Sum
 
 from ..serializers import *
 from ..models import *
@@ -15,9 +15,12 @@ class RegionGroupView(viewsets.ReadOnlyModelViewSet):
     """
     获取区域组的信息。
     """
-    queryset = RegionGroup.objects.all()
-    serializer_class = RegionGroupSerializer
+    serializer_class = RegionGroupListSerializer
     filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return RegionGroup.objects.all().annotate(
+            capacity=Sum('regions__capacity'))
 
 
 class RegionView(viewsets.ReadOnlyModelViewSet):

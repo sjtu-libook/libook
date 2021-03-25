@@ -5,7 +5,7 @@ import moment from "moment"
 import { mergeReservation } from "./utils"
 
 function ReservationItem({ reservation }) {
-    const fromTime = moment(reservation.merged_time.from_time).format('HH:mm')
+    const fromTime = moment(reservation.merged_time.from_time).calendar()
     const toTime = moment(reservation.merged_time.to_time).format('HH:mm')
 
     return <div className="card mb-3">
@@ -32,7 +32,7 @@ function Reservations() {
                 url: "/api/reservations/",
                 params: {
                     from_time__gte: now.startOf('day').toISOString(),
-                    from_time__lte: now.endOf('day').toISOString()
+                    from_time__lte: now.endOf('day').add(7, 'day').toISOString()
                 }
             })
             setLoading(false)
@@ -47,7 +47,7 @@ function Reservations() {
 
     return <>
         <div className="d-flex flex-row align-items-center justify-content-between mb-3">
-            <h1 className="d-inline-block">今日预约</h1>
+            <h1 className="d-inline-block">预约</h1>
             <LoadingWhen when={loading} size="3rem" className="text-muted"></LoadingWhen>
         </div>
         <div>

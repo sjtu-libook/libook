@@ -30,11 +30,16 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
                     from_time__lte: now.endOf('day').toISOString()
                 }
             })
+            const timeslices = filterToNow(result.data, moment())
             setLoading(false)
-            setData(filterToNow(result.data, moment()))
+            setData(timeslices)
             setFromTimeId(0)
             setToTimeId(0)
-            setError(null)
+            if (timeslices.length === 0) {
+                setError('今日已无法预约')
+            } else {
+                setError(null)
+            }
         }
 
         fetchTimeslice().catch(err => {
@@ -47,6 +52,9 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
             return false
         }
         if (fromTimeId > toTimeId) {
+            return false
+        }
+        if (fromTimeId >= data.length) {
             return false
         }
         return true
