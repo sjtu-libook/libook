@@ -14,13 +14,13 @@ tzlocal = "*"
 authlib = "*"
 loginpass = "*"
 gunicorn = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 autopep8 = "*"
 pycodestyle = "*"
 pytest-django = "*"
 pytest = "*"
-django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.9"
