@@ -1,5 +1,5 @@
 import pytest
-from django.test import Client
+from rest_framework.test import APIClient
 
 from ..models import Region, RegionGroup
 
@@ -9,7 +9,7 @@ def test_get_region():
     """创建的 Region 可以通过接口获取到"""
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
-    client = Client()
+    client = APIClient()
     response = client.get(f'/api/regions/{region.id}/')
     assert response.status_code == 200
     assert response.json() == {"id": region.id, "name": "新图 E100",
@@ -22,7 +22,7 @@ def test_get_region_detail():
     group = RegionGroup.objects.create(name="新图 1 楼")
     region1 = Region.objects.create(name="新图 E100", capacity=100, group=group)
     region2 = Region.objects.create(name="新图 E200", capacity=50, group=group)
-    client = Client()
+    client = APIClient()
 
     response = client.get(f'/api/region_groups/')
     assert response.status_code == 200

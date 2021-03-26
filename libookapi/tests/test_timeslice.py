@@ -1,5 +1,5 @@
 import pytest
-from django.test import Client
+from rest_framework.test import APIClient
 from pytz import timezone
 from datetime import date, datetime, timedelta
 
@@ -21,7 +21,7 @@ def test_get_timeslice():
         from_time=tz.localize(datetime(2021, 3, 12, 9, 0, 0)),
         to_time=tz.localize(datetime(2021, 3, 12, 10, 0, 0)))
 
-    client = Client()
+    client = APIClient()
     response = client.get(f'/api/timeslices/', {
         'from_time__gte': tz.localize(datetime(2021, 3, 13, 0, 0, 0)),
         'from_time__lte': tz.localize(datetime(2021, 3, 14, 0, 0, 0))})

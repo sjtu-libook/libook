@@ -1,5 +1,5 @@
 import pytest
-from django.test import Client
+from rest_framework.test import APIClient
 from datetime import datetime
 from pytz import timezone
 from ..models import *
@@ -21,7 +21,7 @@ def test_reservation_region_query():
     user = User.objects.create(username="BBB")
     Reservation.objects.create(user=user, region=region, time=time)
 
-    client = Client()
+    client = APIClient()
     response = client.get(f'/api/reservations/by_region',
                           {'region_id': region.id, 'min_time_id': time.id, 'max_time_id': time.id})
     assert response.status_code == 200
@@ -51,7 +51,7 @@ def test_reservation_region_group_query():
     user = User.objects.create(username="CCC")
     Reservation.objects.create(user=user, region=region2, time=time1)
 
-    client = Client()
+    client = APIClient()
     response = client.get(f'/api/reservations/by_region_group',
                           {'region_group_id': group.id, 'min_time_id': time1.id, 'max_time_id': time2.id})
     assert response.status_code == 200
@@ -93,7 +93,7 @@ def test_all_reservation_region_group_query():
     user = User.objects.create(username="EEE")
     Reservation.objects.create(user=user, region=region4, time=time2)
 
-    client = Client()
+    client = APIClient()
     response = client.get(f'/api/reservations/by_all',
                           {'min_time_id': time1.id, 'max_time_id': time2.id})
     assert response.status_code == 200

@@ -18,12 +18,4 @@ class FrontendAppView(View):
             with open(self.index_file_path) as f:
                 return HttpResponse(f.read())
         except FileNotFoundError:
-            logging.exception('Production build of app not found')
-            return HttpResponse(
-                """
-                This URL is only used when you have built the production
-                version of the app. Visit http://localhost:3000/ instead after
-                running `yarn start` on the frontend/ directory
-                """,
-                status=501,
-            )
+            return HttpResponse('Production build of app not found', 200)
