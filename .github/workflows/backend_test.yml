@@ -27,7 +27,7 @@ jobs:
         python-version: '3.9'
         architecture: 'x64'
     - run: pip install pipenv
-    - run: pipenv sync
+    - run: pipenv install
     - name: lint code style
       run: pipenv run pycodestyle --ignore=E501 **/*.py
     - run: cp libook/secrets.example.py libook/secrets.py
