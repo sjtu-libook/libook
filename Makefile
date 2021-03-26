@@ -22,7 +22,7 @@ format.backend:
 	pipenv run autopep8 --in-place --recursive . --exclude booklib
 
 test.backend:
-	pipenv run pytest -v --cov=libookapi/
+	pipenv run pytest -v
 
 run.frontend:
 	cd booklib && yarn start
