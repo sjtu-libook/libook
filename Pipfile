@@ -22,6 +22,7 @@ pycodestyle = "*"
 pytest-django = "*"
 pytest = "*"
 assertpy = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"

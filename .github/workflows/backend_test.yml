@@ -27,7 +27,7 @@ jobs:
         python-version: '3.9'
         architecture: 'x64'
     - run: pip install pipenv
-    - run: pipenv install --dev
+    - run: pipenv sync --dev
     - name: lint code style
       run: pipenv run pycodestyle --ignore=E501 **/*.py
     - run: cp libook/secrets.example.py libook/secrets.py
@@ -37,3 +37,8 @@ jobs:
       run: pipenv run python manage.py spectacular
     - name: test
       run: make test.backend
+    - name: Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      run: |
+        pip3 install coveralls && coveralls
