@@ -19,9 +19,9 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+        key: ${{ runner.os }}-pipenv-1-${{ hashFiles('Pipfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-pipenv-
+          ${{ runner.os }}-pipenv-1-
     - uses: actions/setup-python@v2
       with:
         python-version: '3.9'
