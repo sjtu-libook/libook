@@ -31,5 +31,7 @@ jobs:
       run: cd booklib && yarn
     - name: lint
       run: make lint.frontend
+    - name: test
+      run: make test.frontend
     - name: build
       run: make build.frontend
