@@ -23,6 +23,7 @@ pytest-django = "*"
 pytest = "*"
 assertpy = "*"
 pytest-cov = "*"
+coveralls = "*"
 
 [requires]
 python_version = "3.9"
