@@ -7,6 +7,22 @@ from ..models import *
 
 
 @pytest.mark.django_db
+def test_get_device_fake():
+    """嵌入式设备可以获取当前位置相关的测试信息"""
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    device = Device.objects.create(api_key="2333333", region=region)
+    client = APIClient()
+    response = client.get(
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "fake": "true"})
+    assert response.status_code == 200
+    result = response.json()
+    assert result[0]['id'] == 1
+    assert result[0]['user']['id'] == 1
+    assert result[0]['user']['user_info']['fingerprint_id'] == 1
+
+
+@pytest.mark.django_db
 def test_get_device():
     """嵌入式设备可以获取当前位置相关的信息"""
     group = RegionGroup.objects.create(name="新图 1 楼")
@@ -14,9 +30,10 @@ def test_get_device():
     device = Device.objects.create(api_key="2333333", region=region)
     time = Timeslice.objects.create(
         from_time=now(), to_time=now() + timedelta(hours=1))
-    user = User.objects.create(username="Alex Chi")
+    User.objects.create(username="Alex Chi")  # Ensure test user is not ID 1
+    user = User.objects.create(username="Bob Chi")
     user_info = UserInfo.objects.create(
-        user=user, fingerprint_id=1, face_id=None)
+        user=user, fingerprint_id=2, face_id=None)
     reservation = Reservation.objects.create(
         user=user, time=time, region=region)
     client = APIClient()
@@ -26,14 +43,14 @@ def test_get_device():
     result = response.json()
     assert result[0]['id'] == reservation.id
     assert result[0]['user']['id'] == user.id
-    assert result[0]['user']['user_info']['fingerprint_id'] == 1
+    assert result[0]['user']['user_info']['fingerprint_id'] == 2
     response = client.get(
-        f'/api/devices/{device.id}', {"api_key": device.api_key, "fake": True})
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "fake": "false"})
     assert response.status_code == 200
     result = response.json()
     assert result[0]['id'] == reservation.id
     assert result[0]['user']['id'] == user.id
-    assert result[0]['user']['user_info']['fingerprint_id'] == 1
+    assert result[0]['user']['user_info']['fingerprint_id'] == 2
 
 
 @pytest.mark.django_db
