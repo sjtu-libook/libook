@@ -37,7 +37,7 @@ class DeviceView(views.APIView):
         api_key = request.GET.get('api_key')
         device = Device.objects.get(id=device_id)
         if device.api_key == api_key:
-            if request.GET.get('fake'):
+            if request.GET.get('fake') == 'true':
                 return Response(FAKE_DATA, status.HTTP_200_OK)
             reservations = Reservation.objects.filter(
                 region=device.region,
