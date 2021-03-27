@@ -85,12 +85,10 @@ class RegionGroupReservationSerializer(serializers.Serializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
-        fields = []
+        fields = ('fingerprint_id', 'face_id')
 
 
 class UserSerializer(serializers.ModelSerializer):
-    user_info = UserInfoSerializer(read_only=True)
-
     class Meta:
         model = User
         fields = ('id', 'username', 'user_info')
@@ -102,11 +100,26 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('token', 'expires_at')
 
 
+class DeviceUserSerializer(serializers.ModelSerializer):
+    user_info = UserInfoSerializer()
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'user_info')
+
+
 class DeviceReservationSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = DeviceUserSerializer()
     region = RegionSerializer()
     time = TimesliceSerializer()
 
     class Meta:
         model = Reservation
         fields = ('id', 'region', 'time', 'user')
+
+
+class DeviceModifySerializer(serializers.ModelSerializer):
+    fingerprint_id = serializers.IntegerField(
+        help_text='更新后指纹 ID', required=False)
+    token = serializers.IntegerField(help_text='用户一次性验证 Token', required=False)
+    user_id = serializers.IntegerField(help_text='入座用户 ID')

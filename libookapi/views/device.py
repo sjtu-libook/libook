@@ -12,12 +12,22 @@ from django.utils.timezone import now
 from ..serializers import *
 from ..models import *
 
+FAKE_DATA = [{
+    'id': 1,
+    'region': {'id': 1, 'name': '新图 E100', 'group': 1, 'capacity': 100},
+    'time': {'id': 1, 'from_time': '2021-03-27T21:14:19.191815+08:00',
+             'to_time': '2021-03-27T22:14:19.191821+08:00'},
+    'user': {'id': 1, 'username': 'Alex Chi', 'user_info': {'fingerprint_id': 1, 'face_id': None}}}]
+
 
 class DeviceView(views.APIView):
     @extend_schema(
         parameters=[
-            OpenApiParameter('id', OpenApiTypes.INT, OpenApiParameter.PATH),
-            OpenApiParameter('api_key', OpenApiTypes.INT)
+            OpenApiParameter('id', OpenApiTypes.INT,
+                             OpenApiParameter.PATH, description='设备 ID'),
+            OpenApiParameter('api_key', OpenApiTypes.STR,
+                             description='API Key'),
+            OpenApiParameter('fake', OpenApiTypes.BOOL, description='返回测试数据')
         ],
         responses=DeviceReservationSerializer(many=True),
     )
@@ -27,6 +37,8 @@ class DeviceView(views.APIView):
         api_key = request.GET.get('api_key')
         device = Device.objects.get(id=device_id)
         if device.api_key == api_key:
+            if request.GET.get('fake'):
+                return Response(FAKE_DATA, status.HTTP_200_OK)
             reservations = Reservation.objects.filter(
                 region=device.region,
                 time__from_time__lte=now(),
@@ -36,10 +48,22 @@ class DeviceView(views.APIView):
             return Response('invalid credentials', status.HTTP_401_UNAUTHORIZED)
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter('id', OpenApiTypes.INT,
+                             OpenApiParameter.PATH, description='设备 ID'),
+            OpenApiParameter('api_key', OpenApiTypes.STR,
+                             description='API Key')
+        ],
+        request=DeviceModifySerializer(),
         responses=ErrorSerializer(),
     )
     def post(self, request, format=None):
         """
-        TODO: 嵌入式设备提交的，创建新的 Serializer，并实现该接口
-        用户入座后确认用户的预约
+        处理用户入座逻辑。
+
+        如果用户之前已经成功入座，则仅需要提供用户 ID 即可。
+
+        如果用户第一次入座，需要修改指纹等信息，需要提供指纹 ID 和用户的一次性验证 Token。
         """
+        # TODO: 嵌入式设备提交的，创建新的 Serializer，并实现该接口用户入座后确认用户的预约
+        pass

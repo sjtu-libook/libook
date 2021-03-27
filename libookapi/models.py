@@ -6,7 +6,8 @@ class UserInfo(models.Model):
     """
     用户是进行操作的最小单位。
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='user_info')
     fingerprint_id = models.IntegerField(help_text="指纹 ID", null=True)
     face_id = models.IntegerField(help_text="面部图像 ID", null=True)
 
