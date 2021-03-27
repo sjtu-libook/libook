@@ -15,6 +15,8 @@ def test_get_device():
     time = Timeslice.objects.create(
         from_time=now(), to_time=now() + timedelta(hours=1))
     user = User.objects.create(username="Alex Chi")
+    user_info = UserInfo.objects.create(
+        user=user, fingerprint_id=1, face_id=None)
     reservation = Reservation.objects.create(
         user=user, time=time, region=region)
     client = APIClient()
@@ -22,9 +24,16 @@ def test_get_device():
         f'/api/devices/{device.id}', {"api_key": device.api_key})
     assert response.status_code == 200
     result = response.json()
-    assert assert_that(result).extracting('id').is_equal_to([reservation.id])
-    assert assert_that(result).extracting(
-        'user').extracting('id').is_equal_to([user.id])
+    assert result[0]['id'] == reservation.id
+    assert result[0]['user']['id'] == user.id
+    assert result[0]['user']['user_info']['fingerprint_id'] == 1
+    response = client.get(
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "fake": True})
+    assert response.status_code == 200
+    result = response.json()
+    assert result[0]['id'] == reservation.id
+    assert result[0]['user']['id'] == user.id
+    assert result[0]['user']['user_info']['fingerprint_id'] == 1
 
 
 @pytest.mark.django_db
