@@ -118,7 +118,7 @@ class DeviceReservationSerializer(serializers.ModelSerializer):
         fields = ('id', 'region', 'time', 'user')
 
 
-class DeviceModifySerializer(serializers.ModelSerializer):
+class DeviceModifySerializer(serializers.Serializer):
     fingerprint_id = serializers.IntegerField(
         help_text='更新后指纹 ID', required=False)
     token = serializers.IntegerField(help_text='用户一次性验证 Token', required=False)
