@@ -65,6 +65,7 @@ class Reservation(models.Model):
         Timeslice, on_delete=models.CASCADE, help_text="预定时间")
     created_at = models.DateTimeField(auto_now_add=True, help_text="预定创建时间")
     updated_at = models.DateTimeField(auto_now=True, help_text="预定更新时间")
+    is_present = models.BooleanField(help_text="是否成功入座", default=False)
 
     class Meta:
         indexes = [
