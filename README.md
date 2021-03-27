@@ -1,5 +1,9 @@
 # library-book
 
+[![Frontend](https://github.com/skyzh/libook/actions/workflows/frontend_test.yml/badge.svg)](https://github.com/skyzh/libook/actions/workflows/frontend_test.yml)
+[![Backend](https://github.com/skyzh/libook/actions/workflows/backend_test.yml/badge.svg)](https://github.com/skyzh/libook/actions/workflows/backend_test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/skyzh/libook/badge.svg?t=FH8Kas)](https://coveralls.io/github/skyzh/libook)
+
 * 后端: libook (django)
 * 前端: booklib (React)
 
