@@ -29,6 +29,11 @@ class Region(models.Model):
         RegionGroup, related_name='regions', on_delete=models.CASCADE, help_text="区域所属区域组")
     capacity = models.IntegerField(help_text="区域最大可容纳人数")
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['group']),
+        ]
+
 
 class Timeslice(models.Model):
     """
@@ -64,6 +69,7 @@ class Reservation(models.Model):
         indexes = [
             models.Index(fields=['region', 'time']),
             models.Index(fields=['user'])
+            models.Index(fields=['time']),
         ]
 
 
