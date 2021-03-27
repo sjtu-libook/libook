@@ -68,7 +68,7 @@ class Reservation(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['region', 'time']),
-            models.Index(fields=['user'])
+            models.Index(fields=['user']),
             models.Index(fields=['time']),
         ]
 
