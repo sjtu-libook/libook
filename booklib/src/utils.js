@@ -13,6 +13,7 @@ export function mergeReservation(reservations) {
         currentReservation.merged_time = { 
             from_time: currentReservation.time.from_time, 
             to_time: currentReservation.time.to_time }
+        currentReservation.merged_id = [currentReservation.id]
         if (mergedReservations.length === 0) {
             mergedReservations.push(currentReservation)
         } else {
@@ -20,6 +21,7 @@ export function mergeReservation(reservations) {
             if (currentReservation.time.from_time === lastReservation.merged_time.to_time && 
                     currentReservation.region.id === lastReservation.region.id) {
                 lastReservation.merged_time.to_time = currentReservation.time.to_time
+                lastReservation.merged_id.push(currentReservation.id)
             } else {
                 mergedReservations.push(currentReservation)
             }

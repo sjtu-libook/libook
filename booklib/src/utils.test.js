@@ -124,7 +124,8 @@ test('should merge multiple reservations', () => {
         "merged_time": {
             "from_time": "2021-03-23T07:00:00+08:00",
             "to_time": "2021-03-23T11:00:00+08:00"
-        }
+        },
+        "merged_id": [1, 2, 3, 4]
     },
     {
         "region": {
@@ -133,7 +134,8 @@ test('should merge multiple reservations', () => {
         "merged_time": {
             "from_time": "2021-03-23T11:00:00+08:00",
             "to_time": "2021-03-23T12:00:00+08:00"
-        }
+        },
+        "merged_id": [5]
     }]
     )
 })
