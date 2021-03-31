@@ -28,8 +28,9 @@ def test_get_device():
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     device = Device.objects.create(api_key="2333333", region=region)
+    current_time = now()
     time = Timeslice.objects.create(
-        from_time=now(), to_time=now() + timedelta(hours=1))
+        from_time=current_time, to_time=current_time + timedelta(hours=1))
     User.objects.create(username="Alex Chi")  # Ensure test user is not ID 1
     user = User.objects.create(username="Bob Chi")
     user_info = UserInfo.objects.create(
@@ -38,14 +39,20 @@ def test_get_device():
         user=user, time=time, region=region)
     client = APIClient()
     response = client.get(
-        f'/api/devices/{device.id}', {"api_key": device.api_key})
+        f'/api/devices/{device.id}', {
+            "api_key": device.api_key,
+            "from_time": current_time,
+            "to_time": current_time + timedelta(hours=1)})
     assert response.status_code == 200
     result = response.json()
     assert result[0]['id'] == reservation.id
     assert result[0]['user']['id'] == user.id
     assert result[0]['user']['user_info']['fingerprint_id'] == 2
     response = client.get(
-        f'/api/devices/{device.id}', {"api_key": device.api_key, "fake": "false"})
+        f'/api/devices/{device.id}', {
+            "api_key": device.api_key, "fake": "false",
+            "from_time": current_time,
+            "to_time": current_time + timedelta(hours=1)})
     assert response.status_code == 200
     result = response.json()
     assert result[0]['id'] == reservation.id

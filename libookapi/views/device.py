@@ -27,7 +27,11 @@ class DeviceView(views.APIView):
                              OpenApiParameter.PATH, description='设备 ID'),
             OpenApiParameter('api_key', OpenApiTypes.STR,
                              description='API Key'),
-            OpenApiParameter('fake', OpenApiTypes.BOOL, description='返回测试数据')
+            OpenApiParameter('fake', OpenApiTypes.BOOL, description='返回测试数据'),
+            OpenApiParameter(
+                'from_time', OpenApiTypes.DATETIME, description='起始时间'),
+            OpenApiParameter('to_time', OpenApiTypes.DATETIME,
+                             description='终止时间'),
         ],
         responses=DeviceReservationSerializer(many=True),
     )
@@ -41,8 +45,8 @@ class DeviceView(views.APIView):
                 return Response(FAKE_DATA, status.HTTP_200_OK)
             reservations = Reservation.objects.filter(
                 region=device.region,
-                time__from_time__lte=now(),
-                time__to_time__gte=now()).select_related()
+                time__from_time__gte=request.GET.get('from_time'),
+                time__from_time__lte=request.GET.get('to_time')).select_related()
             return Response(DeviceReservationSerializer(reservations, many=True).data, status.HTTP_200_OK)
         else:
             return Response('invalid credentials', status.HTTP_401_UNAUTHORIZED)
