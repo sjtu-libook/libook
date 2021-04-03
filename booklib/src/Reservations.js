@@ -15,7 +15,7 @@ function ReservationItem({ reservation, cancelReservation, disabled }) {
 
     let btnText = '取消预约'
     if (fromTime.isBefore(now)) {
-        btnText = '取消剩余的预约'
+        btnText = `取消 ${moment().startOf('hour').format('HH:mm')} 后的预约`
     }
     if (toTime.isBefore(now)) {
         btnText = ''
