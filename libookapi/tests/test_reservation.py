@@ -100,8 +100,8 @@ def test_reservation_delete():
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     tz = timezone('Asia/Shanghai')
     timeslice1 = Timeslice.objects.create(
-        from_time=tz.localize(datetime(2021, 3, 13, 8, 0, 0)),
-        to_time=tz.localize(datetime(2021, 3, 13, 9, 0, 0)))
+        from_time=now(),
+        to_time=now() + timedelta(hours=1))
     user1 = User.objects.create(username="Alex Chi")
     r1 = Reservation.objects.create(user=user1, time=timeslice1, region=region)
 
@@ -260,3 +260,23 @@ def test_batch_reservation_failed_04():
     assert response.status_code == 400
     assert response.json() == [{"region": {"id": region.id, "name": region.name, "group": RegionGroupSerializer(
         region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预约失败！您只能预约未来一周的位置"}]
+
+
+@pytest.mark.django_db
+def test_reservation_delete_before():
+    """只能在预约时间段结束前取消预约"""
+
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    tz = timezone('Asia/Shanghai')
+    timeslice1 = Timeslice.objects.create(
+        from_time=now() - timedelta(hours=1),
+        to_time=now() - timedelta(seconds=5))
+    user1 = User.objects.create(username="Alex Chi")
+    r1 = Reservation.objects.create(user=user1, time=timeslice1, region=region)
+
+    client = APIClient()
+    client.force_authenticate(user=user1)
+
+    response = client.delete(f'/api/reservations/{r1.id}/')
+    assert response.status_code == 400
