@@ -3,6 +3,7 @@ import { dateSelections } from './MainReserve.js'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import sortBy from 'lodash/sortBy'
 
 const dates = dateSelections()
 
@@ -32,7 +33,7 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
             })
             const timeslices = filterToNow(result.data, moment())
             setLoading(false)
-            setData(timeslices)
+            setData(sortBy(timeslices, 'id'))
             setFromTimeId(0)
             setToTimeId(0)
             if (timeslices.length === 0) {

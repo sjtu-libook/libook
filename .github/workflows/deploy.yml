@@ -16,3 +16,4 @@ jobs:
         with:
             ssh_private_key: ${{ secrets.DOKKU_DEPLOY_KEY }}
             git_remote_url: 'ssh://dokku@libook.skyzh.dev:22/libook'
+            git_push_flags: -f
