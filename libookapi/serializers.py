@@ -66,6 +66,17 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = ('id', 'region', 'time', 'user')
 
 
+class ReservationResultSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    region = RegionDetailSerializer()
+    time = TimesliceSerializer()
+    reason = serializers.CharField()
+
+    class Meta:
+        model = Reservation
+        fields = ('id', 'region', 'time', 'reason')
+
+
 class ErrorSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
 
