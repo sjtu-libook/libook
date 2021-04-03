@@ -4,22 +4,34 @@ import { useState, useEffect } from 'react'
 import moment from "moment"
 import { mergeReservation } from "./utils"
 import classnames from 'classnames'
+import reverse from 'lodash/reverse'
 
 function ReservationItem({ reservation, cancelReservation, disabled }) {
-    const fromTime = moment(reservation.merged_time.from_time).calendar()
-    const toTime = moment(reservation.merged_time.to_time).format('HH:mm')
+    const fromTime = moment(reservation.merged_time.from_time)
+    const toTime = moment(reservation.merged_time.to_time)
+    const fromTimeCal = fromTime.calendar()
+    const toTimeCal = toTime.format('HH:mm')
+    const now = moment()
+
+    let btnText = '取消预约'
+    if (fromTime.isBefore(now)) {
+        btnText = '取消剩余的预约'
+    }
+    if (toTime.isBefore(now)) {
+        btnText = ''
+    }
 
     return <div className="card mb-3">
         <div className="card-body">
-            <h5 className="card-title">{fromTime} - {toTime}</h5>
+            <h5 className="card-title">{fromTimeCal} - {toTimeCal}</h5>
             <p className="card-text">{reservation.region.group.name} {reservation.region.name}</p>
-            <div className="d-flex justify-content-end">
+            {btnText && <div className="d-flex justify-content-end">
                 <button
                     onClick={cancelReservation}
                     className={classnames("btn btn-outline-secondary", disabled ? "disabled" : "")}>
-                    取消预约
+                    {btnText}
                 </button>
-            </div>
+            </div>}
         </div>
     </div>
 }
@@ -41,27 +53,29 @@ function Reservations() {
         })
         setLoading(false)
         setReservations(result.data)
-        setError(null)
     }
 
     useEffect(() => {
-        fetchReservations().catch(err => {
-            setError(`无法获取预约信息: ${err}`)
-        })
+        fetchReservations()
+            .then(() => setError(null))
+            .catch(err => {
+                setError(`无法获取预约信息: ${err}`)
+            })
     }, [])
 
     const cancelReservation = (reservation) => {
         async function doCancel() {
-            for (const revervationId of reservation.merged_id) {
-                await axios.delete(`/api/reservations/${revervationId}/`)
+            for (const revervationId of reverse(reservation.merged_id)) {
+                try {
+                    await axios.delete(`/api/reservations/${revervationId}/`)
+                } catch (err) {
+                    setError('部分预定已无法取消')
+                }
             }
             await fetchReservations()
         }
         setLoading(true)
         doCancel().then(() => {
-            setLoading(false)
-        }).catch(err => {
-            setError(`无法取消预定: ${err}`)
             setLoading(false)
         })
     }
@@ -71,7 +85,8 @@ function Reservations() {
             <h1 className="d-inline-block">预约</h1>
             <LoadingWhen when={loading} size="3rem" className="text-muted"></LoadingWhen>
         </div>
-        <div>
+        <ErrorWhen error={error}></ErrorWhen>
+        <div className="mt-3">
             {reservations.length > 0 ?
                 <ul className="list-group">
                     {mergeReservation(reservations).map(reservation =>
@@ -83,7 +98,6 @@ function Reservations() {
                         </ReservationItem>)}
                 </ul> : <p>今日还没有预约。</p>}
         </div>
-        <ErrorWhen error={error}></ErrorWhen>
     </>
 }
 
