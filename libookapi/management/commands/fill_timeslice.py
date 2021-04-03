@@ -6,13 +6,13 @@ from ...models import Timeslice
 
 
 class Command(BaseCommand):
-    help = '生成一整年的时间片。工作日 7am 开到 11pm，周末 8am 开到 10pm。'
+    help = '生成三个月的时间片。工作日 7am 开到 11pm，周末 8am 开到 10pm。'
 
     def handle(self, *args, **options):
         today = date.today()
         tz = timezone('Asia/Shanghai')
         Timeslice.objects.all().delete()
-        for i in range(365):
+        for i in range(90):
             if today.weekday() >= 5:
                 # open from 8am to 10pm on weekends
                 open_range = range(8, 22)
