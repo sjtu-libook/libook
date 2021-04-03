@@ -8,6 +8,7 @@ import SuccessReserve from './flows/SuccessReserve.js'
 import TimeReserve from './flows/TimeReserve.js'
 import LocationReserve from './flows/LocationReserve.js'
 import DoReserve from './flows/DoReserve.js'
+import { parseTimeslice } from './flows/ConfirmReserve.js'
 
 function FlowTransition({ match, children }) {
     return <CSSTransition
@@ -38,12 +39,21 @@ function MakeReservation() {
                 })))
         }
 
-        batchReserve().catch(err => {
-            setError(`${err}`)
-            setStep(returnStep)
-        }).then(() => {
+        batchReserve().then(() => {
             setError(null)
             setStep(nextStep)
+        }).catch(err => {
+            const errorResponse = err.response?.data[0]
+            if (errorResponse) {
+                setError(<>
+                    <span>{errorResponse.reason}：</span><br />
+                    {errorResponse.region?.group?.name} {errorResponse.region?.name} &nbsp;
+                    {parseTimeslice([errorResponse.time])}
+                </>)
+            } else {
+                setError(`${err}`)
+            }
+            setStep(returnStep)
         })
     }
 
@@ -75,7 +85,7 @@ function MakeReservation() {
                 <LocationReserve
                     timeslice={timeslice}
                     prevStep={() => setStep("general-time")}
-                    nextStep={location => { setLocation(location); setStep("general-confirm") }}>
+                    nextStep={location => { setLocation(location); setError(null); setStep("general-confirm") }}>
                 </LocationReserve>
             </FlowTransition>
             <FlowTransition match={step === "general-confirm"}>
