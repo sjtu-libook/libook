@@ -31,6 +31,7 @@ router.register(r'timeslices', views.TimesliceView, 'timeslices')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/version', views.VersionView.as_view(), name='version'),
     path('api/users/self', views.UserView.as_view(), name='users'),
     path('api/reservations/batch', views.BatchReservationView.as_view(),
          name='batch_reservation'),

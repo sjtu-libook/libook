@@ -6,6 +6,7 @@ from rest_framework import viewsets, permissions, views, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F, Sum
+import os
 
 from ..serializers import *
 from ..models import *
@@ -44,3 +45,14 @@ class UserView(views.APIView):
         """
         serializer = UserSerializer(User.objects.get(username=request.user))
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class VersionView(views.APIView):
+    @extend_schema(
+        responses=str,
+    )
+    def get(self, request, format=None):
+        """
+        获取当前后端版本
+        """
+        return Response(os.environ.get('GIT_REV'), status=status.HTTP_200_OK)
