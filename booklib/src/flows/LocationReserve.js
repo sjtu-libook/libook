@@ -4,6 +4,7 @@ import minBy from 'lodash/minBy'
 import maxBy from 'lodash/maxBy'
 import has from 'lodash/has'
 import axios from 'axios'
+import sortBy from 'lodash/sortBy'
 
 export function reserveToMap(reservations, idOf) {
     const regionMap = {}
@@ -81,7 +82,7 @@ function LocationReserve({ prevStep, nextStep, timeslice }) {
         if (fromTime && toTime) {
             setLoadingA(true)
             fetchRegionGroups(fromTime, toTime).then(result => {
-                setRegionGroupData(result)
+                setRegionGroupData(sortBy(result, 'id'))
                 setRegionGroup(0)
                 setLoadingA(false)
                 setErrorA(null)
@@ -96,7 +97,7 @@ function LocationReserve({ prevStep, nextStep, timeslice }) {
         if (regionGroupId) {
             setLoadingB(true)
             fetchRegions(regionGroupId, fromTime, toTime).then(result => {
-                setRegionData(result)
+                setRegionData(sortBy(result, 'id'))
                 setRegion(0)
                 setLoadingB(false)
                 setErrorB(null)
