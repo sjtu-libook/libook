@@ -3,7 +3,7 @@ import minBy from 'lodash/minBy'
 import maxBy from 'lodash/maxBy'
 import moment from 'moment'
 
-function parseTimeslice(timeslice) {
+export function parseTimeslice(timeslice) {
     const fromTime = minBy(timeslice, ts => ts.id)
     const toTime = maxBy(timeslice, ts => ts.id)
     return `${moment(fromTime.from_time).calendar()}-${moment(toTime.to_time).format('HH:mm')}`

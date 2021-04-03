@@ -78,15 +78,17 @@ function LocationReserve({ prevStep, nextStep, timeslice }) {
     const toTime = maxBy(timeslice, ts => ts.id)
 
     useEffect(() => {
-        setLoadingA(true)
-        fetchRegionGroups(fromTime, toTime).then(result => {
-            setRegionGroupData(result)
-            setRegionGroup(0)
-            setLoadingA(false)
-            setErrorA(null)
-        }).catch(err => {
-            setErrorA(`无法获取区域组: ${err}`)
-        })
+        if (fromTime && toTime) {
+            setLoadingA(true)
+            fetchRegionGroups(fromTime, toTime).then(result => {
+                setRegionGroupData(result)
+                setRegionGroup(0)
+                setLoadingA(false)
+                setErrorA(null)
+            }).catch(err => {
+                setErrorA(`无法获取区域组: ${err}`)
+            })
+        }
     }, [setLoadingA, setErrorA, fromTime, toTime])
 
     useEffect(() => {
