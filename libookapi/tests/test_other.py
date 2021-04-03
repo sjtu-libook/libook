@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 from assertpy import assert_that
 from ..models import *
+import os
 
 
 @pytest.mark.django_db
@@ -28,3 +29,13 @@ def test_user():
     result = response.json()
     assert result['username'] == user.username
     assert result['id'] == user.id
+
+
+@pytest.mark.django_db
+def test_version():
+    """可以获取 git revision"""
+    os.environ.setdefault('GIT_REV', 'default_git_rev')
+    client = APIClient()
+    response = client.get(f'/api/version')
+    assert response.status_code == 200
+    assert response.json() == 'default_git_rev'
