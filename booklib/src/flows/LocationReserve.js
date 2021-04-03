@@ -4,6 +4,7 @@ import minBy from 'lodash/minBy'
 import maxBy from 'lodash/maxBy'
 import has from 'lodash/has'
 import axios from 'axios'
+import sortBy from 'lodash/sortBy'
 
 export function reserveToMap(reservations, idOf) {
     const regionMap = {}
