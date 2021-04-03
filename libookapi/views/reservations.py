@@ -46,6 +46,14 @@ class ReservationView(mixins.ListModelMixin,
     filter_backends = [DjangoFilterBackend]
     filterset_class = ReservationFilter
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if now() < instance.time.to_time:
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class QueryRegionReservationView(views.APIView):
     @extend_schema(
