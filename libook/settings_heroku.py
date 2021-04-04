@@ -158,11 +158,10 @@ AUTHLIB_OAUTH_CLIENTS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = ''
+STATIC_URL = '/static/'
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
 STATICFILES_DIRS = [
     os.path.join(REACT_APP_DIR, 'build', 'static'),
-    os.path.join(REACT_APP_DIR, 'build')
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
