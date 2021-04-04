@@ -54,6 +54,19 @@ $link-color: cornflowerblue;
     width: 100%;
 }
 
+.libook-flow-appear {
+    opacity: 0;
+    transform: translate(200px);
+    visibility: visible;
+}
+
+.libook-flow-appear-active {
+    opacity: 1;
+    transform: translate(0);
+    transition: opacity 300ms, transform 300ms;
+    visibility: visible;
+}
+
 .libook-flow-enter {
     opacity: 0;
     transform: translate(200px);
