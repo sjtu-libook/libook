@@ -75,3 +75,50 @@ def test_get_device_failed():
     response = client.get(
         f'/api/devices/{device.id}', {"api_key": "233333"})
     assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_modify_info():
+    """可以通过 API 修改用户的信息"""
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(name="新图 E100", capacity=100, group=group)
+    device = Device.objects.create(api_key="2333333", region=region)
+    current_time = now()
+    time = Timeslice.objects.create(
+        from_time=current_time, to_time=current_time + timedelta(hours=1))
+    user = User.objects.create(username="Alex Chi")
+    reservation = Reservation.objects.create(
+        user=user, time=time, region=region)
+    client = APIClient()
+    response = client.post(
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "user_id": user.id, "fingerprint_id": 2333})
+    assert response.status_code == 200
+    response = client.get(
+        f'/api/devices/{device.id}', {
+            "api_key": device.api_key,
+            "from_time": current_time,
+            "to_time": current_time + timedelta(hours=1)})
+    assert response.status_code == 200
+    assert_that(response.json()).extracting('user') \
+        .extracting('user_info').extracting('fingerprint_id').is_equal_to([2333])
+
+
+@ pytest.mark.django_db
+def test_is_present():
+    """可以通过 API 确认用户的预定"""
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(
+        name="新图 E100", capacity=100, group=group)
+    device = Device.objects.create(api_key="2333333", region=region)
+    current_time = now()
+    time = Timeslice.objects.create(
+        from_time=current_time + timedelta(hours=0),
+        to_time=current_time + timedelta(hours=1))
+    user = User.objects.create(username="Alex Chi")
+    reservation = Reservation.objects.create(
+        user=user, time=time, region=region)
+    client = APIClient()
+    response = client.post(
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "reservation_id": reservation.id})
+    assert response.status_code == 200
+    assert Reservation.objects.get(id=reservation.id).is_present == True

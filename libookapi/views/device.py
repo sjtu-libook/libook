@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F
 from django.utils.timezone import now
+from datetime import timedelta
+from itertools import groupby
+from operator import itemgetter
 
 from ..serializers import *
 from ..models import *
@@ -54,20 +57,42 @@ class DeviceView(views.APIView):
     @extend_schema(
         parameters=[
             OpenApiParameter('id', OpenApiTypes.INT,
-                             OpenApiParameter.PATH, description='设备 ID'),
-            OpenApiParameter('api_key', OpenApiTypes.STR,
-                             description='API Key')
+                             OpenApiParameter.PATH, description='设备 ID')
         ],
         request=DeviceModifySerializer(),
         responses=ErrorSerializer(),
     )
-    def post(self, request, format=None):
+    def post(self, request, id, format=None):
         """
         处理用户入座逻辑。
 
-        如果用户之前已经成功入座，则仅需要提供用户 ID 即可。
+        如果是用户入座，需要提供预定 ID。
 
-        如果用户第一次入座，需要修改指纹等信息，需要提供指纹 ID 和用户的一次性验证 Token。
+        如果用户首次入座修改指纹等信息，需要提供指纹 ID 和用户的一次性验证 Token。
         """
-        # TODO: 嵌入式设备提交的，创建新的 Serializer，并实现该接口用户入座后确认用户的预约
-        pass
+
+        device_id = id
+        device = Device.objects.get(id=device_id)
+        serializer = DeviceModifySerializer(
+            data=request.data, context={'request': request})
+        if serializer.is_valid():
+            if device.api_key == serializer.data['api_key']:
+                if 'reservation_id' in serializer.data:
+                    # 首先，更新用户的预定情况为“已入座”
+                    reservation = Reservation.objects.get(
+                        id=serializer.data['reservation_id'])
+                    reservation.is_present = True
+                    reservation.save()
+                if 'fingerprint_id' in serializer.data:
+                    # 而后，更新用户的身份信息
+                    # TODO: 验证一次性 Token
+                    user = User.objects.get(id=serializer.data['user_id'])
+                    user_info, created = UserInfo.objects.get_or_create(
+                        user=user)
+                    user_info.fingerprint_id = serializer.data['fingerprint_id']
+                    user_info.save()
+                return Response('', status.HTTP_200_OK)
+            else:
+                return Response('invalid credentials', status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -78,7 +78,7 @@ class ReservationResultSerializer(serializers.ModelSerializer):
 
 
 class ErrorSerializer(serializers.Serializer):
-    message = serializers.CharField(max_length=200)
+    message = serializers.CharField()
 
 
 class RegionReservationSerializer(serializers.Serializer):
@@ -133,4 +133,7 @@ class DeviceModifySerializer(serializers.Serializer):
     fingerprint_id = serializers.IntegerField(
         help_text='更新后指纹 ID', required=False)
     token = serializers.IntegerField(help_text='用户一次性验证 Token', required=False)
-    user_id = serializers.IntegerField(help_text='入座用户 ID')
+    reservation_id = serializers.IntegerField(
+        help_text='入座的预定 ID', required=False)
+    user_id = serializers.IntegerField(help_text='入座用户 ID', required=False)
+    api_key = serializers.CharField(help_text='API Key', required=True)
