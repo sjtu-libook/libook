@@ -114,7 +114,7 @@ def test_modify_info():
         .extracting('user_info').extracting('fingerprint_id').is_equal_to([2334])
 
 
-@ pytest.mark.django_db
+@pytest.mark.django_db
 def test_is_present():
     """可以通过 API 确认用户的预定"""
     group = RegionGroup.objects.create(name="新图 1 楼")
@@ -133,3 +133,26 @@ def test_is_present():
         f'/api/devices/{device.id}', {"api_key": device.api_key, "reservation_id": reservation.id})
     assert response.status_code == 200
     assert Reservation.objects.get(id=reservation.id).is_present == True
+
+
+@pytest.mark.django_db
+def test_invalid():
+    """非法的 POST 请求"""
+    group = RegionGroup.objects.create(name="新图 1 楼")
+    region = Region.objects.create(
+        name="新图 E100", capacity=100, group=group)
+    device = Device.objects.create(api_key="2333333", region=region)
+    current_time = now()
+    time = Timeslice.objects.create(
+        from_time=current_time + timedelta(hours=0),
+        to_time=current_time + timedelta(hours=1))
+    user = User.objects.create(username="Alex Chi")
+    reservation = Reservation.objects.create(
+        user=user, time=time, region=region)
+    client = APIClient()
+    response = client.post(
+        f'/api/devices/{device.id}', {"api_key": "23333", "reservation_id": reservation.id})
+    assert response.status_code == 401
+    response = client.post(
+        f'/api/devices/{device.id}', {})
+    assert response.status_code == 400
