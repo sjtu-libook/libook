@@ -101,6 +101,17 @@ def test_modify_info():
     assert response.status_code == 200
     assert_that(response.json()).extracting('user') \
         .extracting('user_info').extracting('fingerprint_id').is_equal_to([2333])
+    response = client.post(
+        f'/api/devices/{device.id}', {"api_key": device.api_key, "user_id": user.id, "fingerprint_id": 2334})
+    assert response.status_code == 200
+    response = client.get(
+        f'/api/devices/{device.id}', {
+            "api_key": device.api_key,
+            "from_time": current_time,
+            "to_time": current_time + timedelta(hours=1)})
+    assert response.status_code == 200
+    assert_that(response.json()).extracting('user') \
+        .extracting('user_info').extracting('fingerprint_id').is_equal_to([2334])
 
 
 @ pytest.mark.django_db

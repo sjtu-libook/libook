@@ -8,9 +8,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Count, F
 from django.utils.timezone import now
-from datetime import timedelta
-from itertools import groupby
-from operator import itemgetter
 
 from ..serializers import *
 from ..models import *
