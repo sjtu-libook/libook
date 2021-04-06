@@ -45,13 +45,24 @@ pipenv run python manage.py fill_region
 ### 后端
 
 1. `git checkout master && git pull && make migrate` 保证目前代码为最新版本，并更新本地数据库 schema。
-2. `git checkout -b your-feature-name` 创建一个新分支。
+2. `git checkout -b your-name/your-feature-name` 创建一个新分支。
 3. 对代码做修改。
 4. 如果更改了数据库 model，运行 `make makemigrations && make migrate` 更新相关文件。
 5. 编写测试。可以配置 VSCode 的 Python 使用 pipenv 的 Python，并配置 Python Test 插件使用 pytest。在侧边栏即可查看所有测试的情况。`make test.backend` 可以手动跑测试。
 6. 更新文档。大部分 API 可以自动生成文档，有一些可能要自己声明。在 Swagger 中可以查看自动生成的 API 文档。
 7. `make format.backend` 格式化代码。
 8. 发 PR。CI 测试通过即可自己 Squash and Merge。Merge 时需要填写格式正确的 commit 标题。如果有不确定的地方，可以请求其他人 review。
+
+### 前端
+
+1. `git checkout master && git pull && make migrate` 保证目前代码为最新版本，并更新本地数据库 schema。
+2. `git checkout -b your-name/your-feature-name` 创建一个新分支。
+3. `make run.backend` 运行后端。
+4. `make run.frontend` 运行前端，在浏览器页面中应当可以正常使用。
+5. 对代码做修改。
+6. `make format.frontend` 格式化代码。
+7. 发 PR。CI 测试通过即可自己 Squash and Merge。Merge 时需要填写格式正确的 commit 标题。如果有不确定的地方，可以请求其他人 review。
+
 
 ## License
 

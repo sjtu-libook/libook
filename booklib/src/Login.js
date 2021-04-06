@@ -19,6 +19,10 @@ function Login() {
                                     onClick={() => window.location = "/api/auth/jaccount/login/"}>
                                     jAccount
                                 </button>
+                                <button className="btn btn-lg btn-dark"
+                                    onClick={() => window.location = "/admin/"}>
+                                    Django Admin
+                                </button>
                             </div>
                         </div>
                     </div>
