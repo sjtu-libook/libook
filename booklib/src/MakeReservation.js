@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { CSSTransition } from 'react-transition-group'
 import { useState } from 'react'
+import { useHistory } from "react-router-dom"
+
 
 import MainReserve from './flows/MainReserve.js'
 import ConfirmReserve from './flows/ConfirmReserve.js'
@@ -18,16 +20,21 @@ function FlowTransition({ match, children }) {
         classNames="libook-flow"
     >
         <div className="libook-flow">
-            <div className="libook-flow-inner">{children}</div>
+            <div className="libook-flow-inner card shadow-sm">
+                <div className="card-body mt-3">
+                    {children}
+                </div>
+            </div>
         </div>
     </CSSTransition>
 }
 
-function MakeReservation() {
-    let [step, setStep] = useState("quick")
+function MakeReservation({ custom }) {
+    let [step, setStep] = useState(custom ? 'general-time' : 'quick')
     let [timeslice, setTimeslice] = useState(null)
     let [location, setLocation] = useState(null)
     let [error, setError] = useState(null)
+    const history = useHistory()
 
     const onDoReserve = (returnStep, nextStep) => {
         setStep("in-progress")
@@ -65,7 +72,7 @@ function MakeReservation() {
             <FlowTransition match={step === "quick"}>
                 <MainReserve
                     nextStep={() => setStep("quick-confirm")}
-                    generalStep={() => setStep("general-time")}
+                    generalStep={() => history.push('/reservation/custom')}
                 ></MainReserve>
             </FlowTransition>
             <FlowTransition match={step === "quick-confirm"}>

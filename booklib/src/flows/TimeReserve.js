@@ -11,7 +11,7 @@ export function filterToNow(timeslices, now) {
     return timeslices.filter(timeslice => moment(timeslice.from_time).isAfter(now))
 }
 
-function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
+function TimeReserve({ nextStep }) {
     const [fromTimeId, setFromTimeId] = useState(0)
     const [toTimeId, setToTimeId] = useState(0)
     const [date, setDate] = useState(0)
@@ -97,8 +97,7 @@ function TimeReserve({ prevStep, nextStep, timesliceData, onChange }) {
 
             <ErrorWhen error={error}></ErrorWhen>
 
-            <div className="display-4 d-flex justify-content-between">
-                <LinkButton onClick={prevStep}><i className="bi bi-arrow-left-square"></i></LinkButton>
+            <div className="display-4 d-flex justify-content-end">
                 <LinkButton
                     onClick={() => nextStep(genTimeslices())}
                     className={{ "disabled": !validate() }}>

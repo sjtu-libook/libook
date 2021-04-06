@@ -96,3 +96,8 @@ $link-color: cornflowerblue;
     transition: opacity 300ms, transform 300ms;
     visibility: visible;
 }
+
+.libook-sidebar {
+    flex: 0 0 300px;
+    z-index: 2000;
+}
