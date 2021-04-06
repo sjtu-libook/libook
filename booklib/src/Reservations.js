@@ -21,7 +21,7 @@ function ReservationItem({ reservation, cancelReservation, disabled }) {
         btnText = ''
     }
 
-    return <div className="card mb-3">
+    return <div className="card mb-3 shadow-sm">
         <div className="card-body">
             <h5 className="card-title">{fromTimeCal} - {toTimeCal}</h5>
             <p className="card-text">{reservation.region.group.name} {reservation.region.name}</p>

@@ -1,53 +1,53 @@
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    NavLink
+    Route
 } from "react-router-dom"
 import MakeReservation from "./MakeReservation"
 import Reservations from './Reservations'
-import StatusBar from './StatusBar'
+import SideBar from './SideBar'
 import Login from './Login'
 
+function CardWarpper({ children }) {
+    return <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div className="col-xl-6 col-lg-8 col-md-10 col-12 libook-wizard-container">
+            <div className="col-12">
+                {children}
+            </div>
+        </div>
+    </div>
+}
 function App() {
     return <Router>
-        <div className="container-fluid vh-100">
-            <div className="row justify-content-center h-100">
-                <div className="col-12 mb-3 p-0">
-                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                        <div className="container-fluid">
-                            <ul className="navbar-nav me-auto">
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName="active" exact to="/">所有预约</NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className="nav-link"
-                                        activeClassName="active"
-                                        to="/reservation/new">新预约</NavLink>
-                                </li>
-                            </ul>
-                            <StatusBar></StatusBar>
-                        </div>
-                    </nav>
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-8 col-12 libook-wizard-container">
-                    <div className="col-12">
-                        <Switch>
-                            <Route path="/reservation/new">
+        <Switch>
+            <div className="container-fluid vh-100">
+                <div className="row justify-content-center h-100">
+                    <div className="col d-none d-md-block libook-sidebar bg-light">
+                        <SideBar></SideBar>
+                    </div>
+                    <div className="col p-3">
+                        <Route path="/reservation/custom">
+                            <CardWarpper>
+                                <MakeReservation custom></MakeReservation>
+                            </CardWarpper>
+                        </Route>
+                        <Route path="/reservation/quick">
+                            <CardWarpper>
                                 <MakeReservation></MakeReservation>
-                            </Route>
-                            <Route path="/login">
-                                <Login></Login>
-                            </Route>
-                            <Route path="/">
+                            </CardWarpper>
+                        </Route>
+                        <Route exact path="/">
+                            <CardWarpper>
                                 <Reservations></Reservations>
-                            </Route>
-                        </Switch>
+                            </CardWarpper>
+                        </Route>
                     </div>
                 </div>
             </div>
-        </div >
+            <Route path="/login">
+                <Login></Login>
+            </Route>
+        </Switch>
     </Router >
 }
 
