@@ -7,7 +7,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "heroku-prebuild": "NODE_ENV=production REACT_APP_GIT_SHA=$GIT_REV cd booklib/ && yarn install --frozen-lockfile && yarn build && cd .. && rm Pipfile*"
+        "heroku-prebuild": "NODE_ENV=production REACT_APP_GIT_SHA=$GIT_REV cd booklib/ && yarn install --immutable && yarn build && cd .. && rm Pipfile*"
     },
     "cacheDirectories": [
         "booklib/node_modules"
