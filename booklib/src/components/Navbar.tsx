@@ -1,9 +1,11 @@
 import { ButtonProps } from "@chakra-ui/button"
 import { useDisclosure } from "@chakra-ui/hooks"
+import { Image } from "@chakra-ui/image"
 import { Box, Flex, HStack, Spacer, Stack } from "@chakra-ui/layout"
 import LinkButton from "components/LinkButton"
 import { PropsWithChildren } from "react"
 import { Route } from "react-router"
+
 import StatusBar from "./StatusBar"
 
 function NavButton({ to, exact = false, children, ...rest }: 
@@ -37,8 +39,8 @@ function Navbar() {
 
   const links = [
     { text: "我的预约", link: "/reservations/me" },
-    { text: "快速预约", link: "/reservations/do/quick" },
-    { text: "自选预约", link: "/reservations/do/custom" },
+    { text: "快速预约", link: "/reservations/make/quick" },
+    { text: "自选预约", link: "/reservations/make/custom" },
   ]
 
   return (
@@ -46,7 +48,9 @@ function Navbar() {
       <Box px={4}>
         <Flex h={14} alignItems='center' justifyContent='space-between'>
           <HStack spacing={8} alignItems={'center'}>
-            <Box>libook</Box>
+            <HStack>
+              <Image src="/static/apple-touch-icon.png" boxSize={10} />
+            </HStack>
             <HStack
               as='nav'
               spacing={4}

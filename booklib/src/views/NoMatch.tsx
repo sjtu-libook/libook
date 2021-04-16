@@ -1,15 +1,16 @@
-import { Container, Heading, Stack, Text  } from "@chakra-ui/layout"
+import { Center, Flex, Heading, Stack, Text } from "@chakra-ui/layout"
 import LinkButton from "components/LinkButton"
-import ScreenContainer from "scaffold/ScreenContainer"
 
 function NoMatch() {
-  return <ScreenContainer>
+  return <Flex alignItems="center" justifyContent="center" direction="column" minHeight="80vh">
     <Stack spacing={5}>
       <Heading textAlign="center">404 Not Found</Heading>
       <Text textAlign="center">您访问的页面不存在</Text>
+      <Center>
+        <LinkButton to="/">返回首页</LinkButton>
+      </Center>
     </Stack>
-    <Container mt="10rem"><LinkButton isFullWidth to="/">返回首页</LinkButton></Container>
-  </ScreenContainer>
+  </Flex>
 }
 
 export default NoMatch

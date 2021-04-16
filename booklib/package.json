@@ -7,19 +7,23 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.41",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.4.1",
     "cra-template": "1.1.2",
+    "formik": "^2.2.6",
     "framer-motion": "^4",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-transition-group": "^4.4.1",
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1"
   },
@@ -31,6 +35,10 @@
     "lint": "eslint src"
   },
   "eslintConfig": {
+    "plugins": [
+      "unused-imports",
+      "simple-import-sort"
+    ],
     "extends": [
       "react-app",
       "react-app/jest"
@@ -50,7 +58,20 @@
           "code": 120
         }
       ],
-      "no-multiple-empty-lines": "warn"
+      "no-multiple-empty-lines": "warn",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "warn",
+      "unused-imports/no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^_",
+          "args": "after-used",
+          "argsIgnorePattern": "^_"
+        }
+      ],
+      "simple-import-sort/imports": "warn"
     }
   },
   "browserslist": {
@@ -68,6 +89,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.10",
     "@types/react-router-dom": "^5.1.7",
+    "@types/react-transition-group": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "babel-eslint": "^10.0.0",
@@ -80,7 +102,9 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-testing-library": "^4.0.1",
+    "eslint-plugin-unused-imports": "^1.1.1",
     "http-proxy-middleware": "^1.1.2"
   }
 }
