@@ -2,15 +2,30 @@ import './App.css'
 import Login from './views/Login'
 import theme from './theme'
 import { ChakraProvider } from "@chakra-ui/react"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { Route, BrowserRouter as Router, Switch, useHistory } from "react-router-dom"
 import Navbar from './components/Navbar'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import NoMatch from './views/NoMatch'
+import DoReservation from 'views/DoReservation'
+
+function RedirectPath() {
+  const history = useHistory()
+  useEffect(() => {
+    history.replace('/reservations/me')
+  })
+  return <Fragment />
+}
 
 function App() {
   const MainRoutes = () => (<Fragment>
-    <Navbar/>
+    <Navbar />
     <Switch>
+      <Route exact path="/">
+        <RedirectPath />
+      </Route>
+      <Route exact path="/reservations/make/custom">
+        <DoReservation />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>
@@ -21,9 +36,9 @@ function App() {
       <Router>
         <Switch>
           <Route path="/login">
-            <Login/>
+            <Login />
           </Route>
-          <Route component={MainRoutes}/>
+          <Route component={MainRoutes} />
         </Switch>
       </Router>
     </ChakraProvider>
