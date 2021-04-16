@@ -1,12 +1,14 @@
 import './App.css'
-import Login from './views/Login'
-import theme from './theme'
+
 import { ChakraProvider } from "@chakra-ui/react"
-import { Route, BrowserRouter as Router, Switch, useHistory } from "react-router-dom"
-import Navbar from './components/Navbar'
 import { Fragment, useEffect } from 'react'
-import NoMatch from './views/NoMatch'
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom"
 import DoReservation from 'views/DoReservation'
+
+import Navbar from './components/Navbar'
+import theme from './theme'
+import Login from './views/Login'
+import NoMatch from './views/NoMatch'
 
 function RedirectPath() {
   const history = useHistory()

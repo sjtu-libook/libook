@@ -59,10 +59,8 @@
         }
       ],
       "no-multiple-empty-lines": "warn",
-      "sort-imports": [
-        "warn"
-      ],
       "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "warn",
       "unused-imports/no-unused-vars": [
         "warn",

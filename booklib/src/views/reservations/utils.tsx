@@ -29,7 +29,7 @@ export function calendarStringOf(date: Moment) {
 }
 
 export function dateSelections() {
-  let day = moment()
+  let day = moment().startOf('day')
   const result = []
 
   for (let i = 0; i < 7; i++) {
@@ -44,21 +44,21 @@ export function dateSelections() {
 const duration = 300
 
 const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
+  transition: `opacity ${duration}ms ease-in-out, max-height ${duration}ms ease-in-out`,
   opacity: 0,
 }
 
 const transitionStyles = {
-  "entering": { opacity: 1 },
-  "entered": { opacity: 1 },
-  "exiting": { opacity: 0 },
+  "entering": { opacity: 1  },
+  "entered": { opacity: 1  },
+  "exiting": { opacity: 0  },
   "exited": { opacity: 0 },
 }
 
 type TransitionState = "entering" | "entered" | "exiting" | "exited"
 
 export const Fade = ({ inProp, children }: PropsWithChildren<{ inProp: boolean }>) => (
-  <Transition inProp={inProp} timeout={duration}>
+  <Transition in={inProp} timeout={duration}>
     { (state: TransitionState) => (
       <Box style={{
         ...defaultStyle,
@@ -67,5 +67,5 @@ export const Fade = ({ inProp, children }: PropsWithChildren<{ inProp: boolean }
         {children}
       </Box>
     )}
-  </Transition>)
-
+  </Transition>
+)

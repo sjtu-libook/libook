@@ -1,10 +1,10 @@
+import { Text } from '@chakra-ui/layout'
+import { Spinner } from '@chakra-ui/spinner'
+import axios from 'axios'
+import { ExclamationTriangleFill } from 'Icons'
+import { User } from 'models'
 import { Fragment, useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import axios from 'axios'
-import { User } from 'models'
-import { Spinner } from '@chakra-ui/spinner'
-import { Text } from '@chakra-ui/layout'
-import { ExclamationTriangleFill } from 'Icons'
 
 
 function StatusBar() {

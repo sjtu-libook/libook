@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Heading, Stack, Text } from "@chakra-ui/layout"
+import { Center, Flex, Heading, Stack, Text } from "@chakra-ui/layout"
 import LinkButton from "components/LinkButton"
 
 function NoMatch() {

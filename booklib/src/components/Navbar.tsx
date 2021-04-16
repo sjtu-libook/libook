@@ -5,6 +5,7 @@ import { Box, Flex, HStack, Spacer, Stack } from "@chakra-ui/layout"
 import LinkButton from "components/LinkButton"
 import { PropsWithChildren } from "react"
 import { Route } from "react-router"
+
 import StatusBar from "./StatusBar"
 
 function NavButton({ to, exact = false, children, ...rest }: 
