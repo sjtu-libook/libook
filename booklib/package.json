@@ -3,30 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "axios": "^0.21.1",
-    "axios-hooks": "^2.5.0",
-    "bootstrap": "^5.0.0-beta2",
-    "bootstrap-icons": "^1.4.0",
-    "classnames": "^2.2.6",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "@chakra-ui/react": "^1.5.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.41",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "cra-template": "1.1.2",
+    "framer-motion": "^4",
     "node-sass": "^5.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "react-transition-group": "^4.4.1",
-    "web-vitals": "^1.0.1"
+    "typescript": "^4.2.4",
+    "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "cross-env PORT=3001 react-scripts start",
+    "start": "cross-env PORT=1234 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext js src"
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": [
@@ -36,7 +34,7 @@
     "rules": {
       "indent": [
         "warn",
-        4
+        2
       ],
       "semi": [
         "warn",
@@ -63,14 +61,19 @@
     ]
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.0.0",
+    "@typescript-eslint/parser": "^4.0.0",
+    "babel-eslint": "^10.0.0",
     "cross-env": "^7.0.3",
+    "eslint": "^7.24.0",
     "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-flowtype": "^5.3.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "http-proxy-middleware": "^1.0.6"
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-testing-library": "^4.0.1",
+    "http-proxy-middleware": "^1.1.2"
   }
 }
