@@ -17,15 +17,15 @@ function Login() {
               <Button variant="solid" colorScheme="blackAlpha"
                 onClick={() => window.location.href = "/api/auth/github/login/"}>
                 GitHub
-                </Button>
+              </Button>
               <Button variant="solid" colorScheme="blackAlpha"
                 onClick={() => window.location.href = "/api/auth/jaccount/login/"}>
                 jAccount
-                </Button>
+              </Button>
               <Button variant="solid" colorScheme="blackAlpha"
                 onClick={() => window.location.href = "/admin/"}>
                 Django Admin
-                </Button>
+              </Button>
             </Stack>
           </Box>
         </SimpleGrid>
