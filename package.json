@@ -15,5 +15,10 @@
     "engines": {
         "yarn": "1.x",
         "node": "14.x"
+    },
+    "devDependencies": {},
+    "dependencies": {
+        "axios": "^0.21.1",
+        "moment": "^2.29.1"
     }
 }
