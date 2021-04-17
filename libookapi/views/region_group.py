@@ -26,3 +26,31 @@ class RegionGroupDetailView(views.APIView):
             capacity=Sum('regions__capacity')).get(id=id)
         serializer = RegionGroupDetailSerializer(region_group)
         return Response(serializer.data)
+
+
+class RegionRecommendationView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("id", OpenApiTypes.INT, OpenApiParameter.PATH),
+        ],
+        responses=RegionGroupSerializer(many=True),
+    )
+    def get(self, request):
+        """
+        根据用户的预定历史推荐区域
+        """
+        region_ids = Reservation.objects \
+            .filter(user=request.user) \
+            .values_list('region', flat=True) \
+            .distinct()
+        group_ids = Region.objects \
+            .filter(id__in=region_ids) \
+            .values_list('group', flat=True) \
+            .distinct()
+        region_groups = RegionGroup.objects \
+            .filter(id__in=group_ids) \
+            .annotate(capacity=Sum('regions__capacity'))
+        serializer = RegionGroupDetailSerializer(region_groups, many=True)
+        return Response(serializer.data)

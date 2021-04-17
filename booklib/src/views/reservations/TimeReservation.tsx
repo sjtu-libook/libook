@@ -7,7 +7,7 @@ import { Skeleton } from "@chakra-ui/skeleton"
 import axios from "axios"
 import { Field, FieldProps, Form, Formik, useFormikContext } from 'formik'
 import { ExclamationTriangleFill } from "Icons"
-import { filter, find, findIndex, sortBy } from "lodash"
+import { filter, find, findIndex, isNaN, sortBy } from "lodash"
 import { Timeslice } from 'models'
 import moment, { Moment } from "moment"
 import { Fragment, useEffect, useMemo, useState } from "react"
@@ -24,11 +24,8 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
   const dates = useMemo(() => dateSelections(), [])
 
   const validateDate = (dateId: string) => {
-    if (!dateId) {
-      return "请选择一个日期"
-    }
     const dateIdNumber = parseInt(dateId)
-    if (dateIdNumber < 0 || dateIdNumber >= dates.length) {
+    if (isNaN(dateIdNumber) || dateIdNumber < 0 || dateIdNumber >= dates.length) {
       return "请选择一个日期"
     }
     return null
@@ -53,11 +50,8 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
     </Field>)
 
   const validateTimeslice = (timeslices: Timeslice[], timesliceId: string) => {
-    if (!timesliceId) {
-      return "请选择一个时间"
-    }
     const timesliceIdNumber = parseInt(timesliceId)
-    if (!find(timeslices, timeslice => timeslice.id === timesliceIdNumber)) {
+    if (isNaN(timesliceIdNumber) || !find(timeslices, timeslice => timeslice.id === timesliceIdNumber)) {
       return "请选择一个时间"
     }
     return null
@@ -167,10 +161,13 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
     onSubmit={async (values) => {
       const date = dates[parseInt(values.dateId)]
       const timeslices = await fetchTimeslices(date)
+      const startTime = find(timeslices, timeslice => timeslice.id === parseInt(values.startTimeId!))
+      const endTime = find(timeslices, timeslice => timeslice.id === parseInt(values.endTimeId!))
+      if (!startTime || !endTime) return
       onSubmit({
         date,
-        startTime: find(timeslices, timeslice => timeslice.id === parseInt(values.startTimeId!))!,
-        endTime: find(timeslices, timeslice => timeslice.id === parseInt(values.endTimeId!))!
+        startTime,
+        endTime
       })
     }}
   >

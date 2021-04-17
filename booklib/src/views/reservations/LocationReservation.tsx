@@ -7,7 +7,7 @@ import * as api from 'api'
 import { RegionGroupReservationDetail, RegionReservationDetail } from 'api'
 import { Field, FieldProps, Form, Formik, useFormikContext } from 'formik'
 import { ExclamationTriangleFill } from "Icons"
-import { find, sortBy } from "lodash"
+import { find, isNaN, sortBy } from "lodash"
 import { Timeslice } from 'models'
 import { Fragment, useEffect, useState } from "react"
 
@@ -76,11 +76,8 @@ export function SelectLocationForm({ reset, onSubmit, initialData, startTime, en
 
 
     function validate(regions: RegionReservationDetail[], regionId: string) {
-      if (!regionId) {
-        return "请选择一个区域"
-      }
       const regionIdNumber = parseInt(regionId)
-      if (!find(regions, region => region.id === regionIdNumber)) {
+      if (isNaN(regionIdNumber) || !find(regions, region => region.id === regionIdNumber)) {
         return "请选择一个区域"
       }
       return null
@@ -119,11 +116,8 @@ export function SelectLocationForm({ reset, onSubmit, initialData, startTime, en
     const [error, setError] = useState<string>()
 
     function validate(groupId: string, regionGroups?: RegionGroupReservationDetail[]) {
-      if (!groupId) {
-        return "请选择一个区域组"
-      }
       const groupIdNumber = parseInt(groupId)
-      if (!find(regionGroups, group => group.id === groupIdNumber)) {
+      if (isNaN(groupIdNumber) || !find(regionGroups, group => group.id === groupIdNumber)) {
         return "请选择一个区域组"
       }
       return null
@@ -166,8 +160,10 @@ export function SelectLocationForm({ reset, onSubmit, initialData, startTime, en
     }}
     onSubmit={async (values) => {
       const regionGroup = await api.fetchRegionGroupDetail(parseInt(values.groupId!))
+      const region = find(regionGroup.regions, region => region.id === parseInt(values.regionId!))
+      if (!region) return
       onSubmit({
-        region: find(regionGroup.regions, region => region.id === parseInt(values.regionId!))!,
+        region,
         group: regionGroup
       })
     }}

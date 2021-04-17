@@ -43,6 +43,8 @@ urlpatterns = [
          views.QueryAllRegionGroupReservationView.as_view(), name='batch_query_region_all'),
     path('api/region_groups/<int:id>/detail',
          views.RegionGroupDetailView.as_view(), name='region_group_detail'),
+    path('api/region_groups/recommendation',
+         views.RegionRecommendationView.as_view(), name='region_group_recommendation'),
     path('api/devices/<int:id>', views.DeviceView.as_view(), name='device'),
     path('api/tokens/', views.TokenView.as_view(), name='token'),
     # Authentication
