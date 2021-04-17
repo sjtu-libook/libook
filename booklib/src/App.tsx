@@ -5,6 +5,7 @@ import { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom"
 import DoReservation from 'views/DoReservation'
 import MyReservations from 'views/MyReservations'
+import QuickReservation from 'views/QuickReservation'
 
 import Navbar from './components/Navbar'
 import theme from './theme'
@@ -28,6 +29,9 @@ function App() {
       </Route>
       <Route exact path="/reservations/make/custom">
         <DoReservation />
+      </Route>
+      <Route exact path="/reservations/make/quick">
+        <QuickReservation />
       </Route>
       <Route exact path="/reservations/me">
         <MyReservations />

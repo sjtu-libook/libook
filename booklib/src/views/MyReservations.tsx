@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button"
 import { Box, Heading, HStack, Spacer, Stack, Text } from "@chakra-ui/layout"
 import { Progress } from "@chakra-ui/progress"
 import axios from "axios"
+import LinkButton from "components/LinkButton"
 import { ExclamationTriangleFill } from "Icons"
 import { reverse } from "lodash"
 import { Reservation } from "models"
@@ -22,24 +23,24 @@ function ReservationItem({ reservation, cancelReservation, isLoading }: {
   const toTimeCal = toTime.format('HH:mm')
   const now = moment()
 
-  let btnText = '取消预约'
+  let btnText: string | null = '取消预约'
   if (fromTime.isBefore(now)) {
     btnText = `取消 ${moment().startOf('hour').format('HH:mm')} 后的预约`
   }
   if (toTime.isBefore(now)) {
-    btnText = ''
+    btnText = null
   }
 
   return <Box p={3} shadow="sm" borderRadius="md" borderWidth={1}>
     <Stack spacing={3}>
       <Text>{fromTimeCal} - {toTimeCal}</Text>
       <Text>{reservation.region.group.name} {reservation.region.name}</Text>
-      <HStack>
+      {btnText && <HStack>
         <Spacer />
         <Button onClick={cancelReservation} isLoading={isLoading}>
           {btnText}
         </Button>
-      </HStack>
+      </HStack>}
     </Stack>
   </Box>
 }
@@ -98,6 +99,7 @@ function MyReservations() {
           key={reservation.id}
           cancelReservation={() => cancelReservation(reservation)}
           isLoading={isCanceling} />) : <Text>今日没有预约。</Text>}
+      <Box><LinkButton to="/reservations/make/quick" isFullWidth colorScheme="teal">新预约</LinkButton></Box>
     </Stack>
   </ScreenContainer>
   )
