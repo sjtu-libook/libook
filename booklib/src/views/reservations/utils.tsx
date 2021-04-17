@@ -31,11 +31,11 @@ export function calendarStringOf(date: Moment) {
   return date.calendar(calendarDateOnly)
 }
 
-export function dateSelections() {
+export function dateSelections(days: number = 7) {
   let day = moment().startOf('day')
   const result = []
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < days; i++) {
     result.push(moment(day))
     day.add(1, 'days')
   }
@@ -111,4 +111,9 @@ export function mergeReservation(reservations: Reservation[]) {
   })
 
   return mergedReservations
+}
+
+export function orZero(index: number) {
+  if (index < 0) return 0
+  return index
 }

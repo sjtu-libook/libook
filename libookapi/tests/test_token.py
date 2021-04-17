@@ -8,8 +8,8 @@ from ..models import *
 
 @pytest.mark.django_db
 def test_generate_token():
-    """可以批量预约"""
-    # TODO: 加入重复预约、超过限制等错误情况的测试
+    """可以批量预定"""
+    # TODO: 加入重复预定、超过限制等错误情况的测试
 
     user = User.objects.create(username="Alex Chi")
 

@@ -9,3 +9,7 @@ export function ChevronDown() {
 export function ListIcon() {
   return <i className="bi bi-list"></i>
 }
+
+export function StarFillIcon() {
+  return <i className="bi bi-star-fill"></i>
+}

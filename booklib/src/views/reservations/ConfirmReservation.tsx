@@ -48,11 +48,11 @@ function ConfirmReservation({ onSubmit, reset, reservationInfo }: {
   }
 
   return <Box>
-    <Text fontWeight="bold">确认要预约吗？</Text>
+    <Text fontWeight="bold">确认要预定吗？</Text>
     {error && <Text color="yellow.500" mt={3}><ExclamationTriangleFill /> {error}</Text>}
     <HStack mt={4}>
       {reset && <Button onClick={reset}>取消</Button>}
-      <Button isFullWidth colorScheme="teal" isLoading={isLoading} onClick={doReserve}>确认预约</Button>
+      <Button isFullWidth colorScheme="teal" isLoading={isLoading} onClick={doReserve}>确认预定</Button>
     </HStack>
   </Box>
 }

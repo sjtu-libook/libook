@@ -25,3 +25,9 @@ export interface QuickReservationInfo {
   group: RegionGroup
   region: Region
 }
+
+export interface RecommendedRegionGroup {
+  id: number
+  name: string
+  star: boolean
+}

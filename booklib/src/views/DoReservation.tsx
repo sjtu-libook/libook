@@ -41,7 +41,7 @@ function DoReservation() {
 
   return (
     <ScreenContainer>
-      <Heading mb={3}>自选预约</Heading>
+      <Heading mb={3}>自选预定</Heading>
 
       { step === ReservationStep.Time && <SelectTimeForm onSubmit={dateNextStep} initialData={timeInfo} />}
       { step > ReservationStep.Time && timeInfo && <TimeDisplay timeInfo={timeInfo} />}
@@ -59,11 +59,11 @@ function DoReservation() {
           onSubmit={confirmNextStep}
           reservationInfo={reservationInfo} />}
       { step === ReservationStep.Success && timeInfo && <Stack spacing={3}>
-        <Text fontWeight="bold">预约成功</Text>
-        <Text>您可以在 {moment(timeInfo.startTime.from_time).calendar()} 前取消预约。</Text>
+        <Text fontWeight="bold">预定成功</Text>
+        <Text>您可以在 {moment(timeInfo.startTime.from_time).calendar()} 前取消预定。</Text>
         <SimpleGrid columns={[1, null, 2]} spacing={3}>
-          <Box><LinkButton to="/reservations/me" isFullWidth>查看所有预约</LinkButton></Box>
-          <Box><Button colorScheme="teal" onClick={reset} isFullWidth>继续预约</Button></Box>
+          <Box><LinkButton to="/reservations/me" isFullWidth>查看所有预定</LinkButton></Box>
+          <Box><Button colorScheme="teal" onClick={reset} isFullWidth>继续预定</Button></Box>
         </SimpleGrid>
       </Stack>}
     </ScreenContainer>

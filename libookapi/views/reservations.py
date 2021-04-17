@@ -35,7 +35,7 @@ class ReservationView(mixins.ListModelMixin,
     permission_classes = [permissions.IsAuthenticated]
 
     """
-    获取、删除单个预约信息。
+    获取、删除单个预定信息。
     """
 
     def get_queryset(self):
@@ -66,8 +66,8 @@ class QueryRegionReservationView(views.APIView):
     )
     def get(self, request):
         """
-        查询区域的预约情况，返回一个数组，代表该区域在 [min_time_id, max_time_id]
-        每个时间段内的预约情况。
+        查询区域的预定情况，返回一个数组，代表该区域在 [min_time_id, max_time_id]
+        每个时间段内的预定情况。
         """
         region = request.GET.get('region_id')
         min_time_id = request.GET.get('min_time_id')
@@ -94,8 +94,8 @@ class QueryRegionGroupReservationView(views.APIView):
     )
     def get(self, request):
         """
-        查询某一区域组的预约情况，返回一个数组，代表在该区域组里的每一个区域在
-        [min_time_id, max_time_id] 每个时间段内的预约情况。
+        查询某一区域组的预定情况，返回一个数组，代表在该区域组里的每一个区域在
+        [min_time_id, max_time_id] 每个时间段内的预定情况。
         """
         group = request.GET.get('region_group_id')
         min_time_id = request.GET.get('min_time_id')
@@ -121,8 +121,8 @@ class QueryAllRegionGroupReservationView(views.APIView):
     )
     def get(self, request):
         """
-        查询所有区域组的预约情况，返回一个数组，代表各个区域组在
-        [min_time_id, max_time_id] 每个时间段内的预约情况。
+        查询所有区域组的预定情况，返回一个数组，代表各个区域组在
+        [min_time_id, max_time_id] 每个时间段内的预定情况。
         """
         min_time_id = request.GET.get('min_time_id')
         max_time_id = request.GET.get('max_time_id')
@@ -149,10 +149,10 @@ class BatchReservationView(views.APIView):
     def post(self, request, format=None):
         """
         实现批量订位
-        1. 用户只能在预约时间片起始时间之前订位
-        2. 一个场地的预约数不能超过场地限制
-        3. 用户在同一个时间段只能预约一个场地
-        4. 用户只能预约接下来一周的场地
+        1. 用户只能在预定时间片起始时间之前订位
+        2. 一个场地的预定数不能超过场地限制
+        3. 用户在同一个时间段只能预定一个场地
+        4. 用户只能预定接下来一周的场地
         5. ... to be continued
         """
         serializer = ReservationSerializer(
@@ -167,39 +167,39 @@ class BatchReservationView(views.APIView):
                 reserve_timeslice = Timeslice.objects.get(
                     id=request_reserve['time'])
 
-                # 1. 用户只能在预约时间片起始时间之前订位
+                # 1. 用户只能在预定时间片起始时间之前订位
                 reserve_fromtime = reserve_timeslice.from_time
                 reserve_totime = reserve_timeslice.to_time
                 curr_time = now()
                 if curr_time > reserve_fromtime:
                     message = [
-                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预约失败！您不能预约过去的位置'}]
+                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预定失败！您不能预定过去的位置'}]
                     result_serializer = ReservationResultSerializer(
                         message, many=True)
                     return Response(result_serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-                # 2. 一个场地的预约数不能超过场地限制
+                # 2. 一个场地的预定数不能超过场地限制
                 reserve_num = Reservation.objects.filter(
                     region=reserve_region, time=reserve_timeslice).count()
                 if reserve_num >= reserve_region.capacity:
                     message = [
-                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预约失败！该区域在该时间段已预约满'}]
+                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预定失败！该区域在该时间段已预定满'}]
                     result_serializer = ReservationResultSerializer(
                         message, many=True)
                     return Response(result_serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-                # 3. 用户在同一个时间段只能预约一个场地
+                # 3. 用户在同一个时间段只能预定一个场地
                 if Reservation.objects.filter(user=request.user, time=reserve_timeslice).count() > 0:
                     message = [
-                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预约失败！您在该时间段已预约了一个位置'}]
+                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预定失败！您在该时间段已预定了一个位置'}]
                     result_serializer = ReservationResultSerializer(
                         message, many=True)
                     return Response(result_serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-                # 4. 用户只能预约接下来一周的场地
+                # 4. 用户只能预定接下来一周的场地
                 if reserve_fromtime > now() + timedelta(days=7):
                     message = [
-                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预约失败！您只能预约未来一周的位置'}]
+                        {'region': reserve_region, 'time': reserve_timeslice, 'reason': '预定失败！您只能预定未来一周的位置'}]
                     result_serializer = ReservationResultSerializer(
                         message, many=True)
                     return Response(result_serializer.data, status=status.HTTP_400_BAD_REQUEST)
@@ -207,7 +207,7 @@ class BatchReservationView(views.APIView):
                 message.append({'region': reserve_region,
                                 'time': reserve_timeslice, 'reason': ''})
 
-            serializer.save()  # 所有预约一起保存
+            serializer.save()  # 所有预定一起保存
             result_serializer = ReservationResultSerializer(message, many=True)
             return Response(result_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
