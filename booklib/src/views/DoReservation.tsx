@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/button'
 import { Box, Heading, Stack, Text } from '@chakra-ui/layout'
 import moment from 'moment'
 import { PropsWithChildren, useState } from 'react'
@@ -64,9 +65,10 @@ function DoReservation() {
           reset={reset}
           onSubmit={confirmNextStep}
           reservationInfo={reservationInfo} />}
-      { step === ReservationStep.Success && timeInfo && <Stack>
+      { step === ReservationStep.Success && timeInfo && <Stack spacing={3}>
         <Text fontWeight="bold">预约成功</Text>
         <Text>您可以在 {moment(timeInfo.startTime.from_time).calendar()} 前取消预约。</Text>
+        <Button colorScheme="teal" onClick={reset}>继续预约</Button>
       </Stack>}
     </ScreenContainer>
   )

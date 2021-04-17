@@ -5,11 +5,16 @@ export interface User {
 
 export interface Timeslice {
   id: number
-  from_time: number
-  to_time: number
+  from_time: string
+  to_time: string
 }
 
 export interface RegionGroup {
+  id: number
+  name: string
+}
+
+export interface RegionGroupDetail {
   id: number
   name: string
   capacity: number
@@ -39,7 +44,7 @@ export interface RegionDetail {
 
 export interface Reservation {
   id: number
-  region: Region
+  region: RegionDetail
   time: Timeslice
 }
 
