@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button"
 import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/form-control"
-import { Box, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/layout"
+import { Box, SimpleGrid, Stack, Text } from "@chakra-ui/layout"
 import { Radio, RadioGroup } from "@chakra-ui/radio"
 import { Skeleton } from "@chakra-ui/skeleton"
 import * as api from 'api'
@@ -81,7 +81,7 @@ export function SimpleForm({ onSubmit, initialData }:
           <FormControl isInvalid={!!(form.errors[name] && form.touched[name])}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <RadioGroup id={name} {...field}>
-              <SimpleGrid columns={[1, null, 3]} spacing={2}>
+              <SimpleGrid columns={[1, null, 2]} spacing={2}>
                 {data.map((datum, idx: number) =>
                   <Box>
                     <Radio key={idx} {...field} value={idx.toString()}>
@@ -103,10 +103,10 @@ export function SimpleForm({ onSubmit, initialData }:
     locationId: string
   }
 
-  const RegionComponent = (group: RecommendedRegionGroup) => (<HStack>
-    <Text>{group.name}</Text>
-    {group.star && <Text color="orange.500"><StarFillIcon /></Text>}
-  </HStack>)
+  const RegionComponent = (group: RecommendedRegionGroup) => (<Box>
+    <Text as="span" mr={1}>{group.name}</Text>
+    {group.star && <Text as="span" color="orange.500"><StarFillIcon /></Text>}
+  </Box>)
 
   const hours = useMemo(() => [
     { display: '1 小时', slices: 1 },
@@ -226,7 +226,7 @@ export function SimpleForm({ onSubmit, initialData }:
         <Form>
           <Stack spacing={5}>
             <DateField name="dateId" />
-            <EnumField name="timeId" data={map(times, 'display')} label="时间段" />
+            <EnumField name="timeId" data={map(times, 'display')} label="入馆时间" />
             <EnumField name="durationId" data={map(hours, 'display')} label="时长" />
             {recommendRegions ?
               <EnumField name="locationId" data={map(recommendRegions, RegionComponent)} label="位置" />
