@@ -33,7 +33,7 @@ function Login() {
     </Flex>
     <Box p={3} background="white">
       <Center>
-        <Text>Libook 是一个开源的图书馆预约系统。</Text>
+        <Text>Libook 是一个开源的图书馆预定系统。</Text>
       </Center>
     </Box>
   </Flex>

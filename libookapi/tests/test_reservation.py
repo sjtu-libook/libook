@@ -10,7 +10,7 @@ from ..serializers import *
 
 @pytest.mark.django_db
 def test_batch_reservation():
-    """可以批量预约"""
+    """可以批量预定"""
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     timeslice1 = Timeslice.objects.create(
@@ -38,7 +38,7 @@ def test_batch_reservation():
 
 @pytest.mark.django_db
 def test_batch_reservation_failed():
-    """提供非法信息时预约会失败"""
+    """提供非法信息时预定会失败"""
 
     user = User.objects.create(username="Alex Chi")
 
@@ -56,7 +56,7 @@ def test_batch_reservation_failed():
 
 @pytest.mark.django_db
 def test_reservation_get_only_self():
-    """只能查询到自己的预约"""
+    """只能查询到自己的预定"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
@@ -94,7 +94,7 @@ def test_reservation_get_only_self():
 
 @pytest.mark.django_db
 def test_reservation_delete():
-    """可以删除预约"""
+    """可以删除预定"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
@@ -122,7 +122,7 @@ def test_reservation_delete():
 
 @pytest.mark.django_db
 def test_reservation_post_only_self():
-    """只能提交自己的预约"""
+    """只能提交自己的预定"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
@@ -144,7 +144,7 @@ def test_reservation_post_only_self():
                            )
     assert response.status_code == 201
 
-    # 即使指定了 user 参数，这个预约最终也会添加到自己的用户下。
+    # 即使指定了 user 参数，这个预定最终也会添加到自己的用户下。
     response = client.get(f'/api/reservations/')
     assert response.status_code == 200
     assert response.json() != []
@@ -152,7 +152,7 @@ def test_reservation_post_only_self():
 
 @pytest.mark.django_db
 def test_batch_reservation_failed_01():
-    """1. 用户只能在预约时间片起始时间之前订位"""
+    """1. 用户只能在预定时间片起始时间之前订位"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
@@ -172,12 +172,12 @@ def test_batch_reservation_failed_01():
                            )
     assert response.status_code == 400
     assert response.json() == [{"region": {"id": region.id, "name": region.name, "group": RegionGroupSerializer(
-        region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预约失败！您不能预约过去的位置"}]
+        region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预定失败！您不能预定过去的位置"}]
 
 
 @pytest.mark.django_db
 def test_batch_reservation_failed_02():
-    """2. 一个场地的预约数不能超过场地限制"""
+    """2. 一个场地的预定数不能超过场地限制"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=2, group=group)
@@ -200,7 +200,7 @@ def test_batch_reservation_failed_02():
         if user == user3:
             assert response.status_code == 400
             assert response.json() == [{"region": {"id": region.id, "name": region.name, "group": RegionGroupSerializer(
-                region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预约失败！该区域在该时间段已预约满"}]
+                region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预定失败！该区域在该时间段已预定满"}]
         else:
             assert response.status_code == 201
             if user == user1:
@@ -213,7 +213,7 @@ def test_batch_reservation_failed_02():
 
 @pytest.mark.django_db
 def test_batch_reservation_failed_03():
-    """3. 用户在同一个时间段只能预约一个场地"""
+    """3. 用户在同一个时间段只能预定一个场地"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region1 = Region.objects.create(name="新图 E100", capacity=10, group=group)
@@ -235,12 +235,12 @@ def test_batch_reservation_failed_03():
                            content_type='application/json')
     assert response.status_code == 400
     assert response.json() == [{"region": {"id": region2.id, "name": region2.name, "group": RegionGroupSerializer(
-        region2.group).data, "capacity": region2.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预约失败！您在该时间段已预约了一个位置"}]
+        region2.group).data, "capacity": region2.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预定失败！您在该时间段已预定了一个位置"}]
 
 
 @pytest.mark.django_db
 def test_batch_reservation_failed_04():
-    """4. 用户只能预约接下来一周的场地"""
+    """4. 用户只能预定接下来一周的场地"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=10, group=group)
@@ -259,12 +259,12 @@ def test_batch_reservation_failed_04():
                            )
     assert response.status_code == 400
     assert response.json() == [{"region": {"id": region.id, "name": region.name, "group": RegionGroupSerializer(
-        region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预约失败！您只能预约未来一周的位置"}]
+        region.group).data, "capacity": region.capacity}, "time": TimesliceSerializer(timeslice).data, "reason": "预定失败！您只能预定未来一周的位置"}]
 
 
 @pytest.mark.django_db
 def test_reservation_delete_before():
-    """只能在预约时间段结束前取消预约"""
+    """只能在预定时间段结束前取消预定"""
 
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)

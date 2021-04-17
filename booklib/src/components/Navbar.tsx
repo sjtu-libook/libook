@@ -37,9 +37,9 @@ function NavButton({ to, exact = false, children, ...rest }:
 
 function Navbar() {
   const links = [
-    { text: "我的预约", link: "/reservations/me" },
-    { text: "快速预约", link: "/reservations/make/quick" },
-    { text: "自选预约", link: "/reservations/make/custom" },
+    { text: "我的预定", link: "/reservations/me" },
+    { text: "快速预定", link: "/reservations/make/quick" },
+    { text: "自选预定", link: "/reservations/make/custom" },
   ]
   const history = useHistory()
 

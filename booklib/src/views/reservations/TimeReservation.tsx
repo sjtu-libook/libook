@@ -4,7 +4,7 @@ import { HStack, Stack, Text } from "@chakra-ui/layout"
 import { Radio, RadioGroup } from "@chakra-ui/radio"
 import { Select } from "@chakra-ui/select"
 import { Skeleton } from "@chakra-ui/skeleton"
-import axios from "axios"
+import * as api from 'api'
 import { Field, FieldProps, Form, Formik, useFormikContext } from 'formik'
 import { ExclamationTriangleFill } from "Icons"
 import { filter, find, findIndex, isNaN, sortBy } from "lodash"
@@ -13,7 +13,7 @@ import moment, { Moment } from "moment"
 import { Fragment, useEffect, useMemo, useState } from "react"
 
 import { ReservationTimeInfo } from './models'
-import { calendarStringOf, dateSelections } from "./utils"
+import { calendarStringOf, dateSelections, orZero } from "./utils"
 
 function filterToNow(timeslices: Timeslice[], now: Moment) {
   return timeslices.filter(timeslice => moment(timeslice.from_time).isAfter(now))
@@ -94,13 +94,9 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
   }
 
   const fetchTimeslices = async (now: Moment) => {
-    return (await axios({
-      url: "/api/timeslices/",
-      params: {
-        from_time__gte: now.startOf('day').toISOString(),
-        from_time__lte: now.endOf('day').toISOString()
-      }
-    })).data as Timeslice[]
+    return await api.fetchTimeslices(
+      now.startOf('day').toISOString(),
+      now.endOf('day').toISOString())
   }
 
   const TimeSelections = () => {
@@ -128,7 +124,7 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
           const timeslices = filterToNow(data, moment())
           setTimeslices(sortBy(timeslices, 'id'))
           if (timeslices.length === 0) {
-            setError('今日已无法预约')
+            setError('今日已无法预定')
             setFieldValue("startTimeId", "0")
             setFieldValue("endTimeId", "0")
           } else {
@@ -154,7 +150,7 @@ export function SelectTimeForm({ reset, onSubmit, initialData }:
 
   return (<Formik
     initialValues={{
-      dateId: (findIndex(dates, date => date.weekday() === initialData?.date.weekday()) || 0).toString(),
+      dateId: orZero(findIndex(dates, date => date.weekday() === initialData?.date.weekday()) || 0).toString(),
       startTimeId: initialData?.startTime.id.toString(),
       endTimeId: initialData?.endTime.id.toString()
     }}

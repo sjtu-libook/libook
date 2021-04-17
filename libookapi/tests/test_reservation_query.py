@@ -7,7 +7,7 @@ from ..models import *
 
 @pytest.mark.django_db
 def test_reservation_region_query():
-    """可以查询某一时间的区域预约情况"""
+    """可以查询某一时间的区域预定情况"""
     group = RegionGroup.objects.create(name="新图 1 楼")
     region = Region.objects.create(name="新图 E100", capacity=100, group=group)
     tz = timezone('Asia/Shanghai')
@@ -31,7 +31,7 @@ def test_reservation_region_query():
 
 @pytest.mark.django_db
 def test_reservation_region_group_query():
-    """可以查询某一时间的某一区域组预约情况"""
+    """可以查询某一时间的某一区域组预定情况"""
     group = RegionGroup.objects.create(name="新图 1 楼")
     region1 = Region.objects.create(name="新图 E100", capacity=100, group=group)
     region2 = Region.objects.create(name="新图 A100", capacity=100, group=group)
@@ -64,7 +64,7 @@ def test_reservation_region_group_query():
 
 @pytest.mark.django_db
 def test_all_reservation_region_group_query():
-    """可以查询某一时间的所有区域组预约情况"""
+    """可以查询某一时间的所有区域组预定情况"""
     group1 = RegionGroup.objects.create(name="新图 1 楼")
     group2 = RegionGroup.objects.create(name="新图 2 楼")
     region1 = Region.objects.create(name="新图 E100", capacity=100, group=group1)

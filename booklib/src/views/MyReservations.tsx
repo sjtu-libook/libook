@@ -23,9 +23,9 @@ function ReservationItem({ reservation, cancelReservation, isLoading }: {
   const toTimeCal = toTime.format('HH:mm')
   const now = moment()
 
-  let btnText: string | null = '取消预约'
+  let btnText: string | null = '取消预定'
   if (fromTime.isBefore(now)) {
-    btnText = `取消 ${moment().startOf('hour').format('HH:mm')} 后的预约`
+    btnText = `取消 ${moment().startOf('hour').format('HH:mm')} 后的预定`
   }
   if (toTime.isBefore(now)) {
     btnText = null
@@ -69,7 +69,7 @@ function MyReservations() {
     fetchReservations()
       .then(() => setError(undefined))
       .catch(err => {
-        setError(`无法获取预约信息: ${err}`)
+        setError(`无法获取预定信息: ${err}`)
       })
   }, [])
 
@@ -89,17 +89,17 @@ function MyReservations() {
   }
 
   return (<ScreenContainer>
-    <Heading mb={3}>我的预约</Heading>
+    <Heading mb={3}>我的预定</Heading>
     {error && <Text color="yellow.500" mt={3}><ExclamationTriangleFill /> {error}</Text>}
-    {isLoading && <Progress size="xs" isIndeterminate colorScheme="blue" />}
+    <Progress size="xs" isIndeterminate colorScheme="blue" visibility={isLoading ? 'visible' : 'hidden'} />
     <Stack spacing={5} mt={5}>
       {reservations.length !== 0 ? mergeReservation(reservations).map(reservation =>
         <ReservationItem
           reservation={reservation}
           key={reservation.id}
           cancelReservation={() => cancelReservation(reservation)}
-          isLoading={isCanceling} />) : <Text>今日没有预约。</Text>}
-      <Box><LinkButton to="/reservations/make/quick" isFullWidth colorScheme="teal">新预约</LinkButton></Box>
+          isLoading={isCanceling} />) : (!isLoading && <Text>今日没有预定。</Text>) }
+      <Box><LinkButton to="/reservations/make/quick" isFullWidth colorScheme="teal">新预定</LinkButton></Box>
     </Stack>
   </ScreenContainer>
   )
