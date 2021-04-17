@@ -40,6 +40,8 @@ function Navbar() {
     { text: "我的预定", link: "/reservations/me" },
     { text: "快速预定", link: "/reservations/make/quick" },
     { text: "自选预定", link: "/reservations/make/custom" },
+    { text: "人流密度", link: "/reservations/visualize" },
+    { text: "联系我们", link: "/contact" },
   ]
   const history = useHistory()
 

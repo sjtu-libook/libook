@@ -3,6 +3,7 @@ import './App.css'
 import { ChakraProvider } from "@chakra-ui/react"
 import { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom"
+import Contact from 'views/Contact'
 import DoReservation from 'views/DoReservation'
 import MyReservations from 'views/MyReservations'
 import QuickReservation from 'views/QuickReservation'
@@ -35,6 +36,9 @@ function App() {
       </Route>
       <Route exact path="/reservations/me">
         <MyReservations />
+      </Route>
+      <Route exact path="/contact">
+        <Contact />
       </Route>
       <Route path="*">
         <NoMatch />
