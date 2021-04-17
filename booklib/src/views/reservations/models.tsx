@@ -17,3 +17,11 @@ export interface ReservationLocationInfo {
   group: RegionGroup
   region: Region
 }
+
+export interface QuickReservationInfo {
+  date: Moment
+  startTime: Timeslice
+  endTime: Timeslice
+  group: RegionGroup
+  region: Region
+}

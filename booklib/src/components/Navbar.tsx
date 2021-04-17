@@ -1,14 +1,15 @@
-import { ButtonProps } from "@chakra-ui/button"
-import { useDisclosure } from "@chakra-ui/hooks"
+import { ButtonProps, IconButton } from "@chakra-ui/button"
 import { Image } from "@chakra-ui/image"
 import { Box, Flex, HStack, Spacer, Stack } from "@chakra-ui/layout"
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu"
 import LinkButton from "components/LinkButton"
+import { ListIcon } from 'Icons'
 import { PropsWithChildren } from "react"
-import { Route } from "react-router"
+import { Route, useHistory } from "react-router"
 
 import StatusBar from "./StatusBar"
 
-function NavButton({ to, exact = false, children, ...rest }: 
+function NavButton({ to, exact = false, children, ...rest }:
   PropsWithChildren<{ to: string, exact?: boolean } & ButtonProps>) {
   return (
     <Route
@@ -35,13 +36,12 @@ function NavButton({ to, exact = false, children, ...rest }:
 
 
 function Navbar() {
-  const { isOpen } = useDisclosure()
-
   const links = [
     { text: "我的预约", link: "/reservations/me" },
     { text: "快速预约", link: "/reservations/make/quick" },
     { text: "自选预约", link: "/reservations/make/custom" },
   ]
+  const history = useHistory()
 
   return (
     <>
@@ -62,15 +62,26 @@ function Navbar() {
           </HStack>
           <Spacer />
           <HStack>
+            <Menu>
+              <MenuButton as={IconButton} 
+                icon={<ListIcon />} 
+                size="sm"
+                variant="ghost" 
+                colorScheme="blue"
+                display={{ base: 'unset', md: 'none' }}>
+              </MenuButton>
+              <MenuList>
+                {links.map((link) => (
+                  <MenuItem key={link.link} onClick={() => history.push(link.link)}>{link.text}</MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
             <StatusBar />
           </HStack>
-
-          {isOpen ? (
+          {true ? (
             <Box pb={4}>
               <Stack as={'nav'} spacing={4}>
-                {links.map((link) => (
-                  <NavButton key={link.link} to={link.link}>{link.text}</NavButton>
-                ))}
+
               </Stack>
             </Box>
           ) : null}

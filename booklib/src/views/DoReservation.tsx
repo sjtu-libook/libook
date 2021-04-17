@@ -1,7 +1,8 @@
 import { Button } from '@chakra-ui/button'
-import { Box, Heading, Stack, Text } from '@chakra-ui/layout'
+import { Box, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/layout'
+import LinkButton from 'components/LinkButton'
 import moment from 'moment'
-import { PropsWithChildren, useState } from 'react'
+import { useState } from 'react'
 import ScreenContainer from 'scaffold/ScreenContainer'
 
 import ConfirmReservation from './reservations/ConfirmReservation'
@@ -14,12 +15,6 @@ enum ReservationStep {
   Location = 1,
   Confirm = 2,
   Success = 3
-}
-
-function ShowWhen({ showProp, children }: PropsWithChildren<{ showProp: boolean }>) {
-  return <Box display={showProp ? "unset" : "none"}>
-    {children}
-  </Box>
 }
 
 function DoReservation() {
@@ -39,9 +34,9 @@ function DoReservation() {
   }
   const reset = () => setStep(ReservationStep.Time)
   const reservationInfo: ReservationInfo | undefined = timeInfo && locationInfo && {
-    fromTime: timeInfo?.startTime.id,
-    toTime: timeInfo?.endTime.id,
-    region: locationInfo?.region.id
+    fromTime: timeInfo.startTime.id,
+    toTime: timeInfo.endTime.id,
+    region: locationInfo.region.id
   }
 
   return (
@@ -50,15 +45,13 @@ function DoReservation() {
 
       { step === ReservationStep.Time && <SelectTimeForm onSubmit={dateNextStep} initialData={timeInfo} />}
       { step > ReservationStep.Time && timeInfo && <TimeDisplay timeInfo={timeInfo} />}
-      <ShowWhen showProp={step === ReservationStep.Location}>
-        {timeInfo &&
-          <SelectLocationForm
-            reset={reset}
-            onSubmit={locationNextStep}
-            initialData={locationInfo}
-            startTime={timeInfo.startTime}
-            endTime={timeInfo.endTime} />}
-      </ShowWhen>
+      {step === ReservationStep.Location && timeInfo &&
+        <SelectLocationForm
+          reset={reset}
+          onSubmit={locationNextStep}
+          initialData={locationInfo}
+          startTime={timeInfo.startTime}
+          endTime={timeInfo.endTime} />}
       { step > ReservationStep.Location && locationInfo && <LocationDisplay locationInfo={locationInfo} />}
       { step === ReservationStep.Confirm && reservationInfo &&
         <ConfirmReservation
@@ -68,7 +61,10 @@ function DoReservation() {
       { step === ReservationStep.Success && timeInfo && <Stack spacing={3}>
         <Text fontWeight="bold">预约成功</Text>
         <Text>您可以在 {moment(timeInfo.startTime.from_time).calendar()} 前取消预约。</Text>
-        <Button colorScheme="teal" onClick={reset}>继续预约</Button>
+        <SimpleGrid columns={[1, null, 2]} spacing={3}>
+          <Box><LinkButton to="/reservations/me" isFullWidth>查看所有预约</LinkButton></Box>
+          <Box><Button colorScheme="teal" onClick={reset} isFullWidth>继续预约</Button></Box>
+        </SimpleGrid>
       </Stack>}
     </ScreenContainer>
   )
