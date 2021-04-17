@@ -230,7 +230,7 @@ export function SimpleForm({ onSubmit, initialData }:
             <EnumField name="durationId" data={map(hours, 'display')} label="时长" />
             {recommendRegions ?
               <EnumField name="locationId" data={map(recommendRegions, RegionComponent)} label="位置" />
-              : <SimpleGrid columns={[1, null, 3]} spacing={2}>
+              : <SimpleGrid columns={[1, null, 2]} spacing={2}>
                 {range(12).map(key => <Skeleton key={key} height="2rem"></Skeleton>)}
               </SimpleGrid>}
             {error && <Text color="yellow.500"><ExclamationTriangleFill /> {error}</Text>}
