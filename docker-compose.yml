@@ -8,8 +8,6 @@ services:
     build: ./
     expose:
       - 8000
-    ports:
-      - 8000:8000
     env_file:
       - ./secrets/postgres-db.env
       - ./secrets/libook.env
