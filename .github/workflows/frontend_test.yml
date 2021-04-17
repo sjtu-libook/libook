@@ -32,5 +32,3 @@ jobs:
       run: make lint.frontend
     - name: test
       run: make test.frontend
-    - name: build
-      run: REACT_APP_GIT_SHA=`git rev-parse --short HEAD` make build.frontend

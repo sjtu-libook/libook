@@ -1,0 +1,55 @@
+version: "3"
+services:
+  libook:
+    restart: unless-stopped
+    networks:
+      - wsgi_net
+      - db_net
+    build: ./
+    expose:
+      - 8000
+    env_file:
+      - ./secrets/postgres-db.env
+      - ./secrets/libook.env
+
+  caddy:
+    restart: unless-stopped
+    networks:
+      - wsgi_net
+    image: caddy:2.3.0
+    command: caddy reverse-proxy --from api.libook.skyzh.dev --to libook:8000
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    ports:
+      - 80:80
+      - 443:443
+
+  postgres-db:
+    image: postgres
+    networks:
+      - db_net
+    expose:
+      - 5432
+    restart: unless-stopped
+    env_file:
+      - ./secrets/postgres-db.env
+    environment:
+      - PGDATA=/data/database
+    volumes:
+      - postgres-storage:/data
+
+volumes:
+  postgres-storage:
+  caddy-data:
+  caddy-config:
+
+networks:
+  wsgi_net:
+  db_net:
+  host_monitor_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -  subnet: 172.31.0.0/16

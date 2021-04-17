@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import django_heroku
-import dj_database_url
 from pathlib import Path
 import os
 
@@ -29,11 +27,14 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "vast-sands-50502.herokuapp.com",
+    "api.libook.skyzh.dev",
     "127.0.0.1",
     "localhost"
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "https://libook.skyzh.dev"
+]
 
 # Application definition
 
@@ -94,8 +95,14 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.config(
-    conn_max_age=600, ssl_require=True)
+DATABASES['default'] = {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'libook',
+    'USER': 'libook',
+    'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+    'HOST': 'postgres-db',
+    'PORT': '5432',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -160,10 +167,4 @@ AUTHLIB_OAUTH_CLIENTS = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
-STATICFILES_DIRS = [
-    os.path.join(REACT_APP_DIR, 'build', 'static'),
-]
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-django_heroku.settings(locals())
