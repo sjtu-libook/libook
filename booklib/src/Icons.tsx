@@ -13,3 +13,7 @@ export function ListIcon() {
 export function StarFillIcon() {
   return <i className="bi bi-star-fill"></i>
 }
+
+export function BoxArrowUpRightIcon() {
+  return <i className="bi bi-box-arrow-up-right"></i>
+}
