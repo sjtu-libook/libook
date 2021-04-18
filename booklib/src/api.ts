@@ -62,7 +62,7 @@ export async function fetchRegionGroupDetail(regionGroupId: number) {
 export async function fetchRegionGroupsWithReservation(fromTime: Timeslice, toTime: Timeslice) {
   const regionGroups = await fetchRegionGroups()
   const reservationInfo = (await axios({
-    url: "/api/reservations/by_all", params: {
+    url: API_ROOT + "/api/reservations/by_all", params: {
       min_time_id: fromTime.id,
       max_time_id: toTime.id
     }

@@ -36,6 +36,10 @@ CORS_ALLOWED_ORIGINS = [
     "https://libook.skyzh.dev"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://libook.skyzh.dev"
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = None
