@@ -7,3 +7,4 @@ import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true;
