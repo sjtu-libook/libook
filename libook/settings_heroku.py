@@ -36,6 +36,10 @@ CORS_ALLOWED_ORIGINS = [
     "https://libook.skyzh.dev"
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = None
+
 # Application definition
 
 INSTALLED_APPS = [
