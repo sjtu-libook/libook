@@ -1,18 +1,52 @@
 from django.core.management.base import BaseCommand
-from ...models import Region, RegionGroup
+from django.db import transaction
+from ...models import Region, RegionGroup, User, Timeslice, Reservation
+from datetime import date, datetime, timedelta
+from pytz import timezone
+import random
 
 
 class Command(BaseCommand):
     help = '生成用于测试的预定信息。'
 
+    @transaction.atomic
     def handle(self, *args, **options):
-        """生成用于测试的预定信息。
+        """生成用于测试的预定信息。"""
+        User.objects.filter(username__startswith="test-user-").delete()
+        print("Generating users...")
+        users = list(map(lambda id: User.objects.create(
+            username=f"test-user-{id}"), range(2000)))
 
-        TODO: 需要编写内容。
+        tz = timezone('Asia/Shanghai')
+        today = date.today()
 
-        首先，我们需要生成一批测试用户（并删除之前生成的测试用户）。可以考虑在
-        `UserInfo` 里加一个 field 表示该用户是实际注册的用户，还是我们生成
-        的测试用户。之后，我们可以根据某一分布（比如下午晚上人多、早上人少），
-        随机生成这些用户的预定信息。
-        """
-        pass
+        for day in range(7):
+            start_of_day = tz.localize(datetime(
+                today.year, today.month, today.day, 0, 0, 0))
+            end_of_day = start_of_day + timedelta(days=1)
+            timeslices = list(
+                Timeslice.objects
+                .filter(from_time__gte=start_of_day, from_time__lte=end_of_day)
+                .order_by('id'))
+            regions = list(Region.objects.all())
+
+            records = 0
+
+            for user in users:
+                from_time = random.randrange(0, len(timeslices))
+                to_time = random.randrange(0, len(timeslices))
+                from_time, to_time = min(
+                    from_time, to_time), max(from_time, to_time)
+                region = random.sample(regions, 1)[0]
+                if region.capacity > 0:
+                    region.capacity -= 1
+                else:
+                    continue
+
+                for time in range(from_time, to_time + 1):
+                    Reservation.objects.create(
+                        user=user, region=region, time=timeslices[time])
+                    records += 1
+
+            today += timedelta(days=1)
+            print(f"{start_of_day}, {len(users)} users, {records} records")

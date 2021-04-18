@@ -12,7 +12,7 @@ class Command(BaseCommand):
         for quiet_room in ["A200", "B200", "C200", "A300", "B300", "C300", "A400", "B400", "C400"]:
             group = RegionGroup(name=f"新图 {quiet_room}")
             group.save()
-            for table in range(50):
+            for table in range(30):
                 region = Region(name=f"{table + 1} 号桌",
                                 group=group, capacity=8)
                 region.save()
@@ -20,7 +20,7 @@ class Command(BaseCommand):
         for corridor in ["2", "3", "4"]:
             group = RegionGroup(name=f"新图 {corridor} 楼非安静区")
             group.save()
-            for table in range(40):
+            for table in range(20):
                 region = Region(name=f"{table + 1} 号桌",
                                 group=group, capacity=4)
                 region.save()
