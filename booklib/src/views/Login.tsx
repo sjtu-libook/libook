@@ -1,6 +1,6 @@
-import { Button } from '@chakra-ui/button'
 import { Box, Center, Container, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/layout'
 import { API_ROOT } from 'api'
+import LinkButton from 'components/LinkButton'
 import React from 'react'
 
 function Login() {
@@ -15,18 +15,21 @@ function Login() {
           <Box backgroundColor="white" shadow="lg" borderRadius="md" borderWidth={1} p={5}>
             <Text mb={3}>请选择认证方式</Text>
             <Stack spacing={2}>
-              <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = API_ROOT + "/api/auth/github/login/"}>
+              <LinkButton variant="solid" colorScheme="blackAlpha"
+                to={API_ROOT + "/api/auth/github/login/"}
+                isFullWidth>
                 GitHub
-              </Button>
-              <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = API_ROOT + "/api/auth/jaccount/login/"}>
+              </LinkButton>
+              <LinkButton variant="solid" colorScheme="blackAlpha"
+                to={API_ROOT + "/api/auth/jaccount/login/"}
+                isFullWidth>
                 jAccount
-              </Button>
-              <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = API_ROOT + "/admin/"}>
+              </LinkButton>
+              <LinkButton variant="solid" colorScheme="blackAlpha"
+                to={API_ROOT + "/admin/"}
+                isFullWidth>
                 Django Admin
-              </Button>
+              </LinkButton>
             </Stack>
           </Box>
         </SimpleGrid>

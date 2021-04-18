@@ -151,6 +151,7 @@ AUTHLIB_OAUTH_CLIENTS = {
 }
 
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
+REDIRECT_TARGET = None
 
 INTERNAL_IPS = [
     '127.0.0.1',
