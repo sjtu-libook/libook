@@ -5,6 +5,7 @@ import { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom"
 import Contact from 'views/Contact'
 import DoReservation from 'views/DoReservation'
+import { RegionGroupHeatmap, RegionHeatmap } from 'views/Heatmap'
 import MyReservations from 'views/MyReservations'
 import QuickReservation from 'views/QuickReservation'
 
@@ -36,6 +37,12 @@ function App() {
       </Route>
       <Route exact path="/reservations/me">
         <MyReservations />
+      </Route>
+      <Route exact path="/reservations/visualize">
+        <RegionGroupHeatmap />
+      </Route>
+      <Route path="/reservations/visualize/:groupId">
+        <RegionHeatmap />
       </Route>
       <Route exact path="/contact">
         <Contact />
