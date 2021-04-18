@@ -24,7 +24,7 @@ const COLOR_MAPPING = [
 ]
 
 function colorMapping(threshold: number) {
-  return COLOR_MAPPING[Math.floor(threshold * COLOR_MAPPING.length)]
+  return COLOR_MAPPING[Math.floor(threshold * 0.9999 * COLOR_MAPPING.length)]
 }
 
 function CapacityIndicator({ color, text, children, border }:
