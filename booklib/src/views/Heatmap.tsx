@@ -53,7 +53,10 @@ function HeatmapComponent<T extends ReservationInfo>
     {
       range(fromTimesliceId, toTimesliceId + 1).map(timeId => {
         const reserveNumber = reserved[timeId] || 0
-        return <CapacityIndicator color={colorMapping(reserveNumber / capacity)} text={reserveNumber.toString()} />
+        return <CapacityIndicator
+          color={colorMapping(reserveNumber / capacity)}
+          text={reserveNumber.toString()}
+          border={reserveNumber === capacity} />
       })
     }
   </Wrap>)
