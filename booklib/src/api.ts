@@ -53,20 +53,22 @@ export async function fetchRecommendedRegionGroups() {
   return (await axios(API_ROOT + "/api/region_groups/recommendation")).data as RegionGroup[]
 }
 
-
 export async function fetchRegionGroupDetail(regionGroupId: number) {
   return (await axios(`${API_ROOT}/api/region_groups/${regionGroupId}/detail`)).data as RegionGroupDetail
 }
 
-
-export async function fetchRegionGroupsWithReservation(fromTime: Timeslice, toTime: Timeslice) {
-  const regionGroups = await fetchRegionGroups()
-  const reservationInfo = (await axios({
+export async function fetchRegionGroupsReservation(fromTime: Timeslice, toTime: Timeslice) {
+  return (await axios({
     url: API_ROOT + "/api/reservations/by_all", params: {
       min_time_id: fromTime.id,
       max_time_id: toTime.id
     }
   })).data as RegionGroupReservationInfo[]
+}
+
+export async function fetchRegionGroupsWithReservation(fromTime: Timeslice, toTime: Timeslice) {
+  const regionGroups = await fetchRegionGroups()
+  const reservationInfo = await fetchRegionGroupsReservation(fromTime, toTime)
   const reservations = reserveToMap(reservationInfo, r => r.region_group_id)
   return regionGroups.map(group => ({
     ...group,

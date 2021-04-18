@@ -12,11 +12,6 @@ export interface Timeslice {
 export interface RegionGroup {
   id: number
   name: string
-}
-
-export interface RegionGroupDetail {
-  id: number
-  name: string
   capacity: number
 }
 
