@@ -167,4 +167,5 @@ AUTHLIB_OAUTH_CLIENTS = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
+REDIRECT_TARGET = "https://libook.skyzh.dev"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
