@@ -11,6 +11,7 @@ from itertools import chain
 from datetime import datetime, timedelta
 from pytz import timezone
 from django.utils.timezone import now
+from django.db import transaction
 import pytz
 
 from ..serializers import *
@@ -146,6 +147,7 @@ class BatchReservationView(views.APIView):
         request=ReservationSerializer(many=True),
         responses=ReservationSerializer(many=True),
     )
+    @transaction.atomic
     def post(self, request, format=None):
         """
         实现批量订位
