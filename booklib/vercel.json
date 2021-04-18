@@ -1,13 +1,8 @@
 {
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "status": 404,
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/api/:match*", "destination": "https://api.libook.skyzh.dev/api/:match*" },
+    { "source": "/api/:match*/", "destination": "https://api.libook.skyzh.dev/api/:match*/" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "github": {
     "silent": true

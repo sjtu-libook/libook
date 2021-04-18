@@ -46,9 +46,6 @@ function Login() {
       <Center>
         <Text>Libook 是一个开源的图书馆预定系统。</Text>
       </Center>
-      <Center>
-        <Text fontSize="xs">{process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA || "Development"}</Text>
-      </Center>
     </Box>
   </Flex>
 }
