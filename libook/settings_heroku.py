@@ -37,8 +37,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://libook.skyzh.dev"
+    "libook.skyzh.dev"
 ]
+
+CSRF_COOKIE_DOMAIN = "libook.skyzh.dev"
 
 CORS_ALLOW_CREDENTIALS = True
 
