@@ -1,7 +1,14 @@
-import { Box, Center, Container, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/layout'
+import { Button, ButtonProps } from '@chakra-ui/button'
+import { Box, Center, Container, Flex, Heading, Link, SimpleGrid, Stack, Text } from '@chakra-ui/layout'
 import { API_ROOT } from 'api'
-import LinkButton from 'components/LinkButton'
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
+
+
+function RedirectButton({ to, children, ...rest }: PropsWithChildren<{ to: string } & ButtonProps>) {
+  return (<Link href={to} _hover={undefined}>
+    <Button {...rest}>{children}</Button>
+  </Link>)
+}
 
 function Login() {
   return <Flex direction="column" position="fixed" top={0} bottom={0} width="100%" justifyContent="center">
@@ -15,21 +22,21 @@ function Login() {
           <Box backgroundColor="white" shadow="lg" borderRadius="md" borderWidth={1} p={5}>
             <Text mb={3}>请选择认证方式</Text>
             <Stack spacing={2}>
-              <LinkButton variant="solid" colorScheme="blackAlpha"
+              <RedirectButton variant="solid" colorScheme="blackAlpha"
                 to={API_ROOT + "/api/auth/github/login/"}
                 isFullWidth>
                 GitHub
-              </LinkButton>
-              <LinkButton variant="solid" colorScheme="blackAlpha"
+              </RedirectButton>
+              <RedirectButton variant="solid" colorScheme="blackAlpha"
                 to={API_ROOT + "/api/auth/jaccount/login/"}
                 isFullWidth>
                 jAccount
-              </LinkButton>
-              <LinkButton variant="solid" colorScheme="blackAlpha"
+              </RedirectButton>
+              <RedirectButton variant="solid" colorScheme="blackAlpha"
                 to={API_ROOT + "/admin/"}
                 isFullWidth>
                 Django Admin
-              </LinkButton>
+              </RedirectButton>
             </Stack>
           </Box>
         </SimpleGrid>

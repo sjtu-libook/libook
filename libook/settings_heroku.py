@@ -169,3 +169,5 @@ STATIC_URL = '/static/'
 REACT_APP_DIR = os.path.join(BASE_DIR, 'booklib')
 REDIRECT_TARGET = "https://libook.skyzh.dev"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
