@@ -24,7 +24,7 @@ const COLOR_MAPPING = [
 ]
 
 function colorMapping(threshold: number) {
-  return COLOR_MAPPING[Math.floor(threshold * 0.9999 * COLOR_MAPPING.length)]
+  return COLOR_MAPPING[Math.floor(threshold * COLOR_MAPPING.length)]
 }
 
 function CapacityIndicator({ color, text, children, border }:
@@ -53,7 +53,10 @@ function HeatmapComponent<T extends ReservationInfo>
     {
       range(fromTimesliceId, toTimesliceId + 1).map(timeId => {
         const reserveNumber = reserved[timeId] || 0
-        return <CapacityIndicator color={colorMapping(reserveNumber / capacity)} text={reserveNumber.toString()} />
+        return <CapacityIndicator
+          color={colorMapping(reserveNumber / capacity)}
+          text={reserveNumber.toString()}
+          border={reserveNumber === capacity} />
       })
     }
   </Wrap>)
