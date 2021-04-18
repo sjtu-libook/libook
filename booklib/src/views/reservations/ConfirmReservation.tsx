@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button"
 import { useBoolean } from "@chakra-ui/hooks"
 import { Box, HStack, Text } from "@chakra-ui/layout"
-import axios from "axios"
+import * as api from 'api'
 import { ExclamationTriangleFill } from "Icons"
 import { range } from "lodash"
 import { ReservationResult } from "models"
@@ -19,7 +19,7 @@ function ConfirmReservation({ onSubmit, reset, reservationInfo }: {
   const [error, setError] = useState<ReactFragment>()
 
   async function batchReserve() {
-    await axios.post("/api/reservations/batch",
+    await api.batchReserve(
       range(reservationInfo.fromTime, reservationInfo.toTime + 1).map(time => ({
         time,
         region: reservationInfo.region

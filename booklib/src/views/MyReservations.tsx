@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button"
 import { Box, Heading, HStack, Spacer, Stack, Text } from "@chakra-ui/layout"
 import { Progress } from "@chakra-ui/progress"
-import axios from "axios"
+import * as api from 'api'
 import LinkButton from "components/LinkButton"
 import { ExclamationTriangleFill } from "Icons"
 import { reverse } from "lodash"
@@ -54,15 +54,12 @@ function MyReservations() {
   const fetchReservations = async () => {
     setIsLoading(true)
     const now = moment()
-    const result = await axios({
-      url: "/api/reservations/",
-      params: {
-        from_time__gte: now.startOf('day').toISOString(),
-        from_time__lte: now.endOf('day').add(7, 'day').toISOString()
-      }
-    })
+    const data = await api.fetchReservations(
+      now.startOf('day').toISOString(),
+      now.endOf('day').add(7, 'day').toISOString()
+    )
     setIsLoading(false)
-    setReservations(result.data)
+    setReservations(data)
   }
 
   useEffect(() => {
@@ -75,9 +72,9 @@ function MyReservations() {
 
   const cancelReservation = (reservation: MergedReservation) => {
     async function doCancel() {
-      for (const revervationId of reverse(reservation.merged_id)) {
+      for (const reservationId of reverse(reservation.merged_id)) {
         try {
-          await axios.delete(`/api/reservations/${revervationId}/`)
+          await api.cancelReservation(reservationId)
         } catch (err) {
           setError('部分预定已无法取消')
         }

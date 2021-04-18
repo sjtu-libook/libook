@@ -1,11 +1,10 @@
 import { Text } from '@chakra-ui/layout'
 import { Spinner } from '@chakra-ui/spinner'
-import axios from 'axios'
+import * as api from 'api'
 import { ExclamationTriangleFill } from 'Icons'
 import { User } from 'models'
 import { Fragment, useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom"
-
 
 function StatusBar() {
   const history = useHistory()
@@ -17,9 +16,9 @@ function StatusBar() {
   useEffect(() => {
     async function fetchUser() {
       setLoading(true)
-      const result = await axios("/api/users/self")
+      const user = await api.fetchUser()
       setLoading(false)
-      setUser(result.data)
+      setUser(user)
       setError(false)
     }
 

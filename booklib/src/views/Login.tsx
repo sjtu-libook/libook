@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/button'
 import { Box, Center, Container, Flex, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/layout'
+import { API_ROOT } from 'api'
 import React from 'react'
 
 function Login() {
@@ -15,15 +16,15 @@ function Login() {
             <Text mb={3}>请选择认证方式</Text>
             <Stack spacing={2}>
               <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = "/api/auth/github/login/"}>
+                onClick={() => window.location.href = API_ROOT + "/api/auth/github/login/"}>
                 GitHub
               </Button>
               <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = "/api/auth/jaccount/login/"}>
+                onClick={() => window.location.href = API_ROOT + "/api/auth/jaccount/login/"}>
                 jAccount
               </Button>
               <Button variant="solid" colorScheme="blackAlpha"
-                onClick={() => window.location.href = "/admin/"}>
+                onClick={() => window.location.href = API_ROOT + "/admin/"}>
                 Django Admin
               </Button>
             </Stack>
@@ -34,6 +35,9 @@ function Login() {
     <Box p={3} background="white">
       <Center>
         <Text>Libook 是一个开源的图书馆预定系统。</Text>
+      </Center>
+      <Center>
+        <Text fontSize="xs">{process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA || "Development"}</Text>
       </Center>
     </Box>
   </Flex>
