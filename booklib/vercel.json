@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/api/:match*", "destination": "https://api.libook.skyzh.dev/api/:match*" },
+    { "source": "/api/:match*/", "destination": "https://api.libook.skyzh.dev/api/:match*/" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "github": {
