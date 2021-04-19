@@ -1,8 +1,8 @@
-import { Box, Heading, Stack, Text, Wrap, WrapItem } from "@chakra-ui/layout"
+import { Box, Heading, HStack, Spacer, Stack, Text, Wrap, WrapItem } from "@chakra-ui/layout"
 import { Progress } from "@chakra-ui/progress"
 import * as api from 'api'
 import LinkButton from "components/LinkButton"
-import { ExclamationTriangleFill } from "Icons"
+import { ArrowLeftIcon,ArrowRightIcon, ExclamationTriangleFill } from "Icons"
 import { filter, first, fromPairs, last, map, range } from "lodash"
 import { Region, RegionGroup } from "models"
 import { Timeslice } from 'models'
@@ -27,11 +27,25 @@ function colorMapping(threshold: number) {
   return COLOR_MAPPING[Math.floor(threshold * COLOR_MAPPING.length)]
 }
 
+function CapacityHeightIndicator({ color, border, height }:
+  PropsWithChildren<{ color?: string, border?: boolean, height: number }>) {
+  return <WrapItem
+    alignSelf="flex-end"
+    width="1.8rem"
+    height={`${3 * height}rem`}
+    alignItems="center"
+    justifyContent="center"
+    backgroundColor={color}
+    borderRadius="md"
+    borderWidth={border ? 1 : undefined}>
+  </WrapItem>
+}
+
 function CapacityIndicator({ color, text, children, border }:
   PropsWithChildren<{ color?: string, text?: string, border?: boolean }>) {
   return <WrapItem
-    width="2rem"
-    height="2rem"
+    width="1.8rem"
+    height="1.8rem"
     borderRadius="md"
     alignItems="center"
     justifyContent="center"
@@ -49,17 +63,31 @@ function HeatmapComponent<T extends ReservationInfo>
     reservations: T[]
   }) {
   const reserved = fromPairs(map(reservations, reservation => [reservation.time_id, reservation.reserved]))
-  return (<Wrap spacing={1}>
-    {
-      range(fromTimesliceId, toTimesliceId + 1).map(timeId => {
-        const reserveNumber = reserved[timeId] || 0
-        return <CapacityIndicator
-          color={colorMapping(reserveNumber / capacity)}
-          text={reserveNumber.toString()}
-          border={reserveNumber === capacity} />
-      })
-    }
-  </Wrap>)
+  return (<Stack spacing={1}>
+    <Wrap spacing={1}>
+      {
+        range(fromTimesliceId, toTimesliceId + 1).map(timeId => {
+          const reserveNumber = reserved[timeId] || 0
+          return <CapacityHeightIndicator
+            height={reserveNumber / capacity}
+            color={colorMapping(reserveNumber / capacity)}
+            border={reserveNumber === capacity} />
+        })
+      }
+    </Wrap>
+    <Wrap spacing={1}>
+      {
+        range(fromTimesliceId, toTimesliceId + 1).map(timeId => {
+          const reserveNumber = reserved[timeId] || 0
+          return <CapacityIndicator
+            color={colorMapping(reserveNumber / capacity)}
+            text={reserveNumber.toString()}
+            border={reserveNumber === capacity} />
+        })
+      }
+    </Wrap>
+  </Stack>
+  )
 }
 
 const TimeBox = ({ timeslices }: { timeslices: Timeslice[] }) => (
@@ -67,8 +95,9 @@ const TimeBox = ({ timeslices }: { timeslices: Timeslice[] }) => (
     {timeslices.map(timeslice =>
       <CapacityIndicator border>
         <Text fontSize="xs" lineHeight="1.2" align="center">
-          {moment(timeslice.from_time).format('HH:mm')} <br />
-          {moment(timeslice.to_time).format('HH:mm')}
+          {moment(timeslice.from_time).format('HH')}
+          <br />
+          {moment(timeslice.to_time).format('HH')}
         </Text>
       </CapacityIndicator>
     )}
@@ -136,22 +165,27 @@ export function RegionGroupHeatmap() {
           {
             reservations.map(reservation =>
               <Stack spacing={2}>
-                <Heading size="md">{reservation.group.name}</Heading>
-                <Text color="gray.500">可容纳 {reservation.group.capacity} 人</Text>
+                <HStack spacing={2}>
+                  <Heading size="md">{reservation.group.name}</Heading>
+                  <Text color="gray.500">可容纳 {reservation.group.capacity} 人</Text>
+                  <Spacer />
+                  <LinkButton
+                    size="sm"
+                    to={`/reservations/visualize/${reservation.group.id}`}
+                    variant="ghost"
+                    colorScheme="blue"
+                    rightIcon={<ArrowRightIcon />}>查看详情</LinkButton>
+                </HStack>
                 <HeatmapComponent
                   key={reservation.group.id}
                   fromTimesliceId={timeslice.firstTimeslice.id}
                   toTimesliceId={timeslice.lastTimeslice.id}
                   capacity={reservation.group.capacity}
                   reservations={reservation.reservations} />
-                <Box>
-                  <LinkButton size="sm" to={`/reservations/visualize/${reservation.group.id}`}>查看详情</LinkButton>
-                </Box>
               </Stack>)
           }
         </Fragment>
       }
-
     </Stack>
   </ScreenContainer>
 }
@@ -210,6 +244,14 @@ export function RegionHeatmap() {
   }, [groupId])
 
   return <ScreenContainer>
+    <Box mb={3}>
+      <LinkButton
+        size="sm"
+        to={`/reservations/visualize`}
+        variant="ghost"
+        colorScheme="blue"
+        leftIcon={<ArrowLeftIcon />}>返回</LinkButton>
+    </Box>
     <Heading mb={3}>人流密度</Heading>
     <Stack spacing={5}>
       <Progress size="xs" isIndeterminate colorScheme="blue" visibility={isLoading ? 'visible' : 'hidden'} />
@@ -220,8 +262,10 @@ export function RegionHeatmap() {
           {
             reservations.map(reservation =>
               <Stack spacing={2}>
-                <Heading size="md">{reservation.region.name}</Heading>
-                <Text color="gray.500">可容纳 {reservation.region.capacity} 人</Text>
+                <HStack spacing={2}>
+                  <Heading size="md">{reservation.region.name}</Heading>
+                  <Text color="gray.500">可容纳 {reservation.region.capacity} 人</Text>
+                </HStack>
                 <HeatmapComponent
                   key={reservation.region.id}
                   fromTimesliceId={timeslice.firstTimeslice.id}
