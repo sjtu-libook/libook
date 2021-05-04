@@ -3,6 +3,7 @@ import { Box, Heading, HStack, Spacer, Stack, Text } from "@chakra-ui/layout"
 import { Progress } from "@chakra-ui/progress"
 import * as api from 'api'
 import LinkButton from "components/LinkButton"
+import Token from "components/Token"
 import { ExclamationTriangleFill } from "Icons"
 import { reverse } from "lodash"
 import { Reservation } from "models"
@@ -90,6 +91,7 @@ function MyReservations() {
     {error && <Text color="yellow.500" mt={3}><ExclamationTriangleFill /> {error}</Text>}
     <Progress size="xs" isIndeterminate colorScheme="blue" visibility={isLoading ? 'visible' : 'hidden'} />
     <Stack spacing={5} mt={5}>
+      <Token/>
       {reservations.length !== 0 ? mergeReservation(reservations).map(reservation =>
         <ReservationItem
           reservation={reservation}

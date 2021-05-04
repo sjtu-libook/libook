@@ -60,3 +60,8 @@ export interface ReservationResult {
   region: RegionDetail
   time: Timeslice
 }
+
+export interface TokenResult {
+  token: string
+  expires_at: string
+}
