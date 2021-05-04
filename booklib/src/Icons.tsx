@@ -25,3 +25,7 @@ export function StarFillIcon() {
 export function BoxArrowUpRightIcon() {
   return <i className="bi bi-box-arrow-up-right"></i>
 }
+
+export function ArrowClockwiseIcon() {
+  return <i className="bi bi-arrow-clockwise"></i>
+}

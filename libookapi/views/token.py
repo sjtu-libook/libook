@@ -27,8 +27,16 @@ class TokenView(views.APIView):
         """
         获取当前用户的一次性验证 Token
         """
-        token = UserToken.objects.filter(user=request.user)[0]
-        return Response(TokenSerializer(token).data)
+        token = UserToken.objects.filter(user=request.user)
+        if len(token) > 0:
+            token_object = token[0]
+            now = timezone.now()
+            if now > token_object.expires_at:
+                return Response("no token", status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response(TokenSerializer(token_object).data)
+        else:
+            return Response("no token", status=status.HTTP_404_NOT_FOUND)
 
     @extend_schema(
         responses=TokenSerializer(),

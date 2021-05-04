@@ -1,13 +1,15 @@
 import axios from "axios"
 import { has } from "lodash"
-import { 
-  RegionGroup, 
+import {
+  RegionGroup,
   RegionGroupDetail,
   RegionGroupReservationInfo,
-  RegionReservationInfo, 
+  RegionReservationInfo,
   Reservation,
   Timeslice,
-  User } from "models"
+  TokenResult,
+  User
+} from "models"
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT || ''
 
@@ -115,16 +117,26 @@ export async function cancelReservation(revervationId: number) {
   await axios.delete(`${API_ROOT}/api/reservations/${revervationId}/`)
 }
 
-export async function batchReserve(batch: { time: number, region: number}[]) {
+export async function batchReserve(batch: { time: number, region: number }[]) {
   await axios.post(API_ROOT + "/api/reservations/batch", batch)
 }
 
 export async function fetchReservations(fromTime: string, toTime: string) {
   return (await axios({
-    url:  API_ROOT + "/api/reservations/",
+    url: API_ROOT + "/api/reservations/",
     params: {
       from_time__gte: fromTime,
       from_time__lte: toTime
     }
   })).data as Reservation[]
+}
+
+export async function fetchToken() {
+  return (await axios({
+    url: API_ROOT + "/api/tokens/",
+  })).data as TokenResult
+}
+
+export async function refreshToken() {
+  return (await axios.post(API_ROOT + "/api/tokens/")).data as TokenResult
 }

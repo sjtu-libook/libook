@@ -13,7 +13,6 @@ function Contact() {
         </Text>
         <Text fontWeight="bold">版本信息</Text>
         <Text>{process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA || "Development"}</Text>
-        <Text>{process.env.REACT_APP_VERCEL_GIT_COMMIT_MESSAGE || "Development"}</Text>
       </Stack>
     </ScreenContainer> 
   )
