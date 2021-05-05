@@ -3,7 +3,7 @@ import { Progress } from "@chakra-ui/progress"
 import * as api from 'api'
 import LinkButton from "components/LinkButton"
 import { ArrowLeftIcon,ArrowRightIcon, ExclamationTriangleFill } from "Icons"
-import { filter, first, fromPairs, last, map, range } from "lodash"
+import { filter, first, fromPairs, last, map, range, sortBy } from "lodash"
 import { Region, RegionGroup } from "models"
 import { Timeslice } from 'models'
 import moment from "moment"
@@ -133,12 +133,12 @@ export function RegionGroupHeatmap() {
       const firstTimeslice = first(timeslices)!
       const lastTimeslice = last(timeslices)!
       const reservations = await api.fetchRegionGroupsReservation(firstTimeslice, lastTimeslice)
-      const data = map(groups, group => ({
+      const data = sortBy(map(groups, group => ({
         fromTimesliceId: firstTimeslice.id,
         toTimesliceId: lastTimeslice.id,
         group,
         reservations: filter(reservations, reservation => reservation.region_group_id === group.id)
-      }))
+      })), group => group.group.id)
       if (isCurrent) {
         setReservations(data)
         setTimeslices({
@@ -222,12 +222,12 @@ export function RegionHeatmap() {
       const firstTimeslice = first(timeslices)!
       const lastTimeslice = last(timeslices)!
       const reservations = await api.fetchRegionGroupReservation(groupIdNumber, firstTimeslice, lastTimeslice)
-      const data = map(group.regions, region => ({
+      const data = sortBy(map(group.regions, region => ({
         fromTimesliceId: firstTimeslice.id,
         toTimesliceId: lastTimeslice.id,
         region,
         reservations: filter(reservations, reservation => reservation.region_id === region.id)
-      }))
+      })), region => region.region.id)
       if (isCurrent) {
         setReservations(data)
         setTimeslices({
