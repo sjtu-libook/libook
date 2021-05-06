@@ -24,7 +24,7 @@ services:
     ports:
       - 80:80
       - 443:443
-
+  
   postgres-db:
     image: postgres
     networks:
@@ -39,14 +39,40 @@ services:
     volumes:
       - postgres-storage:/data
 
+  grafana:
+    image: grafana/grafana:7.5.1
+    networks:
+      - prometheus_net
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - "./secrets/grafana.ini:/etc/grafana/grafana.ini"
+    expose:
+      - 3000
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.25.2
+    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus
+    networks:
+      - prometheus_net
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - prometheus-storage:/data
+    expose:
+      - 9090
+    restart: unless-stopped
+
 volumes:
   postgres-storage:
   caddy-data:
   caddy-config:
+  grafana-storage:
+  prometheus-storage:
 
 networks:
   wsgi_net:
   db_net:
+  prometheus_net:
   host_monitor_net:
     driver: bridge
     ipam:
