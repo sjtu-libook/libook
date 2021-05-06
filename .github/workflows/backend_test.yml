@@ -13,19 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v1
+    - uses: actions/setup-python@v2
       with:
-        python-version: "3.9"
+        python-version: '3.9'
+        architecture: 'x64'
     - uses: actions/cache@v2
       with:
         path: ~/.local/share/virtualenvs
         key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-pipenv-
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-        architecture: 'x64'
     - run: pip install pipenv
     - run: pipenv sync --dev
     - name: lint code style
