@@ -20,9 +20,9 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+        key: ${{ runner.os }}-pipenv-new-${{ hashFiles('Pipfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-pipenv-
+          ${{ runner.os }}-pipenv-new-
     - run: pip install pipenv
     - run: pipenv sync --dev
     - name: lint code style
