@@ -31,7 +31,7 @@ function CapacityHeightIndicator({ color, border, height }:
   PropsWithChildren<{ color?: string, border?: boolean, height: number }>) {
   return <WrapItem
     alignSelf="flex-end"
-    width="1.8rem"
+    width="1.7rem"
     height={`${3 * height}rem`}
     alignItems="center"
     justifyContent="center"
@@ -44,8 +44,8 @@ function CapacityHeightIndicator({ color, border, height }:
 function CapacityIndicator({ color, text, children, border }:
   PropsWithChildren<{ color?: string, text?: string, border?: boolean }>) {
   return <WrapItem
-    width="1.8rem"
-    height="1.8rem"
+    width="1.7rem"
+    height="1.7rem"
     borderRadius="md"
     alignItems="center"
     justifyContent="center"
