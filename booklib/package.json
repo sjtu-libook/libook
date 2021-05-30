@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/react": "^1.5.1",
+    "@chakra-ui/react": "^1.6.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@types/jest": "^26.0.22",
