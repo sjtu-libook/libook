@@ -20,7 +20,7 @@ class Command(BaseCommand):
         tz = timezone('Asia/Shanghai')
         today = date.today()
 
-        for day in range(7):
+        for day in range(30):
             start_of_day = tz.localize(datetime(
                 today.year, today.month, today.day, 0, 0, 0))
             end_of_day = start_of_day + timedelta(days=1)

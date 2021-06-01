@@ -17,6 +17,7 @@ idna==2.10
 inflection==0.5.1
 jsonschema==3.2.0
 loginpass==0.5
+psycopg2-binary==2.8.6
 pycparser==2.20
 pyrsistent==0.17.3
 pytz==2021.1
@@ -27,3 +28,4 @@ sqlparse==0.4.1
 tzlocal==2.1
 uritemplate==3.0.1
 urllib3==1.26.4
+whitenoise==5.2.0
