@@ -12,5 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
+      - name: Create necessary files
+        run: |
+          mkdir secrets
+          touch secrets/libook.env
+          touch secrets/postgres-db.env
       - name: Build
         run: docker-compose build
